@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="author" content="Symboint Energy Admin" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="Symboint Energy Admin" />
+        <title>Admin</title>
+        <link rel="stylesheet" id="layout-styles-anchor" href="/splash-screen.css" />
+        <link rel="shortcut icon" href="/media/logos/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+        <link rel="shortcut icon" href="media/favicon.svg" />
+        <link rel="stylesheet" id="layout-styles-anchor" href="/splash-screen.css" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Symboint Energy Admin" />
+        <meta property="og:description" content="Symboint Energy Admin" />
+        <meta property="og:image" content="/media/logos/dunreidy.png" />
+
+        <link rel="icon" type="image/png" href="/media/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/media/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/media/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="Dunreidy Admin" />
+        <link rel="manifest" href="/media/site.webmanifest" />
+    </head>
+
+    <body id="kt_body" class="page-loading">
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <!--begin::Theme mode setup on page load-->
+        <script>
+            // let themeMode = 'system'
+
+            // if (localStorage.getItem('kt_theme_mode_value')) {
+            //   themeMode = localStorage.getItem('kt_theme_mode_value')
+            // }
+
+            // if (themeMode === 'system') {
+            //   themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            // }
+
+            // document.documentElement.setAttribute('data-bs-theme', themeMode)
+        </script>
+        <!--end::Theme mode setup on page load-->
+
+        <div id="root"></div>
+        <div id="splash-screen" class="splash-screen">
+            <div class="arc"></div>
+            <div class="splash-h1">
+                <span>LOADING</span>
+            </div>
+        </div>
+
+        <div id="root-modals"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

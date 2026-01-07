@@ -1,0 +1,22 @@
+export interface IBillData {
+    _id: string,
+    ppaDetail: {
+        ppaId: string,
+        plantId: string,
+        userId: string,
+        tarrif : number,
+        plantCapacity : number,
+    },
+    billingMonth: number,
+    billingYear: number,
+    generatedUnits: number,
+    consumedUnits: number,
+    exportedUnits: number,
+    totalAmount: number,
+    isPaid: boolean,
+    paymentRefId: string,
+    paymentDate: string,
+    deleted: boolean,
+    _createdAt: string,
+    _updatedAt: string,
+}

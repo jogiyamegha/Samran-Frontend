@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x=".25" y=".25" width="31.5" height="31.5" rx="15.75" fill="url(#hyclldi97a)"/>
+    <rect x=".25" y=".25" width="31.5" height="31.5" rx="15.75" stroke="#fff" stroke-width=".5"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M17.72 25.374c.954-1.412 1.042-2.937.264-4.575-.217.879-.613 1.412-1.189 1.6.535-1.527.088-3.176-1.34-4.949-.031 1.83-.471 3.164-1.32 4-1.17 1.152-1.156 2.451.041 3.898-4.97-2.644-5.67-6.191-2.103-10.64.221 1.074.757 1.734 1.608 1.98-.927-3.937.049-7.292 2.929-10.064.017 6.152 1.904 6.699 4.289 9.445 2.575 3.295 1.062 7.098-3.18 9.305z" fill="#fff"/>
+    <defs>
+        <linearGradient id="hyclldi97a" x1="32" y1="0" x2="-19.341" y2="17.191" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#3D2FDE"/>
+            <stop offset="1" stop-color="#C71DD8"/>
+        </linearGradient>
+    </defs>
+</svg>
