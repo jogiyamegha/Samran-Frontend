@@ -5,7 +5,7 @@ import Method from "../../../utils/methods";
 import { PlantStatus, PropertyTypes } from "../../../utils/constants";
 import PlaceholderLogo from "../../../_admin/assets/media/svg/placeholder.svg";
 
-const ViewPlant = () => {
+const ViewBill = () => {
     const navigate = useNavigate();
     const {state}: any = useLocation();
     
@@ -14,7 +14,7 @@ const ViewPlant = () => {
     };
     
     const handleBack = () => {
-        navigate("/plant/all-plants");
+        navigate("/bill/all-bills");
     };
     
     if (!state) {
@@ -208,6 +208,6 @@ const ViewPlant = () => {
     );
 };
 
-export default ViewPlant;
+export default ViewBill;
 
  

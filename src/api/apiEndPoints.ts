@@ -15,11 +15,11 @@ export const PLANT = {
     ADDPLANT : 'admin/plant/add' + ' ' + constants.POST_FORM,
     LISTPLANT : 'admin/plant/list' + ' ' + constants.GET_URL_PARAMS,
     PLANTINFO : 'admin/plant/info' + ' ' + constants.PATCH_FORM_ID,
-    PLANTSTATUSUPDATE : 'admin/plant/status/update' + ' ' + constants.GET_ID_PARAMS,
+    PLANTSTATUSUPDATE : 'admin/plant/status/update' + ' ' + constants.PATCH_ID,
 }
 
 export const PPA = {
-    ADDPPA : 'admin/ppa/add' + ' ' + constants.POST_RAW,
+    ADDPPA : 'admin/ppa/create' + ' ' + constants.POST_FORM,
     LISTPPA : 'admin/ppa/list' + ' ' + constants.GET_URL_PARAMS,
     PPAINFO : 'admin/ppa/info' + ' ' + constants.PATCH_FORM_ID,
 }

@@ -194,6 +194,7 @@ const AddPlant = () => {
         }
 
         const isValid = !Object.values(newValidation).some((value) => value);
+        console.log("isValid",isValid);
         if(isValid) {
             try {
                 const apiService = new APICallService(
@@ -262,7 +263,7 @@ const AddPlant = () => {
                                     className="mb-3"
                                     controlId="propertyType"
                                 >
-                                    <Form.Label className="fs-16 fw-500 ">
+                                    <Form.Label className="fs-16 fw-500 required">
                                         Property Name
                                     </Form.Label>
                                     <Form.Control

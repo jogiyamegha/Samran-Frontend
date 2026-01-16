@@ -5,7 +5,8 @@ export interface IListPpaParams {
     searchTerm?: string;
     sortKey?: string;
     sortOrder?: number;
-    userId? : string;
+    plantId? : string;
+    isSigned? : boolean;
 }
 
 
@@ -13,6 +14,7 @@ export interface IListPpa {
     _id: string,
     plantDetail: {
         plantId: string,
+        propertyName: string,
         propertyType: string,
         address: string,
         city: string,

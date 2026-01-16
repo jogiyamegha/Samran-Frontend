@@ -52,44 +52,17 @@ const Method = {
     plantStatusBadgeColor: (status: number) => {
         switch (status) {
             case PlantStatus.Submitted:
-                return {backgroundColor: "#d1ecf1", color: "#0c5460"}; 
+                return {backgroundColor: "#b5caec", color: "#0c4360"}; 
             case PlantStatus.Approved:
                 return {backgroundColor: "#d4edda", color: "#155724"}; 
             case PlantStatus.Rejected:
-                return {backgroundColor: "#b86634ff", color: "#7d2702ff"}; // Light yellow/orange
+                return {backgroundColor: "rgb(232, 172, 161)", color: "#7d2702ff"}; // Light yellow/orange
             
             default:
                 return {backgroundColor: "#f8f9fa", color: "#6c757d"}; // Light gray
         }
     },
-    // getBottleStatusLabel: (status: number) => {
-    //     switch (status) {
-    //         case BottleStatus.Available:
-    //             return "Available";
-    //         case BottleStatus.OnSite:
-    //             return "On Site";
-    //         case BottleStatus.Returned:
-    //             return "Returned";
-    //         case BottleStatus.Generated:
-    //             return "Generated";
-    //         default:
-    //             return "Unknown";
-    //     }
-    // },
-    // getBottleStatusBadgeColor: (status: number) => {
-    //     switch (status) {
-    //         case BottleStatus.Available:
-    //             return {backgroundColor: "#d4edda", color: "#155724"}; // Light green
-    //         case BottleStatus.OnSite:
-    //             return {backgroundColor: "#d1ecf1", color: "#0c5460"}; // Light blue
-    //         case BottleStatus.Returned:
-    //             return {backgroundColor: "#fff3cd", color: "#856404"}; // Light yellow/orange
-    //         case BottleStatus.Generated:
-    //             return {backgroundColor: "#e2d9f3", color: "#6f42c1"}; // Light purple
-    //         default:
-    //             return {backgroundColor: "#f8f9fa", color: "#6c757d"}; // Light gray
-    //     }
-    // },
+  
     getPropertyTypeLabel: (propertyType: number) => {
         switch (propertyType) {
             case PropertyTypes.HousingSociety:

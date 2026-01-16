@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {Button, Card, Col, FormLabel, Row} from "react-bootstrap";
+import {Button, Card, Col, Dropdown, FormLabel, Row} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import Loader from "../../../global/loader";
-import {PAGE_LIMIT} from "../../../utils/constants";
+import {PAGE_LIMIT, PlantStatus} from "../../../utils/constants";
 import Pagination from "../../../global/pagination";
 import ThreeDots from "../../../_admin/assets/media/svg/threeDots.svg";
 import {CustomSelectTable} from "../../custom/select/CustomSelectTable";
@@ -23,11 +23,13 @@ const Ppa = () => {
     const [totalRecords, setTotalRecords] = useState(0);
     const [page, setPage] = useState(1);
     const [showModel, setShowModel] = useState<boolean>(false);
+    const [isSigned, setIsSigned] = useState<boolean>(false);
     const [ppaId, setPpaId] = useState<string | null>(null);
     const [plantId, setPlantId] = useState<string | undefined>(undefined);
     const [pageLimit, setPageLimit] = useState(PAGE_LIMIT);
     const [searchTerm, setSearchTerm] = useState('');
     const [plantOptions, setPlantOptions] = useState<any[]>([]);
+    const [signedFilter, setSignedFilter] = useState<boolean | undefined>(undefined);
 
     useEffect(() => {
         const fetchPlants = async () => {
@@ -45,6 +47,7 @@ const Ppa = () => {
             sortOrder: -1,
             needCount: true,
             searchTerm: searchTerm ? searchTerm : undefined,
+            plantStatus: PlantStatus.Approved
         }
         const apiService = new APICallService(PLANT.LISTPLANT, PLANTAPIJSON.listPlant(params));
         const response = await apiService.callAPI();
@@ -65,7 +68,8 @@ const Ppa = () => {
         pageNo: number,
         limit: number,
         searchTerm? : string,
-        ppaId? : string
+        plantId? : string,
+        isSigned? : boolean
     ) => {
         setLoading(true);
         let params = {
@@ -75,6 +79,8 @@ const Ppa = () => {
             sortOrder: -1,
             needCount: true,
             searchTerm: searchTerm ? searchTerm : undefined,
+            plantId: plantId ? plantId : undefined,
+            isSigned: isSigned ? true : false ,
         }
 
         let apiService = new APICallService(
@@ -83,7 +89,8 @@ const Ppa = () => {
         );
 
         let response = await apiService.callAPI();
-        console.log("sdfghjkdfghuj",response);
+        console.log(response.records[0].isSigned);
+        console.log("response nnduh", response.isSigned);
         if (response) {
             setTotalRecords(response.total);
             setPpas(response.records);
@@ -155,6 +162,20 @@ const Ppa = () => {
         );
     }
 
+    const handleStatusChange = (eventKey: string | null) => {
+        let isSigned: boolean | undefined = undefined;
+        if (eventKey === "true") {
+            isSigned = true;
+        } else if (eventKey === "false") {
+            isSigned = false;
+        } else if (eventKey === "clear" || eventKey === null) {
+            isSigned = undefined;
+        }
+        setSignedFilter(isSigned);
+        setPage(1);
+        fetchPpa(1, pageLimit, searchTerm, isSigned);
+    };
+
     const handlePpaOption = async (
         event: any,
         index: number,
@@ -162,7 +183,7 @@ const Ppa = () => {
     ) => {
         switch (event.value) {
             case 1:
-                navigate('/ppa/all-ppa/view-details', { state: ppa });
+                navigate('/ppa/view-details', { state: ppa });
                 break;
 
             case 3:
@@ -189,7 +210,7 @@ const Ppa = () => {
                 >
                 <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
                     <div className="d-flex align-items-center">
-                        <h1 className="fs-22 mt-2 fw-bolder">Plants</h1>
+                        <h1 className="fs-22 mt-2 fw-bolder">PPA</h1>
                         <div className="badge badge-primary ms-3 rounded-pill">
                             <span className="p-1 fs-14 text-white">{totalRecords}</span>
                         </div>
@@ -197,7 +218,7 @@ const Ppa = () => {
                     <Button
                         variant="primary"
                         className="fs-16 fw-bold btn-lg"
-                        onClick={() => navigate('/plant/all-plants/add-plant')}
+                        onClick={() => navigate('/ppa/add-ppa')}
                     >
                         <img
                             src={AddIcon}
@@ -216,22 +237,6 @@ const Ppa = () => {
                     className="mb-4"
                 >
                     <Row className="align-items-end g-5">
-                        {/* <Col>
-                            <div className="position-relative flex-grow-1 d-flex align-items-center w-sm-300px w-md-375px w-lg-300px">
-                                <KTSVG
-                                    path="/media/icons/duotune/general/gen021.svg"
-                                    className="svg-icon-3 position-absolute ms-3"
-                                />
-                                <input
-                                    type="text"
-                                    id="kt_filter_search"
-                                    className="form-control form-control-white min-h-60px form-control-lg ps-10"
-                                    placeholder="Search by "
-                                    value={searchTerm}
-                                    onChange={(event) => handleSearch(event.target.value)}
-                                />
-                            </div>
-                        </Col> */}
                         
                         <Col sm={4} xl={3}>
                             <FormLabel className="fs-16 fw-500 text-dark">Plant</FormLabel>
@@ -252,6 +257,74 @@ const Ppa = () => {
                                 fontWeight="500"
                             />
                         </Col>
+
+                        <Col
+                            sm={4}
+                            xl={3}
+                        >
+                            <FormLabel className="fs-16 fw-500 text-dark">Status</FormLabel>
+                            <Dropdown onSelect={(eventKey) => handleStatusChange(eventKey)}>
+                                <Dropdown.Toggle
+                                    variant="white"
+                                    className="form-control bg-white min-h-60px fs-14 fw-bold text-dark min-w-md-288px min-w-175px text-start border border-3px border-radius-15px"
+                                    id="dropdown-status"
+                                >
+                                    Sign Status
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu
+                                    className="border border-3px border-radius-15px"
+                                    style={{ padding: '8px 0', minWidth: '100%' }}
+                                >
+                                    <Dropdown.Item
+                                        eventKey="true"
+                                        className="fs-14 fw-500 text-dark"
+                                        style={{ padding: '12px 16px', color: '#5e6278' }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.color = '#1b74e4';
+                                            e.currentTarget.style.backgroundColor = '#f1faff';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.color = '#5e6278';
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }}
+                                    >
+                                        Signed
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                    eventKey="false"
+                                        className="fs-14 fw-500 text-dark"
+                                        style={{ padding: '12px 16px', color: '#5e6278' }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.color = '#1b74e4';
+                                            e.currentTarget.style.backgroundColor = '#f1faff';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.color = '#5e6278';
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }}
+                                    >
+                                        Not Signed
+                                    </Dropdown.Item>
+                                <Dropdown.Divider style={{ margin: '8px 0' }} />
+                                <Dropdown.Item
+                                eventKey={undefined}
+                                className="fs-14 fw-500 text-dark"
+                                style={{ padding: '12px 16px', color: '#5e6278' }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = '#1b74e4';
+                                    e.currentTarget.style.backgroundColor = '#f1faff';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = '#5e6278';
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                }}
+                                >
+                                Clear Filter
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                            </Dropdown>
+                    </Col>
+                        
                     </Row>
                 </Col>
                 
@@ -262,10 +335,11 @@ const Ppa = () => {
                             <table className="table table-rounded table-row-bordered align-middle gs-7 gy-4">
                                 <thead>
                                     <tr className="fw-bold fs-14 fw-600 text-dark border-bottom h-70px align-middle">
+                                    <th className="min-w-160px text-center">Property Name</th>
                                     <th className="min-w-160px text-center">Property Address</th>
-                                    <th className="min-w-160px text-center">Property Type</th>
                                     <th className="min-w-150px text-center">Plant Capacity</th>
                                     <th className="min-w-160px text-center">Tarrif</th>
+                                    <th className="min-w-160px text-center">Signed</th>
                                     <th className="min-w-160px text-center">Start Date</th>
                                     <th className="min-w-160px text-center">End Date </th>
                                     <th className="min-w-150px text-center">Actions</th>
@@ -298,28 +372,34 @@ const Ppa = () => {
                                                     <tr
                                                         key={index}
                                                         className=""
+                                                        onClick={() =>
+                                                            navigate(
+                                                                '/ppa/view-details',
+                                                                {
+                                                                    state: ppa,
+                                                                }
+                                                            )
+                                                        }
                                                     >
                                                         <td
                                                             className="fs-15 fw-500 text-center"
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    '/ppa/view-details',
-                                                                    {
-                                                                        state: ppa,
-                                                                    }
-                                                                )
-                                                            }
                                                         >
-                                                            {ppa?.plantDetail?.address}
+                                                            {ppa?.plantDetail?.propertyName}
                                                         </td>
                                                         <td className="fs-14 fw-500 text-center">
-                                                            {ppa?.plantDetail?.propertyType}
+                                                            {ppa?.plantDetail?.address}
                                                         </td>
                                                         <td className="fs-14 fw-500 text-center">
                                                             {ppa?.plantCapacity}
                                                         </td>
                                                         <td className="fs-14 fw-500 text-center">
                                                             {ppa?.tarrif}
+                                                        </td>
+                                                        {/* <td className="fs-14 fw-500 text-center">
+                                                            {ppa?.isSigned ? true : false}
+                                                        </td>  */}
+                                                        <td className="fs-14 fw-500 text-center">
+                                                             {String(ppa?.isSigned)}
                                                         </td>
                                                         <td className="fs-14 fw-500 text-center">
                                                             {formatDate(ppa?.startDate)}

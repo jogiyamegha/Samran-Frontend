@@ -25,7 +25,7 @@ export const PPAAPIJSON = {
             formData.append("expectedYears", expectedYears.toString());        
         }
         if (startDate !== undefined && startDate !== null) {
-            formData.append("expiryDate", Method.convertDateToFormat(startDate.toISOString(), "YYYY-MM-DD"));
+            formData.append("startDate", Method.convertDateToFormat(startDate.toISOString(), "YYYY-MM-DD"));
         }
         if (ppaDocument !== undefined && ppaDocument !== null) {
             formData.append("ppaDocument", ppaDocument);        
@@ -33,6 +33,7 @@ export const PPAAPIJSON = {
         if (leaseDocument !== undefined && leaseDocument !== null) {
             formData.append("leaseDocument", leaseDocument);        
         }
+        return formData;
     },
 
     listPpa: ({
@@ -42,7 +43,8 @@ export const PPAAPIJSON = {
         sortOrder,
         needCount,
         searchTerm,
-        // userId
+        plantId,
+        isSigned
     }: IListPpaParams) => {
         return {
             pageNo : page,
@@ -51,7 +53,8 @@ export const PPAAPIJSON = {
             sortOrder,
             needCount,
             ...(searchTerm !== undefined && {searchTerm: searchTerm.trim()}),
-            // userId
+            ...(plantId !== undefined && {plantId: plantId.trim()}),
+            isSigned
         };
     }
 }

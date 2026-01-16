@@ -6,8 +6,8 @@ export interface IPpaData {
     plantCapacity: number,
     tarrif : number,
     expectedYears : number,
-    startDate: string,
-    endDate: string,
+    startDate: Date,
+    endDate: Date,
     ppaDocument: string,
     leaseDocument: string,
     isSigned: boolean,
@@ -19,9 +19,9 @@ export interface IPpaData {
 
 export interface IAddPpa {
     plantId: string | null,
-    plantCapacity: number,
-    tarrif : number,
-    expectedYears : number,
+    plantCapacity: number | null,
+    tarrif : number | null,
+    expectedYears : number | null,
     startDate: Date | null,
     ppaDocument: File | null,
     leaseDocument: File | null,
