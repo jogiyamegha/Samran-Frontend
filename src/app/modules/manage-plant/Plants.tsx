@@ -77,8 +77,8 @@ const Plants = () => {
         limit: number,
         searchTerm: string = '',
         userId: string = '',
-        plantStatus: number | undefined,
-        propertyType: number | undefined
+        plantStatus?: number | undefined,
+        propertyType?: number | undefined
     ) => {
         setLoading(true);
         let params = {
@@ -109,17 +109,11 @@ const Plants = () => {
     const debouncedSearch = useDebounce(fetchPlants, 400);
 
     const handleSearch = async (value: string) => {
-        // value = value.trimStart();
-        // const regex = /^(\S+( \S+)*)? ?$/;
-        // const isValid = regex.test(value);
-        // if (!isValid) {
-        //     return;
-        // }
         setSearchTerm(value.trimStart());
         setPage(1);
         setLoading(true);
         setTotalRecords(0);
-        await fetchPlants(page, pageLimit, searchTerm, userId, plantStatus, propertyType);
+        await fetchPlants(1, pageLimit, value, userId, plantStatus, propertyType);
     };  
 
     const handleSelectChange = (eventKey: string | number | undefined | null) => {
@@ -197,34 +191,7 @@ const Plants = () => {
         setShowModal(true);
     };
 
-    // const handleActionSubmit = async (action: 2 | 3, reason: string, plantUniqueName: string) => {
-    //     if (!selectedPlantId) return;
-
-    //     setLoading(true);
-
-    //     const apiService = new APICallService(
-    //         PLANT.PLANTSTATUSUPDATE,
-    //         PLANTAPIJSON.ApproveRejectPlant({
-    //             _id: selectedPlantId,
-    //             plantStatus: action,
-    //             plantUniqueName: plantUniqueName,
-    //             rejectionReason: action === 3 ? reason : null
-    //         }),
-    //         { _id: selectedPlantId } // URL param
-    //     );
-
-    //     const response = await apiService.callAPI();
-    //     console.log(" vandho?", response);
-
-    //     if (response) {
-    //         success(`Plant ${action === 2 ? "approved" : "rejected"} successfully`);
-    //         await fetchPlants(page, pageLimit, searchTerm, userId, plantStatus, propertyType);
-    //     }
-
-    //     setShowModal(false);
-    //     setLoading(false);
-    // };
-
+ 
     const handleActionSubmit = async (data: {
         actionType: 2 | 3;
         reason?: string;
@@ -351,8 +318,8 @@ const Plants = () => {
                                     className="form-control bg-white min-h-60px fs-14 fw-bold text-dark min-w-md-288px min-w-175px text-start border border-3px border-radius-15px"
                                     id="dropdown-user-type"
                                 >
-                                    {plantStatus
-                                        ? Method.getPropertyTypeLabel(plantStatus)
+                                    {propertyType
+                                        ? Method.getPropertyTypeLabel(propertyType)
                                         : 'Select Property Type'}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu

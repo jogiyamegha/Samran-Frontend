@@ -54,7 +54,7 @@ export const USERAPIJSON = {
             sortKey: sortKey,
             sortOrder: sortOrder,
             needCount: needCount,
-            ...(userType !== undefined && { userType }),
+            ...(userType !== undefined && { userType : userType.toString()}),
         };
     }
 }

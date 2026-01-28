@@ -4,7 +4,6 @@ import {useNavigate} from "react-router-dom";
 import {CustomSelectTable} from "../../../custom/select/CustomSelectTable";
 import ThreeDots from "../../../../_admin/assets/media/svg/threeDots.svg";
 import Pagination from "../../../../global/pagination";
-import CustomDatePicker from "../../../custom/DateRange/DatePicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DeleteModal from "../../../modals/DeleteModal";
 import CustomDateInput from "../../../custom/DateRange/CustomDateInput";
@@ -18,15 +17,12 @@ import {success} from "../../../../global/toast";
 import {PAGE_LIMIT, UserTypes} from "../../../../utils/constants";
 import {useDebounce} from "../../../../utils/useDebounce";
 import Method from "../../../../utils/methods";
-import AddIcon from "../../../../_admin/assets/media/svg/add.svg";
-import {IMAGES} from "../../../../utils/staticJSON";
 
 const Users = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState<string | null>(null);
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
-    const [startDate, endDate] = dateRange;
     const [totalRecords, setTotalRecords] = useState(0);
     const [usersData, setUsersData] = useState<ListUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -37,7 +33,7 @@ const Users = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            fetchUsers(page, pageLimit, searchTerm, userType, startDate, endDate);
+            fetchUsers(page, pageLimit, searchTerm, userType);
         };
         fetchData();
     }, []);
@@ -47,24 +43,20 @@ const Users = () => {
         limit: number,
         searchTerm: string = "",
         userType: number | undefined = undefined,
-        startDate: Date | null = dateRange[0],
-        endDate: Date | null = dateRange[1]
     ) => {
         setLoading(true);
-        let params = {
+        const params = {
             page: pageNo,
             limit: limit,
             sortKey: "_createdAt",
             sortOrder: -1,
             needCount: true,
-            searchTerm: searchTerm ? searchTerm : undefined,
+            searchTerm: searchTerm,
             userType: userType ? userType : undefined,
-            startDate: startDate ? startDate.toISOString() : undefined,
-            endDate: endDate ? endDate.toISOString() : undefined,
         };
         let apiService = new APICallService(USER.LISTUSER, USERAPIJSON.listUser(params));
         let response = await apiService.callAPI();
-        console.log(response);
+        console.log("response", response);
         if (response) {
             // const totalRecords = response.total;
             setTotalRecords(response.total);
@@ -75,81 +67,52 @@ const Users = () => {
 
     const debouncedSearch = useDebounce(fetchUsers, 400);
     const handleSearch = async (value: string) => {
-        value = value.trimStart();
-        console.log(value);
-        //const regex = /^(\w+( \w+)*)( {0,1})$/;
-        //const regex = /^(\w+( \w+)*)? ?$/;
-        const regex = /^(\S+( \S+)*)? ?$/;
-        const isValid = regex.test(value);
-        if (!isValid) {
-            return;
-        }
-        setSearchTerm(value);
-        if (value.trim().length > 2 && searchTerm !== value) {
-            setPage(1);
-            setLoading(true);
-            setTotalRecords(0);
-            await debouncedSearch(1, pageLimit, value);
-        } else if (value.trim().length <= 2 && value.length < searchTerm.length) {
-            setPage(1);
-            setLoading(true);
-            setTotalRecords(0);
-            await debouncedSearch(1, pageLimit, value);
-        }
-    };
-
-    const handleDateFilter = async (update: [Date | null, Date | null]) => {
-        setDateRange(update);
-        setPage(1); // reset page
-        fetchUsers(1, pageLimit, searchTerm, userType, update[0], update[1]);
+        setSearchTerm(value.trimStart());
+        setPage(1);
+        setLoading(true);
+        setTotalRecords(0);
+        setUsersData([]);
+        await fetchUsers(
+            1,
+            pageLimit,
+            value,
+            userType
+        );
+        setLoading(false);
     };
 
     const handleSelectChange = (eventKey: number | undefined ) => {
         const newUserType = eventKey ? eventKey as number : undefined;
         setUserType(newUserType);
         setPage(1);
-        fetchUsers(1, pageLimit, searchTerm, newUserType, startDate, endDate);
+        fetchUsers(1, pageLimit, searchTerm, newUserType);
     };
 
     const handleCurrentPage = async (val: number) => {
         if (val === page || val.toString() === "...") return;
         setPage(val);
-        await fetchUsers(val, pageLimit, searchTerm, userType, startDate, endDate);
+        await fetchUsers(val, pageLimit, searchTerm, userType);
     };
     const handleNextPage = async (val: number) => {
         setPage(val + 1);
-        await fetchUsers(val + 1, pageLimit, searchTerm, userType, startDate, endDate);
+        await fetchUsers(val + 1, pageLimit, searchTerm, userType);
     };
     const handlePreviousPage = async (val: number) => {
         setPage(val - 1);
-        await fetchUsers(val - 1, pageLimit, searchTerm, userType, startDate, endDate);
+        await fetchUsers(val - 1, pageLimit, searchTerm, userType);
     };
     const handlePageLimit = async (event: any) => {
         setPage(1);
         setPageLimit(+event.target.value);
-        await fetchUsers(1, event.target.value, searchTerm, userType, startDate, endDate);
+        await fetchUsers(1, event.target.value, searchTerm, userType);
     };
 
     const handleUserType = (eventKey: number | null) => {
-        let type: number | undefined;
-        if (eventKey === 2) type = UserTypes.Consumer;
-        else if (eventKey === 3) type = UserTypes.Investor;
-        else type = undefined;
-
-        setUserType(type);
-        // fetchUsers({ 
-        //     page: 1, 
-        //     // limit: pageLimit, 
-        //     sortKey: '_createdAt', 
-        //     sortOrder: -1, 
-        //     needCount: true, 
-        //     userType: type,
-        //     searchTerm: searchTerm
-        // });
+        const userType = eventKey ? eventKey : undefined;
+        setUserType(userType);
+        setPage(1);
+        fetchUsers(page, pageLimit, searchTerm, userType)
     };
-
-
-
 
     // handle delete user (accept nullable id from state)
     const handleDeleteUser = async (userId: string | null) => {
@@ -195,6 +158,7 @@ const Users = () => {
                                     id="kt_filter_search"
                                     className="form-control bg-white min-h-60px fs-14 fw-bold text-dark min-w-md-288px min-w-175px ps-10 border border-3px border-radius-15px"
                                     placeholder="Search by name, email"
+                                    value={searchTerm}
                                     onChange={(event) => {
                                         handleSearch(event.target.value);
                                     }}
@@ -202,61 +166,69 @@ const Users = () => {
                             </div>
                         </Col>
                         <Col sm={4} xl={3}>
-                            <FormLabel className="fs-16 fw-500 text-dark">User Type</FormLabel>
-                                <Dropdown onSelect={(eventKey) => handleUserType(eventKey ? Number(eventKey) : null)}>
+                            <FormLabel className="fs-16 fw-500 text-dark">
+                                UserType
+                            </FormLabel>
+                            <Dropdown
+                                onSelect={(eventKey) =>
+                                    handleUserType(eventKey ? parseInt(eventKey) : null)
+                                }
+                            >
                                 <Dropdown.Toggle
                                     variant="white"
                                     className="form-control bg-white min-h-60px fs-14 fw-bold text-dark min-w-md-288px min-w-175px text-start border border-3px border-radius-15px"
                                     id="dropdown-user-type"
                                 >
-                                    {userType ? Method.getUserTypeLabel(userType) : "Select User Type"}
+                                    {userType
+                                        ? Method.getUserTypeLabel(userType)
+                                        : 'Select UserType'}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu
                                     className="border border-3px border-radius-15px"
-                                    style={{padding: "8px 0", minWidth: "100%"}}
+                                    style={{ padding: '8px 0', minWidth: '100%' }}
                                 >
                                     <Dropdown.Item
-                                        eventKey="2"
+                                        eventKey="3"
                                         className="fs-14 fw-500 text-dark"
-                                        style={{padding: "12px 16px", color: "#5e6278"}}
+                                        style={{ padding: '12px 16px', color: '#5e6278' }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.color = "#1b74e4";
-                                            e.currentTarget.style.backgroundColor = "#f1faff";
+                                            e.currentTarget.style.color = '#1b74e4';
+                                            e.currentTarget.style.backgroundColor = '#f1faff';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.color = "#5e6278";
-                                            e.currentTarget.style.backgroundColor = "transparent";
+                                            e.currentTarget.style.color = '#5e6278';
+                                            e.currentTarget.style.backgroundColor = 'transparent';
                                         }}
                                     >
                                         Consumer
                                     </Dropdown.Item>
                                     <Dropdown.Item
-                                        eventKey="3"
+                                        eventKey="2"
                                         className="fs-14 fw-500 text-dark"
-                                        style={{padding: "12px 16px", color: "#5e6278"}}
+                                        style={{ padding: '12px 16px', color: '#5e6278' }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.color = "#1b74e4";
-                                            e.currentTarget.style.backgroundColor = "#f1faff";
+                                            e.currentTarget.style.color = '#1b74e4';
+                                            e.currentTarget.style.backgroundColor = '#f1faff';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.color = "#5e6278";
-                                            e.currentTarget.style.backgroundColor = "transparent";
+                                            e.currentTarget.style.color = '#5e6278';
+                                            e.currentTarget.style.backgroundColor = 'transparent';
                                         }}
                                     >
                                         Investor
                                     </Dropdown.Item>
-                                    <Dropdown.Divider style={{margin: "8px 0"}} />
+                                    <Dropdown.Divider style={{ margin: '8px 0' }} />
                                     <Dropdown.Item
                                         eventKey={undefined}
                                         className="fs-14 fw-500 text-dark"
-                                        style={{padding: "12px 16px", color: "#5e6278"}}
+                                        style={{ padding: '12px 16px', color: '#5e6278' }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.color = "#1b74e4";
-                                            e.currentTarget.style.backgroundColor = "#f1faff";
+                                            e.currentTarget.style.color = '#1b74e4';
+                                            e.currentTarget.style.backgroundColor = '#f1faff';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.color = "#5e6278";
-                                            e.currentTarget.style.backgroundColor = "transparent";
+                                            e.currentTarget.style.color = '#5e6278';
+                                            e.currentTarget.style.backgroundColor = 'transparent';
                                         }}
                                     >
                                         Clear Filter
@@ -332,7 +304,7 @@ const Users = () => {
                                                                     {user?.email}
                                                                 </td>
                                                                 <td className="fs-14 fw-500 text-center">
-                                                                    {user?.phoneCountry} {user?.phone}
+                                                                    +{user?.phoneCountry} {user?.phone}
                                                                 </td>
                                                                 <td className="fs-14 fw-500 text-center">
                                                                     {Method.getUserTypeLabel(user?.userType)}
