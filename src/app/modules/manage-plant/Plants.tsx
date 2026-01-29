@@ -470,7 +470,7 @@ const Plants = () => {
                         placeholder="Select User"
                         options={[
                             ...userOptions,
-                            // { value: undefined, label: "Clear Filter" }, // Acts as clear option
+                            { value: undefined, label: "Clear Filter" }, // Acts as clear option
                         ]}
                         isMulti={false}
                         onChange={(selected: any) => {

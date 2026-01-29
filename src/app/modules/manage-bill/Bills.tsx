@@ -233,6 +233,8 @@ const Bills = () => {
                             <table className="table table-rounded table-row-bordered align-middle gs-7 gy-4">
                                 <thead>
                                     <tr className="fw-bold fs-14 fw-600 text-dark border-bottom h-70px align-middle">
+                                    <th className="min-w-150px text-center">Plant's Name</th>
+                                    <th className="min-w-150px text-center">PPA Name</th>
                                     <th className="min-w-150px text-center">Billing Month</th>
                                     <th className="min-w-160px text-center">Billing Year</th>
                                     <th className="min-w-160px text-center">Generated Unit</th>
@@ -270,8 +272,8 @@ const Bills = () => {
                                                         key={index}
                                                         className=""
                                                     >
-                                                        <td
-                                                            className="fs-15 fw-500 text-center"
+                                                        <td 
+                                                            className="fs-14 fw-500 text-center"
                                                             onClick={() =>
                                                                 navigate(
                                                                     '/bill/view-details',
@@ -280,6 +282,14 @@ const Bills = () => {
                                                                     }
                                                                 )
                                                             }
+                                                        >
+                                                            {bill?.ppaDetail?.plantUniqueName}
+                                                        </td>
+                                                        <td className="fs-14 fw-500 text-center">
+                                                            {bill?.ppaDetail?.ppaName}
+                                                        </td>
+                                                        <td
+                                                            className="fs-15 fw-500 text-center"
                                                         >
                                                             {Method.getMonthLabel(
                                                                 bill?.billingMonth

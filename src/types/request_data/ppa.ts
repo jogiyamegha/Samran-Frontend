@@ -1,6 +1,13 @@
 export interface IPpaData {
+    ppaUniqueId: string,
+    ppaName: string,
     plantDetail: {
         plantId: string,
+        // plantUniqueId: string,
+        // plantUniqueName: string,
+        // propertyName: string,
+        // propertyType: string,
+        // plantId: string,
         userId: number,
     },
     plantCapacity: number,
@@ -18,6 +25,7 @@ export interface IPpaData {
 }
 
 export interface IAddPpa {
+    ppaName: string | null,
     plantId: string | null,
     plantCapacity: number | null,
     tarrif : number | null,

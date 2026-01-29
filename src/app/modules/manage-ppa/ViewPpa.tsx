@@ -76,7 +76,7 @@ const ViewPpa = () => {
         <div className="p-9 bg-light">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
+                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 ">
                         <div className="d-flex align-items-center gap-3">
                             <Button
                                 variant="light"
@@ -102,8 +102,8 @@ const ViewPpa = () => {
 
             <Row className="g-6">
                 {/* PPA Information Card */}
-                <Col md={6}>
-                    <Card className="border bg-white shadow-sm h-100">
+                <Col md={5}>
+                    <Card className="border bg-white shadow-sm h-20">
                         <Card.Header className="bg-light border-bottom-0 pb-0">
                             <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
                                 <i className="bi bi-info-circle me-2 text-primary"></i>
@@ -111,16 +111,126 @@ const ViewPpa = () => {
                             </h5>
                         </Card.Header>
                         <Card.Body className="p-6">
-                            <InfoCard
-                                icon="bi bi-person"
-                                label="PPA Id"
-                                value={state?.ppaUniqueId}
-                            />
-                            <InfoCard
-                                icon="bi bi-person"
-                                label="PPA Name"
-                                value={state?.ppaName}
-                            />
+                            <InfoCard icon="bi bi-person" label="PPA Id" value={state?.ppaUniqueId}/>
+                            <InfoCard icon="bi bi-person" label="PPA Name" value={state?.ppaName}/>
+                            <InfoCard icon="bi bi-person" label="Plant Capacity" value={state?.plantCapacity}/>
+                            <InfoCard icon="bi bi-award" label="tarrif" value={state?.tarrif || "—"} />
+                            <InfoCard icon="bi bi-award" label="expected Years" value={state?.expectedYears || "—"} />
+                            <InfoCard icon="bi bi-award" label="Start Date - End Date" value={(formatDate(state?.startDate) + " to " + formatDate(state?.endDate)) || "—" }/>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={7}>
+                    {/* Activity History */}
+                    <Card className="border bg-white shadow-sm mb-2">
+                        <Card.Header className="bg-light border-bottom-0 pt-6">
+                            <h5 className="fs-18 fw-bold text-dark mb-0 pb-0">
+                                <i className="bi bi-clock-history me-3 text-primary"></i>
+                                Signing History
+                            </h5>
+                        </Card.Header>
+                        <Card.Body className="pt-4 pb-0">
+                            <div className="timeline timeline-3">
+                                {/* Submission */}
+                                <div className="timeline-item d-flex align-items-start mb-0">
+                                    <div className="timeline-icon symbol symbol-circle symbol-40px me-5">
+                                        <div className="symbol-label bg-light-primary">
+                                        <i className="bi bi-upload text-primary fs-4"></i>
+                                        </div>
+                                    </div>
+                                <div className="timeline-content">
+                                    {state?.isSigned ? (
+                                        <>
+                                            <p className="fw-bold fs-16 mb-0">Signed</p>
+                                            <p className="text-muted fs-14 mb-0">
+                                                {Method.convertDateToFormat(
+                                                    state?.signedAt,
+                                                    'dddd, DD MMMM YYYY [at] hh:mm A'
+                                                )}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <p className="fw-bold text-danger fs-16">Not Signed</p>
+                                    )}
+                                </div>
+                                </div>
+                            </div>
+                        </Card.Body>
+                    </Card>
+
+                    <Card className="border bg-white shadow-sm">
+                        <Card.Header className="bg-light border-bottom-0 pt-5">
+                            <h5 className="fs-18 fw-bold text-dark mb-0">
+                                Documents
+                            </h5>
+                        </Card.Header>
+                        <Card.Body className="pb-0">
+                            <div className="timeline timeline-3">
+                                {/* Submission */}
+                                <div className="timeline-item d-flex align-items-start mb-2 gap-3">
+                                    <div className="timeline-content">
+                                        {state.ppaDocument && (
+                                            <div className="bg-light rounded p-4 mb-4" style={{border: "1px solid #e4e6ef"}}>
+                                                <div className="d-flex align-items-center mb-3">
+                                                    <i
+                                                        className="bi bi-file-pdf"
+                                                        style={{fontSize: "20px", color: "#1b74e4", marginRight: "12px"}}
+                                                    ></i>
+                                                    <h6 className="fs-16 fw-600 text-dark mb-0">PPA File</h6>
+                                                </div>
+                                                <div style={{marginLeft: "32px"}}>
+                                                    <a
+                                                        href={state.ppaDocument}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="btn btn-sm btn-primary mb-2"
+                                                    >
+                                                        <i className="bi bi-box-arrow-up-right me-1"></i>
+                                                        Open in New Tab
+                                                    </a>
+                                                    <p className="fs-14 fw-500 text-muted mb-0 mt-2">PDF Document</p>
+                                                </div>
+                                            </div>
+                                        )} 
+                                    </div>
+                                    <div className="timeline-content">
+                                        {state.leaseDocument && (
+                                            <div className="bg-light rounded p-4 mb-4" style={{border: "1px solid #e4e6ef"}}>
+                                                <div className="d-flex align-items-center mb-3">
+                                                    <i
+                                                        className="bi bi-file-pdf"
+                                                        style={{fontSize: "20px", color: "#1b74e4", marginRight: "12px"}}
+                                                    ></i>
+                                                    <h6 className="fs-16 fw-600 text-dark mb-0">Lease Document File</h6>
+                                                </div>
+                                                <div style={{marginLeft: "32px"}}>
+                                                    <a
+                                                        href={state.leaseDocument}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="btn btn-sm btn-primary mb-2"
+                                                    >
+                                                        <i className="bi bi-box-arrow-up-right me-1"></i>
+                                                        Open in New Tab
+                                                    </a>
+                                                    <p className="fs-14 fw-500 text-muted mb-0 mt-2">PDF Document</p>
+                                                </div>
+                                            </div>
+                                        )} 
+                                    </div>
+                                </div>
+                            </div>
+                        </Card.Body>
+                    </Card>
+
+                    <Card className="border bg-white shadow-sm h-20">
+                        <Card.Header className="bg-light border-bottom-0 pb-0">
+                            <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
+                                <i className="bi bi-info-circle me-2 text-primary"></i>
+                                    Plant Information
+                            </h5>
+                        </Card.Header>
+                        <Card.Body className="p-3">
                             <InfoCard
                                 icon="bi bi-person"
                                 label="Plant Name"
@@ -131,39 +241,19 @@ const ViewPpa = () => {
                                 label="Property Name"
                                 value={state?.plantDetail?.propertyName}
                             />
-                            <InfoCard
-                                icon="bi bi-award" 
-                                label="Property Type" 
-                                value={
-                                        Object.keys(PropertyTypes).find( key => PropertyTypes[key as keyof typeof PropertyTypes] ===
-                                            state?.plantDetail?.propertyType) ?? "—"
-                                }
-                             />
-                            <InfoCard icon="bi bi-award" label="Property Address" value={state?.plantDetail?.address || "—"} />
-                            <InfoCard icon="bi bi-award" label="City" value={state?.plantDetail?.city || "—"} />
-                            <InfoCard icon="bi bi-award" label="plant's Capacity" value={state?.plantCapacity || "—"} />
-                            <InfoCard icon="bi bi-award" label="tarrif" value={state?.tarrif || "—"} />
-                            <InfoCard icon="bi bi-award" label="expected Years" value={state?.expectedYears || "—"} />
-                            <InfoCard icon="bi bi-award" label="Start Date - End Date" value={(formatDate(state?.startDate) + " to " + formatDate(state?.endDate)) || "—" }/>
-                            <InfoCard icon="bi bi-award" label="Signed Status" value= {String(state?.isSigned) || '-'} />
-                            {state?.isSigned == true && (
-                                <InfoCard
-                                    icon="bi bi-award"
-                                    label="Sign Info"
-                                    value={
-                                        formatDate(state?.signedAt) || "—"
-                                    }
-                                />
-                            )}
-                            {state?.isSigned == false }
                         </Card.Body>
                     </Card>
+
+                    
+
+                    
                 </Col>
+
                 
                 {/* PDF Preview Card */}
-                <Col md={6}>
+                {/* <Col md={6}>
                     {state?.ppaDocument ? (
-                        <Card className="border bg-white shadow-sm h-100">
+                        <Card className="border bg-white shadow-sm h-50">
                             <Card.Header className="bg-light border-bottom-0 pb-0">
                                 <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
                                     <i className="bi bi-file-earmark-pdf me-2 text-danger"></i>
@@ -210,8 +300,8 @@ const ViewPpa = () => {
                             </Card.Body>
                         </Card>
                     )}
-                </Col>
-                <Col md={6}>
+                </Col> */}
+                {/* <Col md={6}>
                     {state?.leaseDocument ? (
                         <Card className="border bg-white shadow-sm h-100">
                             <Card.Header className="bg-light border-bottom-0 pb-0">
@@ -260,7 +350,7 @@ const ViewPpa = () => {
                             </Card.Body>
                         </Card>
                     )}
-                </Col>
+                </Col> */}
             </Row>
         </div>
     );

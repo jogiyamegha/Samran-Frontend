@@ -54,7 +54,7 @@ const Ppa = () => {
         if (response && response.records) {
             const options = response.records.map((plant: any) => ({
                 value: plant._id,
-                label: `${plant?.propertyAddress?.address}`
+                label: `${plant?.plantUniqueName} (${plant?.plantUniqueId})`
             }));
             setPlantOptions(options);
         }
@@ -371,17 +371,17 @@ const Ppa = () => {
                                                     <tr
                                                         key={index}
                                                         className=""
-                                                        onClick={() =>
-                                                            navigate(
-                                                                '/ppa/view-details',
-                                                                {
-                                                                    state: ppa,
-                                                                }
-                                                            )
-                                                        }
-                                                    >
+                                                        >
                                                         <td
                                                             className="fs-15 fw-500 text-center"
+                                                            onClick={() =>
+                                                                navigate(
+                                                                    '/ppa/view-details',
+                                                                    {
+                                                                        state: ppa,
+                                                                    }
+                                                                )
+                                                            }
                                                         >
                                                             {ppa?.ppaUniqueId}
                                                         </td>

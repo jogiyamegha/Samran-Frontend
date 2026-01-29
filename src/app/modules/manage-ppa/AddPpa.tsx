@@ -10,8 +10,7 @@ import { IAddPpa } from '../../../types/request_data/ppa';
 import { PLANT } from '../../../api/apiEndPoints';
 import { PLANTAPIJSON } from '../../../api/apiJSON/plant';
 import clsx from 'clsx';
-import Method from '../../../utils/methods';
-import { PropertyTypes } from '../../../utils/constants';
+import { PlantStatus } from '../../../utils/constants';
 import CustomDatePicker from '../../custom/DateRange/DatePicker';
 
 const AddPpa = () => {
@@ -19,6 +18,7 @@ const AddPpa = () => {
     const [loading, setLoading] = useState(false);
     const [plantOptions, setPlantOptions] = useState<any[]>([]);
     const [formData, setFormData] = useState<IAddPpa>({
+        ppaName: null,
         plantId: null,
         plantCapacity: null,
         tarrif: null,
@@ -46,6 +46,7 @@ const AddPpa = () => {
                 sortKey: '_createdAt',
                 sortOrder: -1,
                 needCount: false,
+                plantStatus: PlantStatus.Approved
             };
             const apiService = new APICallService(
                 PLANT.LISTPLANT,
@@ -56,7 +57,7 @@ const AddPpa = () => {
             if (response && response.records) {
                 const options = response.records.map((plant: any) => ({
                     value: plant._id,
-                    label: `${plant?.propertyAddress?.propertyName} (${plant?.propertyAddress?.address})`
+                    label: `${plant?.plantUniqueName} (${plant?.propertyAddress?.address})`,
                 }));
                 setPlantOptions(options);
             }
@@ -114,7 +115,9 @@ const AddPpa = () => {
 
     const validateField = (name: string, value: any) => {
         let isInvalid = false;
-        if(name === 'plantId') {
+        if(name === 'ppaName') {
+            isInvalid = value === null;
+        }else if(name === 'plantId') {
             isInvalid = value === null;
         } else if( name === 'plantCapacity') {
             isInvalid = value === 0;
@@ -143,6 +146,7 @@ const AddPpa = () => {
     const handleAddPpa = async () => {
         setLoading(true);
         const newValidation = {
+            ppaName: !formData.ppaName,
             plantId: !formData.plantId,
             plantCapacity : !formData.plantCapacity,
             tarrif : !formData.tarrif,
@@ -170,6 +174,7 @@ const AddPpa = () => {
                 const apiService = new APICallService(
                     PPA.ADDPPA,
                     PPAAPIJSON.AddPpa({
+                        ppaName: formData.ppaName,
                         plantId: formData.plantId,
                         plantCapacity: formData.plantCapacity,
                         tarrif: formData.tarrif,
@@ -222,6 +227,31 @@ const AddPpa = () => {
                                     md={6}
                                     className="mb-3"
                                 >
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="ppaName"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            PPA's Unique Name
+                                        </Form.Label>
+                                        <Form.Control
+                                            className={clsx(
+                                                'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                { 'border-danger': validation.ppaName }
+                                            )}
+                                            type="string"
+                                            placeholder="Type here…"
+                                            name="ppaName"
+                                            value={formData.ppaName ?? ''}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: validation.ppaName
+                                                ? '1px solid #F1416C'
+                                                : '1px solid #e0e0df',
+                                            }}
+                                        />
+                                    </Form.Group>
+
                                     <Form.Group
                                         className="mb-3"
                                         controlId="plantId"

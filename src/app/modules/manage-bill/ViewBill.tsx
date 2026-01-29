@@ -75,8 +75,8 @@ const ViewBill = () => {
             </Row>
 
             <Row className="g-6">
-                {/* Plant Information Card */}
-                <Col md={6}>
+                {/* Bill Information Card */}
+                <Col md={5}>
                     <Card className="border bg-white shadow-sm h-100">
                         <Card.Header className="bg-light border-bottom-0 pb-0">
                             <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
@@ -99,6 +99,36 @@ const ViewBill = () => {
                             <InfoCard icon="bi bi-award" label="Consumed Units" value={state?.consumedUnits || "—"} />
                             <InfoCard icon="bi bi-award" label="Exported Units" value={state?.exportedUnits || "—"} />
                             <InfoCard icon="bi bi-award" label="Total Amount" value={state?.totalAmount || "—"} />
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* PPA Plant Information Card */}
+                <Col md={7}>
+                    <Card className="border bg-white shadow-sm h-30 mb-5">
+                        <Card.Header className="bg-light border-bottom-0 pb-0">
+                            <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
+                                <i className="bi bi-info-circle me-2 text-primary"></i>
+                                    PPA Information
+                            </h5>
+                        </Card.Header>
+                        <Card.Body className="p-6">
+                            <InfoCard icon="bi bi-award" label="PPA Id" value={state?.ppaDetail?.ppaUniqueId || "—"} />
+                            <InfoCard icon="bi bi-award" label="PPA Name" value={state?.ppaDetail?.ppaName || "—"} />
+                        </Card.Body>
+                    </Card>
+                    
+                    <Card className="border bg-white shadow-sm h-30">
+                        <Card.Header className="bg-light border-bottom-0 pb-0">
+                            <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
+                                <i className="bi bi-info-circle me-2 text-primary"></i>
+                                    Plant Information
+                            </h5>
+                        </Card.Header>
+                        <Card.Body className="p-6">
+                            <InfoCard icon="bi bi-award" label="Plant Id" value={state?.ppaDetail?.plantUniqueId || "—"} />
+                            <InfoCard icon="bi bi-award" label="Plant's Unique Name" value={state?.ppaDetail?.plantUniqueName || "—"} />
+                            <InfoCard icon="bi bi-award" label="Plant's Capacity" value={state?.ppaDetail?.plantCapacity || "—"} />
                         </Card.Body>
                     </Card>
                 </Col>

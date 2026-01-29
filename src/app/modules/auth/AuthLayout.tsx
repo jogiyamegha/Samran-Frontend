@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {Outlet, Link} from "react-router-dom";
-import AuthPhoto from "../../../_admin/assets/media/The-Dunreidy-Story.png";
+import AuthPhoto from "../../../_admin/assets/media/solarImage.png";
 import {Card, Col, Row} from "react-bootstrap";
 const AuthLayout = () => {
     useEffect(() => {

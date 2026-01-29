@@ -1,5 +1,5 @@
 export interface IBillData {
-    ppaDetails: {
+    ppaDetail: {
         ppaId: string,
         plantId: string,
         userId: string,

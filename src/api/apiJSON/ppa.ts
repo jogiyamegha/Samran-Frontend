@@ -3,6 +3,7 @@ import Method from '../../utils/methods';
 
 export const PPAAPIJSON = {
     AddPpa: ({
+        ppaName,
         plantId,
         plantCapacity,
         tarrif,
@@ -12,6 +13,9 @@ export const PPAAPIJSON = {
         leaseDocument,
     } : IAddPpa) => {
         const formData = new FormData();
+        if (ppaName !== undefined && ppaName !== null) {
+            formData.append("ppaName", ppaName);
+        }
         if (plantId !== undefined && plantId !== null) {
             formData.append("plantId", plantId);
         }

@@ -55,7 +55,7 @@ const AddBill = () => {
             if (response && response.records) {
                 const options = response.records.map((ppa: any) => ({
                     value: ppa._id,
-                    label: `${ppa?.plantDetail?.name}`
+                    label: `${ppa?.ppaName} (${ppa?.ppaUniqueId})`
                 }));
                 setPpaOptions(options);
             }

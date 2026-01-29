@@ -109,7 +109,7 @@ export function ForgotPassword() {
                     type="submit"
                     id="kt_password_reset_submit"
                     className="btn btn-primary w-100"
-                    disabled={formik.isSubmitting || formik.isValid}
+                    disabled={formik.isSubmitting || !formik.isValid}
                 >
                     {!loading && <span className='indicator-label'>Submit</span>}
                     {loading && (
