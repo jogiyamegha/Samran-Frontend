@@ -178,7 +178,7 @@ const BillDownloadReportModal: React.FC<BillDownloadReportModalProps> = ({
             if (activeTab === "billingMonth" && selectedBillingMonth)
                 params.billingMonth = Number(selectedBillingMonth.value);
             if (activeTab === "userPaymentMethod" && selectedUserPaymentMethod)
-                params.paymentMethod = Number(selectedUserPaymentMethod.value);
+                params.userPaymentMethod = Number(selectedUserPaymentMethod.value);
             if (activeTab === "isPaid" && selectedIsPaid)
                 params.isPaid = selectedIsPaid.value === "true";
 
