@@ -4,11 +4,14 @@ import {useLocation, useNavigate} from "react-router-dom";
 import Method from "../../../utils/methods";
 import { PlantStatus, PropertyTypes } from "../../../utils/constants";
 import PlaceholderLogo from "../../../_admin/assets/media/svg/placeholder.svg";
+import CommonImageModal from "../../modals/CommonImageModal";
 
 const ViewPlant = () => {
     const navigate = useNavigate();
     const {state}: any = useLocation();
-    
+    const [showImageModal, setShowImageModal] = React.useState(false);
+    const [selectedImage, setSelectedImage] = React.useState<string>("");
+
     const formatDate = (dateString: string): string => {
         return Method.convertDateToFormat(dateString, "DD-MM-YYYY");
     };
@@ -156,12 +159,16 @@ const ViewPlant = () => {
                             <div
                             className="d-inline-block rounded shadow-sm border bg-white p-3"
                             >
-                            <Image
-                                src={`${state?.propertyAddress?.billImage}`}
-                                alt="Bill Image"
-                                className="img-fluid rounded"
-                                style={{ maxHeight: '520px', maxWidth: '100%', objectFit: 'contain' }}
-                            />
+                                <Image
+                                    src={`${state?.propertyAddress?.billImage}`}
+                                    alt="Bill Image"
+                                    className="img-fluid rounded"
+                                    style={{ maxHeight: '520px', maxWidth: '100%', objectFit: 'contain', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        setSelectedImage(state?.propertyAddress?.billImage);
+                                        setShowImageModal(true);
+                                    }}
+                                />
                             </div>
                         ) : (
                             <div className="py-6">
@@ -242,6 +249,12 @@ const ViewPlant = () => {
                     </Card>
                 </Col>
             </Row>
+            <CommonImageModal
+                show={showImageModal}
+                onHide={() => setShowImageModal(false)}
+                imageSrc={selectedImage}
+                imageAlt="Bill Image Preview"
+            />
         </div>
     );
 };

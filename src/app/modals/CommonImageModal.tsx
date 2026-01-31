@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import CrossSvg from '../../admin/assets/media/svg/CloseImagePopUp.svg';
+import CrossSvg from '../../_admin/assets/media/svg/CloseImagePopUp.svg';
 
 interface CommonImageModalProps {
     show: boolean;

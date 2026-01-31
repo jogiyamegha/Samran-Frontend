@@ -739,6 +739,7 @@ const Bills = () => {
                                                     >
                                                         <td 
                                                             className="fs-14 fw-500 text-center"
+                                                            style={{cursor: 'pointer'}}
                                                             onClick={() =>
                                                                 navigate(
                                                                     '/bill/view-details',

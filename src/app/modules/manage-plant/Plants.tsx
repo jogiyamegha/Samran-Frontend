@@ -488,7 +488,7 @@ const Plants = () => {
                 </Col>
                 
                 <Col>
-                    <Card className="border border-r10px">
+                    <Card className="border border-r10px mt-4">
                         <Card.Body className="p-0">
                             <div className="table-responsive">
                                 <table className="table table-rounded table-row-bordered align-middle gs-7 gy-4">
@@ -544,7 +544,7 @@ const Plants = () => {
                                                                     )
                                                                 }
                                                                 className="fs-15 fw-500 text-center"
-                                                                
+                                                                style={{cursor: 'pointer'}}
                                                             >
                                                                 {plant?.plantUniqueId}
                                                             </td>

@@ -238,7 +238,10 @@ const Ppa = () => {
                             <FormLabel className="fs-16 fw-500 text-dark">Plant</FormLabel>
                             <CustomSelectWhite
                                 placeholder="Select Plant"
-                                options={[...plantOptions]}
+                                options={[
+                                    ...plantOptions,
+                                    { value: undefined, label: "Clear Filter" }, // Acts as clear option
+                                ]}
                                 isMulti={false}
                                 onChange={(selected: any) => {
                                     handleSelectChange(selected ? selected.value : undefined);
@@ -374,6 +377,7 @@ const Ppa = () => {
                                                         >
                                                         <td
                                                             className="fs-15 fw-500 text-center"
+                                                            style={{cursor: 'pointer'}}
                                                             onClick={() =>
                                                                 navigate(
                                                                     '/ppa/view-details',

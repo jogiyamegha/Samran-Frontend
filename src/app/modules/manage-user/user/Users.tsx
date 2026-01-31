@@ -287,7 +287,8 @@ const Users = () => {
                                                                     {user.firstName} {user.lastName}
                                                                 </td> */}
                                                                 <td
-                                                                    className="fs-15 fw-500"
+                                                                    className="fs-15 fw-500 "
+                                                                    style={{cursor: 'pointer'}}
                                                                     onClick={() =>
                                                                         navigate("/user/view-details", {
                                                                             state: user,
