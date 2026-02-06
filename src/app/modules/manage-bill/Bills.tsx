@@ -256,6 +256,9 @@ const Bills = () => {
                 setShowModal(true);   
                 break;
             case 3:
+                navigate('/bill/edit-bill', { state: bill });
+                break;
+            case 4:
                 setBillId(bill._id);
                 setShowModel(true);
                 break;
@@ -810,14 +813,21 @@ const Bills = () => {
                                                                         ),
                                                                         value: 2,
                                                                     },
-
-                                                                    {
+                                                                    {   
                                                                         label: (
-                                                                        <button className="btn btn-link fs-14 fw-500 text-danger w-100 d-flex justify-content-center align-items-center py-3">
-                                                                            Delete
-                                                                        </button>
+                                                                            <button className="btn btn-link fs-14 fw-500 text-black w-100 d-flex justify-content-center align-items-center py-3">
+                                                                                Edit Bill
+                                                                            </button>
                                                                         ),
                                                                         value: 3,
+                                                                    },
+                                                                    {
+                                                                        label: (
+                                                                            <button className="btn btn-link fs-14 fw-500 text-danger w-100 d-flex justify-content-center align-items-center py-3">
+                                                                                Delete
+                                                                            </button>
+                                                                        ),
+                                                                        value: 4,
                                                                     },
                                                                 ]}
                                                             />

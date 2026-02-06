@@ -23,3 +23,9 @@ export interface IAddBill {
     consumedUnits: number | null,
     exportedUnits: number | null,
 }
+
+export interface IEditBill {
+    generatedUnits: number | null,
+    consumedUnits: number | null,
+    exportedUnits: number | null,
+}

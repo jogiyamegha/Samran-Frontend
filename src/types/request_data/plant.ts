@@ -51,3 +51,18 @@ export interface IAddPlant {
     billImage : File | null,
     electricityRate: number | null,
 }
+
+export interface IEditPlant {
+    plantUniqueName: string;
+    userId: string;
+    propertyName: string;
+    propertyType: number;
+    address: string;
+    city: string;
+    state: string;
+    pincode: number;
+    roofArea: number;
+    billAmount: number;
+    electricityRate: number;
+    billImage: File | null;
+}

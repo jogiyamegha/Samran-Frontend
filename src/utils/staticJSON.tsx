@@ -27,3 +27,8 @@ export const weekdayOptions: Option[] = [
     {value: 6, label: "Saturday"},
     {value: 7, label: "Sunday"},
 ]
+
+export const propertyTypeOptions = [
+    { value: 1, label: 'HousingSociety' },
+    {value: 2, label: "ManufacturingUnit"},
+];

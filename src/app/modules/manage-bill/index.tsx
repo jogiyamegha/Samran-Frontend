@@ -3,6 +3,7 @@ import { PageTitle } from '../../../_admin/layout/core';
 import Bills from './Bills';
 import AddBill from './AddBill';
 import ViewBill from './ViewBill';
+import EditBill from './EditBill';
 
 const ManageBillPage = () => {
     return (
@@ -39,6 +40,15 @@ const ManageBillPage = () => {
                         </>
                     }
                 />
+                    <Route
+                        path='/edit-bill'
+                        element={
+                            <>
+                                <PageTitle>Edit Bill</PageTitle>
+                                <EditBill />
+                            </>
+                        }
+                    />
             </Route>
         </Routes>
     ) }

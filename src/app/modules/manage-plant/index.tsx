@@ -3,6 +3,7 @@ import { PageTitle } from '../../../_admin/layout/core';
 import Plants from './Plants';
 import AddPlant from './AddPlant';
 import ViewPlant from './ViewPlant';
+import EditPlant from './EditPlant';
 
 const ManagePlantPage = () => {
     return (
@@ -27,6 +28,15 @@ const ManagePlantPage = () => {
                         <>
                             <PageTitle>Add Plant</PageTitle>
                             <AddPlant />
+                        </>
+                    }
+                /> 
+                <Route
+                    path='/edit-plant'
+                    element={
+                        <>
+                            <PageTitle>Edit Plant</PageTitle>
+                            <EditPlant />
                         </>
                     }
                 />

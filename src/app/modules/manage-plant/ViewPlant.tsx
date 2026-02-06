@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {Button, Card, Col, Row, Badge, Image} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
 import Method from "../../../utils/methods";
@@ -9,16 +9,27 @@ import CommonImageModal from "../../modals/CommonImageModal";
 const ViewPlant = () => {
     const navigate = useNavigate();
     const {state}: any = useLocation();
+    const location = useLocation();
     const [showImageModal, setShowImageModal] = React.useState(false);
     const [selectedImage, setSelectedImage] = React.useState<string>("");
-
+    const [plant, setPlant] = useState<any>(null);
     const formatDate = (dateString: string): string => {
         return Method.convertDateToFormat(dateString, "DD-MM-YYYY");
     };
+
+    useEffect(() => {
+        if (location.state) {
+            setPlant(location.state);
+        }
+    }, [location.state]);
     
     const handleBack = () => {
         navigate("/plant/all-plants");
     };
+
+    const handleEdit = () => {
+        navigate("/plant/edit-plant", {state: plant});
+    }
     
     if (!state) {
         return (
@@ -94,6 +105,10 @@ const ViewPlant = () => {
                             </Button>
                             <p className="fs-22 fw-bolder mb-0" style={{ color: '#1e3369' }}>Plant Details</p>
                         </div>
+                        <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
+                            <i className="bi bi-pencil me-2"></i>
+                            Edit Site
+                        </Button>
                     </div>
                 </Col>
             </Row>

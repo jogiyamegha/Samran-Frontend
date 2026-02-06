@@ -1,5 +1,5 @@
 import { IListPlantParams } from '../../types';
-import { IAddPlant } from '../../types/request_data/plant';
+import { IAddPlant, IEditPlant, IPlantData } from '../../types/request_data/plant';
 import { ApproveRejectPlantParams } from '../../types/response_data/plant';
 
 export const PLANTAPIJSON = {
@@ -51,6 +51,64 @@ export const PLANTAPIJSON = {
             formData.append("electricityRate", electricityRate.toString());        
         }
         return formData;
+    },
+
+    editPlant:({
+        plantUniqueName,
+        userId,
+        propertyName,
+        propertyType,
+        address,
+        city,
+        state,
+        pincode,
+        roofArea,
+        billAmount,
+        electricityRate,
+        billImage
+    } : IEditPlant) => {
+        return {
+            plantUniqueName: plantUniqueName.trim(),
+            userId: userId,
+            propertyName: propertyName.trim(),
+            propertyType: propertyType,
+            address: address.trim(),
+            city: city.trim(),
+            state: state.trim(),
+            pincode: pincode,
+            roofArea: roofArea,
+            billAmount: billAmount,
+            electricityRate: electricityRate,
+            billImage: billImage
+        }
+    },
+
+    editPlantWithoutBillImage: ({
+        plantUniqueName,
+        userId,
+        propertyName,
+        propertyType,
+        address,
+        city,
+        state,
+        pincode,
+        roofArea,
+        billAmount,
+        electricityRate,
+    }: IEditPlant) => {
+        return {
+            plantUniqueName: plantUniqueName.trim(),
+            userId: userId,
+            propertyName: propertyName.trim(),
+            propertyType: propertyType,
+            address: address.trim(),
+            city: city.trim(),
+            state: state.trim(),
+            pincode: pincode,
+            roofArea: roofArea,
+            billAmount: billAmount,
+            electricityRate: electricityRate,
+        }
     },
 
     listPlant: ({

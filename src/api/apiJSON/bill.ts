@@ -1,5 +1,5 @@
 import { IListBillParams } from "../../types";
-import {IAddBill} from '../../types/request_data/bill';
+import {IAddBill, IEditBill} from '../../types/request_data/bill';
 export const BILLAPIJSON = {
     AddBill: ({
         ppaId,
@@ -12,6 +12,16 @@ export const BILLAPIJSON = {
         ppaId,
         billingMonth,
         billingYear,
+        generatedUnits,
+        consumedUnits,
+        exportedUnits,
+    }),
+
+    EditBill: ({
+        generatedUnits,
+        consumedUnits,
+        exportedUnits,
+    } : IEditBill) => ({
         generatedUnits,
         consumedUnits,
         exportedUnits,
