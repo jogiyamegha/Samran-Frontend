@@ -1,0 +1,19 @@
+A premium, high-fidelity dashboard UI mockup for a solar investment platform called SAMRAN. The interface shows:
+- Clean, modern design with white background and navy/slate accents
+- Large revenue metrics card showing "₹2.4 Cr Monthly Revenue" with green upward trend arrow (+23.5%)
+- Solar generation graph with smooth gradient bars in blue and cyan showing upward trend
+- Portfolio overview section with multiple solar project cards
+- Real-time energy generation indicator with green pulse dot showing "Live: 1.2 MW Generation"
+- Professional typography using Inter font family
+- Soft shadows and rounded corners (24px radius)
+- Subtle glass morphism effects on cards
+- Institutional-grade financial dashboard aesthetic similar to Bloomberg Terminal
+- Color scheme: white (#FFFFFF), navy (#0A1628), slate gray (#64748B), cyan (#06B6D4), blue (#0066FF), violet accent (#8B5CF6)
+- Style: Stripe-like minimalism meets BlackRock sophistication
+- No device frames, just the clean UI interface floating
+- Desktop view, 16:9 aspect ratio
+- Subtle depth with layered cards
+- Modern fintech product design
+- Professional, trustworthy, institutional quality
+
+Generate as: samran_dashboard_mockup.png

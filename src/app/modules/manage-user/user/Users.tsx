@@ -1,21 +1,21 @@
-import React, {useEffect, useReducer, useState} from "react";
-import {Button, Card, Col, Dropdown, Form, FormLabel, Row} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
-import {CustomSelectTable} from "../../../custom/select/CustomSelectTable";
+import React, { useEffect, useReducer, useState } from "react";
+import { Button, Card, Col, Dropdown, Form, FormLabel, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { CustomSelectTable } from "../../../custom/select/CustomSelectTable";
 import ThreeDots from "../../../../_admin/assets/media/svg/threeDots.svg";
 import Pagination from "../../../../global/pagination";
 import "react-datepicker/dist/react-datepicker.css";
 import DeleteModal from "../../../modals/DeleteModal";
 import CustomDateInput from "../../../custom/DateRange/CustomDateInput";
-import {KTSVG} from "../../../../_admin/helpers";
-import {USER} from "../../../../api/apiEndPoints";
+import { KTSVG } from "../../../../_admin/helpers";
+import { USER } from "../../../../api/apiEndPoints";
 import APICallService from "../../../../api/apiCallService";
-import {USERAPIJSON} from "../../../../api/apiJSON/user";
-import {ListUser} from "../../../../types/response_data/user";
+import { USERAPIJSON } from "../../../../api/apiJSON/user";
+import { ListUser } from "../../../../types/response_data/user";
 import Loader from "../../../../global/loader";
-import {success} from "../../../../global/toast";
-import {PAGE_LIMIT, UserTypes} from "../../../../utils/constants";
-import {useDebounce} from "../../../../utils/useDebounce";
+import { success } from "../../../../global/toast";
+import { PAGE_LIMIT, UserTypes } from "../../../../utils/constants";
+import { useDebounce } from "../../../../utils/useDebounce";
 import Method from "../../../../utils/methods";
 
 const Users = () => {
@@ -81,7 +81,7 @@ const Users = () => {
         setLoading(false);
     };
 
-    const handleSelectChange = (eventKey: number | undefined ) => {
+    const handleSelectChange = (eventKey: number | undefined) => {
         const newUserType = eventKey ? eventKey as number : undefined;
         setUserType(newUserType);
         setPage(1);
@@ -141,6 +141,14 @@ const Users = () => {
                             <div className="badge badge-primary ms-3 rounded-pill">
                                 <span className="p-1 fs-14 text-white">{totalRecords}</span>
                             </div>
+                        </div>
+                        <div className="d-flex gap-3">
+                            <button
+                                className="btn btn-primary fs-14 fw-bold rounded-pill px-6"
+                                onClick={() => navigate("/user/add-user")}
+                            >
+                                <i className="fas fa-plus me-2"></i> New Investor
+                            </button>
                         </div>
                     </div>
                 </Col>
@@ -241,42 +249,42 @@ const Users = () => {
                 <Col>
                     {/* <Card className="border border-r20px">
                         <Card.Body className="p-0"> */}
-                            <div className="table-responsive">
-                                <table className="table table-rounded table-row-bordered align-middle gs-7 gy-2.5">
-                                    <thead className="bg-header-table">
-                                        <tr className="fw-bold fs-14 fw-600 border-bottom h-50px align-middle">
-                                            <th className="min-w-150px text-center">Name</th>
-                                            <th className="min-w-200px text-center">Email</th>
-                                            <th className="min-w-150px text-center">Phone</th>
-                                            <th className="min-w-100px text-center">Role</th>
-                                            <th className="min-w-150px text-center">Actions</th>
-                                        </tr>
-                                    </thead>
+                    <div className="table-responsive">
+                        <table className="table table-rounded table-row-bordered align-middle gs-7 gy-2.5">
+                            <thead className="bg-header-table">
+                                <tr className="fw-bold fs-14 fw-600 border-bottom h-50px align-middle">
+                                    <th className="min-w-150px text-center">Name</th>
+                                    <th className="min-w-200px text-center">Email</th>
+                                    <th className="min-w-150px text-center">Phone</th>
+                                    <th className="min-w-100px text-center">Role</th>
+                                    <th className="min-w-150px text-center">Actions</th>
+                                </tr>
+                            </thead>
 
-                                    <tbody>
-                                        {loading ? (
+                            <tbody>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan={6}>
+                                            <div className="w-100 d-flex justify-content-center text-center">
+                                                <Loader loading={loading} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    <>
+                                        {usersData.length === 0 && loading === false ? (
                                             <tr>
                                                 <td colSpan={6}>
                                                     <div className="w-100 d-flex justify-content-center text-center">
-                                                        <Loader loading={loading} />
+                                                        <div className="fw-bold fs-16">No Users Found!</div>
                                                     </div>
                                                 </td>
                                             </tr>
                                         ) : (
                                             <>
-                                                {usersData.length === 0 && loading === false ? (
-                                                    <tr>
-                                                        <td colSpan={6}>
-                                                            <div className="w-100 d-flex justify-content-center text-center">
-                                                                <div className="fw-bold fs-16">No Users Found!</div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ) : (
-                                                    <>
-                                                        {usersData.map((user, index) => (
-                                                            <tr key={index} className="">
-                                                                {/* <td
+                                                {usersData.map((user, index) => (
+                                                    <tr key={index} className="">
+                                                        {/* <td
                                                                     className="fs-15 fw-500 text-center"
                                                                     onClick={() =>
                                                                         navigate("/manage-users/view-details", {
@@ -286,108 +294,108 @@ const Users = () => {
                                                                 >
                                                                     {user.firstName} {user.lastName}
                                                                 </td> */}
-                                                                <td
-                                                                    className="fs-15 fw-500 "
-                                                                    style={{cursor: 'pointer'}}
-                                                                    onClick={() =>
-                                                                        navigate("/user/view-details", {
-                                                                            state: user,
-                                                                        })
-                                                                    }
-                                                                >
-                                                                    <div className="d-flex align-items-center">
-                                                                        <span className="fs-15 fw-600 ms-3">
-                                                                            {user?.name}
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td className="fs-14 fw-500 text-center">
-                                                                    {user?.email}
-                                                                </td>
-                                                                <td className="fs-14 fw-500 text-center">
-                                                                    +{user?.phoneCountry} {user?.phone}
-                                                                </td>
-                                                                <td className="fs-14 fw-500 text-center">
-                                                                    {Method.getUserTypeLabel(user?.userType)}
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    <CustomSelectTable
-                                                                        backgroundColor="white"
-                                                                        marginLeft={"0px"}
-                                                                        width={"auto"}
-                                                                        placeholder={
-                                                                            <img
-                                                                                src={ThreeDots}
-                                                                                width={32}
-                                                                                height={32}
-                                                                                alt=""
-                                                                            />
-                                                                        }
-                                                                        options={[
-                                                                            {
-                                                                                label: (
-                                                                                    <button
-                                                                                        className="btn btn-link fs-14 fw-500 text-black ms-3 p-4"
-                                                                                        onClick={() =>
-                                                                                            navigate(
-                                                                                                "/user/view-details",
-                                                                                                {
-                                                                                                    state: user,
-                                                                                                }
-                                                                                            )
-                                                                                        }
-                                                                                    >
-                                                                                        View details
-                                                                                    </button>
-                                                                                ),
-                                                                                value: 1,
-                                                                            },
-                                                                            {
-                                                                                label: (
-                                                                                    <button
-                                                                                        className="btn btn-link fs-14 fw-500 text-black ms-3 p-4"
-                                                                                        onClick={() =>
-                                                                                            navigate(
-                                                                                                "/manage-users/edit-user",
-                                                                                                {state: user}
-                                                                                            )
-                                                                                        }
-                                                                                    >
-                                                                                        Edit details
-                                                                                    </button>
-                                                                                ),
-                                                                                value: 2,
-                                                                            },
-                                                                            {
-                                                                                label: (
-                                                                                    <button
-                                                                                        className="btn btn-link fs-14 fw-500 text-danger ms-3 p-4"
-                                                                                        onClick={() => {
-                                                                                            setShowModal(true);
-                                                                                            setUserId(user._id);
-                                                                                        }}
-                                                                                    >
-                                                                                        Delete
-                                                                                    </button>
-                                                                                ),
-                                                                                value: 3,
-                                                                            },
-                                                                        ]}
-                                                                        // isOptionDisabled={(option: {
-                                                                        //   value: number;
-                                                                        // }) => option.value === 3}
+                                                        <td
+                                                            className="fs-15 fw-500 "
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={() =>
+                                                                navigate("/user/view-details", {
+                                                                    state: user,
+                                                                })
+                                                            }
+                                                        >
+                                                            <div className="d-flex align-items-center">
+                                                                <span className="fs-15 fw-600 ms-3">
+                                                                    {user?.name}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="fs-14 fw-500 text-center">
+                                                            {user?.email}
+                                                        </td>
+                                                        <td className="fs-14 fw-500 text-center">
+                                                            +{user?.phoneCountry} {user?.phone}
+                                                        </td>
+                                                        <td className="fs-14 fw-500 text-center">
+                                                            {Method.getUserTypeLabel(user?.userType)}
+                                                        </td>
+                                                        <td className="text-center">
+                                                            <CustomSelectTable
+                                                                backgroundColor="white"
+                                                                marginLeft={"0px"}
+                                                                width={"auto"}
+                                                                placeholder={
+                                                                    <img
+                                                                        src={ThreeDots}
+                                                                        width={32}
+                                                                        height={32}
+                                                                        alt=""
                                                                     />
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </>
-                                                )}
+                                                                }
+                                                                options={[
+                                                                    {
+                                                                        label: (
+                                                                            <button
+                                                                                className="btn btn-link fs-14 fw-500 text-black ms-3 p-4"
+                                                                                onClick={() =>
+                                                                                    navigate(
+                                                                                        "/user/user-details",
+                                                                                        {
+                                                                                            state: user,
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                View details
+                                                                            </button>
+                                                                        ),
+                                                                        value: 1,
+                                                                    },
+                                                                    {
+                                                                        label: (
+                                                                            <button
+                                                                                className="btn btn-link fs-14 fw-500 text-black ms-3 p-4"
+                                                                                onClick={() =>
+                                                                                    navigate(
+                                                                                        "/user/edit-user",
+                                                                                        { state: user }
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Edit details
+                                                                            </button>
+                                                                        ),
+                                                                        value: 2,
+                                                                    },
+                                                                    {
+                                                                        label: (
+                                                                            <button
+                                                                                className="btn btn-link fs-14 fw-500 text-danger ms-3 p-4"
+                                                                                onClick={() => {
+                                                                                    setShowModal(true);
+                                                                                    setUserId(user._id);
+                                                                                }}
+                                                                            >
+                                                                                Delete
+                                                                            </button>
+                                                                        ),
+                                                                        value: 3,
+                                                                    },
+                                                                ]}
+                                                            // isOptionDisabled={(option: {
+                                                            //   value: number;
+                                                            // }) => option.value === 3}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                             </>
                                         )}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {/* </Card.Body>
+                                    </>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/* </Card.Body>
                     </Card> */}
                 </Col>
                 {totalRecords > 0 && !loading ? (

@@ -8,6 +8,10 @@ import { CustomerServicei18nProvider } from './_admin/i18n/CustomerServicei18n';
 import './_admin/assets/sass/style.react.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import './_admin/assets/sass/style.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Tailwind CSS - Import last to ensure utilities override framework styles
+import './index.css';
 import { AppRoutes } from './app/routing/AppRoutes';
 import { AuthProvider } from './app/modules/auth';
 import { ToastContainer } from 'react-toastify';

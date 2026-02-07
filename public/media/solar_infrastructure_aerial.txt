@@ -1,0 +1,16 @@
+A premium aerial photograph of a large-scale solar farm for an institutional renewable energy investment platform. The image shows:
+- Bird's eye view of modern solar panel installation
+- Perfectly aligned rows of deep blue photovoltaic solar panels creating geometric patterns
+- Clean, professional industrial aesthetic
+- Bright daylight with clear blue sky
+- High-end corporate photography style similar to annual reports
+- Institutional quality, suitable for investor presentations and venture capital pitch decks
+- Color grading: cool tones with deep blues (#0066FF), slate grays, and clean whites
+- Professional, calm, trustworthy atmosphere
+- Sharp focus, high resolution
+- No text overlays or watermarks
+- Landscape orientation (16:9), suitable for hero section background
+- Conveys scale, professionalism, and infrastructure credibility
+- Style: Similar to photography used by BlackRock, Brookfield Renewable, or NextEra Energy investor materials
+
+Generate as: solar_infrastructure_aerial.png

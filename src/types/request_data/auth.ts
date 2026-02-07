@@ -21,3 +21,11 @@ export interface IVerifyOTP {
     otp: string;
     email: string;
 }
+export interface ISignUpData {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    userType: string | number;
+    phoneCountry?: string;
+}

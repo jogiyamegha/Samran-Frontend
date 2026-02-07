@@ -1,17 +1,12 @@
 import { useEffect } from "react";
-import { Navigate, Routes } from "react-router-dom";
 import { useAuth } from ".";
 
 export function Logout() {
     const {logout} = useAuth();
     useEffect(() => {
         logout();
-        document.location.reload();
+        window.location.href = '/auth/login';
     }, [logout]);
 
-    return (
-        <Routes>
-            <Navigate to='/auth/login' />
-        </Routes>
-    )
+    return null;
 }

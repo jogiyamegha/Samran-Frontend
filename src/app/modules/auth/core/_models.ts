@@ -1,14 +1,17 @@
 export interface AuthModel {
-    token : string
+    token: string
 }
 export interface UserModel {
-    firstName : string;
-    lastName : string;
-    image? : string;
+    name: string;
+    image?: string;
+    profilePicture?: string;
     email: string;
     userType?: number;
     active?: boolean;
     roleAndPermission?: any;
     phoneCountry?: string;
     phone?: string;
+    address?: string;
+    createdAt?: string;
+    id?: string;
 }

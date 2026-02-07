@@ -4,6 +4,7 @@ import { Login } from './components/Login';
 import { AuthLayout } from './AuthLayout';
 import { ResetPassword } from './components/Newpassword';
 import { Successfull } from './components/Successful';
+import Register from '../public/pages/Register';
 
 const AuthPage = () => (
     <div
@@ -18,6 +19,7 @@ const AuthPage = () => (
             <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="registration" element={<Register />} />
                 <Route path="reset-password" element={<ResetPassword />} />
                 <Route path="success" element={<Successfull />} />
                 {/* <Route path="otp-success" element={<OtpSuccessfull />} />
@@ -48,4 +50,4 @@ export const UserVerifyDetails = () => (
     </div>
 );
 
-export {AuthPage};
+export { AuthPage };

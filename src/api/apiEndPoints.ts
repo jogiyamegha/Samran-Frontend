@@ -1,21 +1,29 @@
 // API END-POINTS
 import * as constants from '../utils/constants';
 /**------------------Authentication-------------------- */
-export const LOGIN = 'admin/login' + " " + constants.POST_RAW;
-export const LOGOUT = 'admin/logout' + " " + constants.POST_RAW;
+export const ADMIN_LOGIN = 'admin/login' + " " + constants.POST_RAW;
+export const USER_LOGIN = 'user/login' + " " + constants.POST_RAW;
+export const USER_SIGNUP = 'user/signup' + " " + constants.POST_RAW;
+export const ADMIN_LOGOUT = 'admin/logout' + " " + constants.POST_RAW;
+export const USER_LOGOUT = 'user/logout' + " " + constants.POST_RAW;
+
+export const LOGIN = ADMIN_LOGIN;
+export const LOGOUT = ADMIN_LOGOUT;
 export const AUTH = {
     FORGOT_PASSWORD: 'admin/password/forgot' + ' ' + constants.POST_RAW,
     RESET_PASSWORD: 'admin/password/reset' + ' ' + constants.POST_RAW,
     CHANGE_PASSWORD: 'admin/password/change' + ' ' + constants.PATCH,
+    USER_FORGOT_PASSWORD: 'user/forgot/password' + ' ' + constants.POST_RAW,
+    USER_RESET_PASSWORD: 'user/reset/password' + ' ' + constants.POST_RAW,
     verifyOTP: "user/verify-details" + " " + constants.PATCH,
     resendOTP: "user/confirm-details" + " " + constants.GET_URL_PARAMS,
 }
 
 export const PLANT = {
-    ADDPLANT : 'admin/plant/add' + ' ' + constants.POST_FORM,
-    LISTPLANT : 'admin/plant/list' + ' ' + constants.GET_URL_PARAMS,
-    PLANTINFO : 'admin/plant/info' + ' ' + constants.PATCH_FORM_ID,
-    PLANTSTATUSUPDATE : 'admin/plant/status/update' + ' ' + constants.PATCH_ID,
+    ADDPLANT: 'admin/plant/add' + ' ' + constants.POST_FORM,
+    LISTPLANT: 'admin/plant/list' + ' ' + constants.GET_URL_PARAMS,
+    PLANTINFO: 'admin/plant/info' + ' ' + constants.PATCH_FORM_ID,
+    PLANTSTATUSUPDATE: 'admin/plant/status/update' + ' ' + constants.PATCH_ID,
     DOWNLOADREPORT: 'admin/plant/report/download' + ' ' + constants.GET_URL_PARAMS,
     EDITPLANT: 'admin/plant/edit' + ' ' + constants.PATCH_ID,
     EDITPLANT_FORM: 'admin/plant/edit' + ' ' + constants.PATCH_FORM_ID,
@@ -23,22 +31,22 @@ export const PLANT = {
 }
 
 export const PPA = {
-    ADDPPA : 'admin/ppa/create' + ' ' + constants.POST_FORM,
-    LISTPPA : 'admin/ppa/list' + ' ' + constants.GET_URL_PARAMS,
-    PPAINFO : 'admin/ppa/info' + ' ' + constants.PATCH_FORM_ID,
-    SIGNPPA : 'admin/ppa/sign' + ' ' + constants.PATCH_ID,
+    ADDPPA: 'admin/ppa/create' + ' ' + constants.POST_FORM,
+    LISTPPA: 'admin/ppa/list' + ' ' + constants.GET_URL_PARAMS,
+    PPAINFO: 'admin/ppa/info' + ' ' + constants.PATCH_FORM_ID,
+    SIGNPPA: 'admin/ppa/sign' + ' ' + constants.PATCH_ID,
 }
 
 export const Bill = {
-    ADDBILL : 'admin/bill/generate' + ' ' + constants.POST_RAW,
-    LISTBILL : 'admin/bill/list' + ' ' + constants.GET_URL_PARAMS,
-    BILLINFO : 'admin/bill/info' + ' ' + constants.PATCH_FORM_ID,
+    ADDBILL: 'admin/bill/generate' + ' ' + constants.POST_RAW,
+    LISTBILL: 'admin/bill/list' + ' ' + constants.GET_URL_PARAMS,
+    BILLINFO: 'admin/bill/info' + ' ' + constants.PATCH_FORM_ID,
     DOWNLOADREPORT: 'admin/bill/report/download' + ' ' + constants.GET_URL_PARAMS,
     EDITBILL: 'admin/bill/edit' + ' ' + constants.PATCH_ID
 }
 
 export const PAYMENT = {
-    UPDATECASHPAYMENT : 'admin/update/cash-payment' + ' ' + constants.PATCH_ID
+    UPDATECASHPAYMENT: 'admin/update/cash-payment' + ' ' + constants.PATCH_ID
 }
 
 export const DASHBOARD = {
@@ -52,6 +60,7 @@ export const USER = {
     DELETEUSER: 'admin/user/delete' + ' ' + constants.DELETE_ID_PARAMS,
     GETUSERSITEJOBS: 'admin/user' + ' ' + constants.GET_ID_PARAMS,
     GETUSERTIMELOGS: "admin/user/time-logs" + " " + constants.GET_ID_PARAMS,
+    UPDATE_PROFILE: 'user/profile/update' + ' ' + constants.PATCH,
 }
 
 export const CMS = {
@@ -77,4 +86,12 @@ export const FIELDTYPE = {
     ADDFIELDTYPE: "admin/fieldType/add" + " " + constants.POST_RAW,
     EDITFIELDTYPE: "admin/fieldType/edit" + " " + constants.PATCH_ID,
     UPDATESTATUS: "admin/fieldType/edit-status" + " " + constants.PATCH_ID,
+}
+
+export const INVESTOR = {
+    PORTFOLIO: 'investor/portfolio' + ' ' + constants.GET,
+    MY_INVESTMENTS: 'investor/my-investments' + ' ' + constants.GET,
+    INVESTMENT_DETAIL: 'investor/my-investments' + ' ' + constants.GET_ID_PARAMS,
+    PAYOUTS: 'investor/payouts' + ' ' + constants.GET,
+    AVAILABLE_INVESTMENTS: 'investor/available-investments' + ' ' + constants.GET,
 }

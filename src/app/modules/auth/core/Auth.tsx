@@ -17,6 +17,11 @@ type AuthContextProps = {
     currentUser : UserModel | undefined;
     saveCurrentUser : (auth: UserModel | undefined) => void;
     logout: () => void;
+    userType: number | null;
+    isUserType: (type: number) => boolean;
+    isAdmin: () => boolean;
+    isInvestor: () => boolean;
+    isConsumer: () => boolean;
 }
 
 const initAuthContextPropsState = {
@@ -25,6 +30,11 @@ const initAuthContextPropsState = {
     currentUser : undefined,
     saveCurrentUser : () => {},
     logout: () => {},
+    userType: null,
+    isUserType: (type: number) => false,
+    isAdmin: () => false,
+    isInvestor: () => false,
+    isConsumer: () => false,
 }
 
 const AuthContext = createContext<AuthContextProps> (initAuthContextPropsState);
@@ -38,6 +48,10 @@ const AuthProvider: FC<WithChildren> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<UserModel | undefined>(
         authHelper.getUser()
     );
+    
+    // Calculate user type based on current user
+    const userType = currentUser?.userType || null;
+    
     const saveAuth = (auth: AuthModel | undefined) => {
         setAuth(auth);
         if(auth) {
@@ -58,6 +72,22 @@ const AuthProvider: FC<WithChildren> = ({ children }) => {
         saveAuth(undefined);
         saveCurrentUser(undefined);
     }
+    
+    const isUserType = (type: number) => {
+        return currentUser?.userType === type;
+    };
+    
+    const isAdmin = () => {
+        return isUserType(1);
+    };
+    
+    const isInvestor = () => {
+        return isUserType(2);
+    };
+    
+    const isConsumer = () => {
+        return isUserType(3);
+    };
 
     return (
         <AuthContext.Provider
@@ -66,7 +96,12 @@ const AuthProvider: FC<WithChildren> = ({ children }) => {
                 saveAuth,
                 currentUser,
                 saveCurrentUser,
-                logout
+                logout,
+                userType,
+                isUserType,
+                isAdmin,
+                isInvestor,
+                isConsumer
             }}
         >
             {children}

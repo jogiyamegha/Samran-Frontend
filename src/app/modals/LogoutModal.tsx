@@ -7,14 +7,17 @@ import { LOGOUT } from '../../api/apiEndPoints';
 const LogoutModal = (props: any) => {
     const { logout } = useAuth();
     const handleLogout = async () => {
-        console.log("step 1")
-        // Perform logout action here
-        const apiService = new APICallService(LOGOUT);
-        const response = await apiService.callAPI();
-        console.log("logout res=>", response)
-        if (response) {
+        try {
+            const apiService = new APICallService(LOGOUT);
+            await apiService.callAPI();
+        } catch (error) {
+            console.error("Logout API error:", error);
+        } finally {
+            // Always logout on frontend regardless of backend result
             logout();
             props.onHide();
+            // Force redirect to login
+            window.location.href = '/auth/login';
         }
     };
     return (

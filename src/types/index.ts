@@ -5,7 +5,8 @@ export type {
     IResetPassword,
     IChangePassword,
     IVerifyOTP,
-    IUpdateProfile
+    IUpdateProfile,
+    ISignUpData
 } from '../types/request_data/auth';
 
 export type {IUserProfile} from "../types/request_data/user";

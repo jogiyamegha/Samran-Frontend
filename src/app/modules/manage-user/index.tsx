@@ -10,7 +10,7 @@ const ManageUsersPage = () => {
     return (
         <Routes>
             <Route element={<Outlet />}>
-                <Route  
+                <Route
                     index
                     element={<Navigate to='/user/all-users' />}
                 />
@@ -23,7 +23,7 @@ const ManageUsersPage = () => {
                         </>
                     }
                 />
-                {/* <Route
+                <Route
                     path="/add-user"
                     element={
                         <>
@@ -31,8 +31,8 @@ const ManageUsersPage = () => {
                             <AddUser />
                         </>
                     }
-                /> */}
-                {/* <Route
+                />
+                <Route
                     path="/edit-user"
                     element={
                         <>
@@ -40,17 +40,8 @@ const ManageUsersPage = () => {
                             <EditUser />
                         </>
                     }
-                /> */}
-                <Route
-                    path="/view-details"
-                    element={
-                        <>
-                            <PageTitle>User Details</PageTitle>
-                            <ViewUser />
-                        </>
-                    }
                 />
-                {/* <Route
+                <Route
                     path="/user-details"
                     element={
                         <>
@@ -58,7 +49,7 @@ const ManageUsersPage = () => {
                             <UserDetails />
                         </>
                     }
-                /> */}
+                />
             </Route>
         </Routes>
     );

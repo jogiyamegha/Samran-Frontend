@@ -2,7 +2,8 @@ export const PREF_TOKEN = "bearerToken";
 export const IS_INTRO = "/";
 export const IS_LOGIN = "Login";
 // export const BASE_URL = "https://api.symboint.com";
-export const BASE_URL = "http://127.0.0.1:3000/";
+export const BASE_URL = import.meta.env.VITE_APP_API_URL || "http://127.0.0.1:7000/";
+export const IMAGE_URL = BASE_URL;
 export const PAGE_LIMIT = 10;
 
 // API TYPES
@@ -45,7 +46,7 @@ export const OtpSeconds = 59;
 
 // CMS Types
 export const CMSTypes = (function () {
-    function CMSTypes() {}
+    function CMSTypes() { }
     CMSTypes.AboutUs = 1;
     CMSTypes.PrivacyPolicy = 2;
     CMSTypes.TermsAndCondition = 3;
@@ -54,14 +55,14 @@ export const CMSTypes = (function () {
 })();
 
 export const PropertyTypes = (function () {
-    function PropertyTypes() {};
+    function PropertyTypes() { };
     PropertyTypes.HousingSociety = 1;
     PropertyTypes.ManufacturingUnit = 2;
     return PropertyTypes;
 })();
 
 export const PlantStatus = (function () {
-    function PlantStatus() {};
+    function PlantStatus() { };
     PlantStatus.Submitted = 1;
     PlantStatus.Approved = 2;
     PlantStatus.Rejected = 3;
@@ -70,7 +71,7 @@ export const PlantStatus = (function () {
 })();
 
 export const UserTypes = (function () {
-    function UserTypes() {}
+    function UserTypes() { }
     UserTypes.Admin = 1;
     UserTypes.Investor = 2;
     UserTypes.Consumer = 3;
@@ -78,7 +79,7 @@ export const UserTypes = (function () {
 })();
 
 export const Months = (function Months() {
-    function Months() {};
+    function Months() { };
     Months.January = 1;
     Months.February = 2;
     Months.March = 3;
@@ -91,12 +92,12 @@ export const Months = (function Months() {
     Months.October = 10;
     Months.November = 11;
     Months.December = 12;
-    
+
     return Months;
 })();
 
-export const UserPaymentMethod = (function (){
-    function UserPaymentMethod() {};
+export const UserPaymentMethod = (function () {
+    function UserPaymentMethod() { };
     UserPaymentMethod.Cash = 1;
     UserPaymentMethod.Online = 2;
 

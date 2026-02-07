@@ -1,15 +1,15 @@
 import clsx from "clsx";
-import React, {useRef, useState, useEffect} from "react";
-import {Button, Card, Col, Form, Row} from "react-bootstrap";
+import React, { useRef, useState, useEffect } from "react";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import PlaceholderLogo from "../../../../_admin/assets/media/svg/placeholder.svg";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import APICallService from "../../../../api/apiCallService";
-import {USER} from "../../../../api/apiEndPoints";
-import {USERAPIJSON} from "../../../../api/apiJSON/user";
-import {error, success} from "../../../../global/toast";
-import {CustomSelectWhite} from "../../../custom/select/CustomSelectWhite";
-import {userTypeOptions} from "../../../../utils/staticJSON";
-import PhoneInput, {parsePhoneNumber, getCountryCallingCode} from "react-phone-number-input";
+import { USER } from "../../../../api/apiEndPoints";
+import { USERAPIJSON } from "../../../../api/apiJSON/user";
+import { error, success } from "../../../../global/toast";
+import { CustomSelectWhite } from "../../../custom/select/CustomSelectWhite";
+import { userTypeOptions } from "../../../../utils/staticJSON";
+import PhoneInput, { parsePhoneNumber, getCountryCallingCode } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
 // Custom CSS for PhoneInput to match form styling
@@ -65,20 +65,18 @@ if (typeof document !== "undefined") {
 
 const EditUser = () => {
     const navigate = useNavigate();
-    const {state}: any = useLocation();
+    const { state }: any = useLocation();
     console.log("🚀 ~ EditUser ~ state:", state);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<any>({
         email: state.email,
         phone: state.phone,
-        countryCode: state.countryCode?.startsWith("+") ? state.countryCode : `+${state.countryCode}`,
-        firstName: state.firstName,
-        lastName: state.lastName,
+        phoneCountry: state.phoneCountry?.startsWith("+") ? state.phoneCountry : `+${state.phoneCountry}`,
+        name: state.name,
         userType: state.userType,
         profilePicture: state.image,
         image: null,
-        sagePayrollCode: state.sagePayrollCode,
     });
     const [selectedCountry, setSelectedCountry] = useState<any>(null);
 
@@ -109,17 +107,15 @@ const EditUser = () => {
     const [validation, setValidation] = useState<any>({
         email: false,
         phone: false,
-        countryCode: false,
-        firstName: false,
-        lastName: false,
+        phoneCountry: false,
+        name: false,
         profilePicture: false,
         userType: false,
-        sagePayrollCode: false,
     });
     console.log("formData", formData);
 
     const handleInputChange = (e: any) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         let updatedValue = value;
         setFormData({
             ...formData,
@@ -129,14 +125,14 @@ const EditUser = () => {
     };
 
     const handlePhoneChange = (value: any) => {
-        let validationTemp = {...validation};
+        let validationTemp = { ...validation };
         validationTemp.phone = false;
         setValidation(validationTemp);
         if (!value) {
             setFormData((prevData: any) => ({
                 ...prevData,
                 phone: "",
-                countryCode: prevData.countryCode || state.countryCode || "+353",
+                phoneCountry: prevData.phoneCountry || state.phoneCountry || "+353",
             }));
             return;
         }
@@ -145,7 +141,7 @@ const EditUser = () => {
             if (phoneNumber) {
                 setFormData((prevData: any) => ({
                     ...prevData,
-                    countryCode: `+${phoneNumber.countryCallingCode}`,
+                    phoneCountry: `+${phoneNumber.countryCallingCode}`,
                     phone: phoneNumber.nationalNumber,
                 }));
             }
@@ -160,7 +156,7 @@ const EditUser = () => {
             const newCountryCode = `+${getCountryCallingCode(country)}`;
             setFormData((prevData: any) => ({
                 ...prevData,
-                countryCode: newCountryCode,
+                phoneCountry: newCountryCode,
                 phone: prevData.phone,
             }));
         }
@@ -247,10 +243,8 @@ const EditUser = () => {
         const newValidation = {
             email: formData.email.trim() === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()),
             phone: formData.phone.trim() === "",
-            countryCode: formData.countryCode.trim() === "",
-            firstName: formData.firstName.trim() === "",
-            lastName: formData.lastName.trim() === "",
-            sagePayrollCode: formData.sagePayrollCode.trim() === "",
+            phoneCountry: formData.phoneCountry.trim() === "",
+            name: formData.name.trim() === "",
             userType: formData.userType === null,
             profilePicture: formData.profilePicture === null,
         };
@@ -261,11 +255,11 @@ const EditUser = () => {
             // Add the employee logic here
             const userId = state._id;
             console.log("Form is valid. Editing the user...", formData);
-            const apiService = new APICallService(USER.EDITUSER, USERAPIJSON.editUser(formData), {id: userId});
+            const apiService = new APICallService(USER.EDITUSER, USERAPIJSON.editUser(formData), { id: userId });
             const response = await apiService.callAPI();
             if (response) {
                 success("User has been edited successfully");
-                navigate("/manage-users/all-users");
+                navigate("/user/all-users");
             }
         }
         setLoading(false);
@@ -350,32 +344,17 @@ const EditUser = () => {
                             <Row className="align-items-center">
                                 <Col>
                                     <Row>
-                                        <Col md={6} className="mb-3">
+                                        <Col md={12} className="mb-3">
                                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Label className="fs-16 fw-500 required">First Name</Form.Label>
+                                                <Form.Label className="fs-16 fw-500 required">Full Name</Form.Label>
                                                 <Form.Control
                                                     className={clsx("form-control-custom bg-white", {
-                                                        "border-danger": validation.firstName,
+                                                        "border-danger": validation.name,
                                                     })}
                                                     type="text"
                                                     placeholder="Type here…"
-                                                    name="firstName"
-                                                    value={formData.firstName}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={6} className="mb-3">
-                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Label className="fs-16 fw-500 required">Last Name</Form.Label>
-                                                <Form.Control
-                                                    className={clsx("form-control-custom bg-white", {
-                                                        "border-danger": validation.lastName,
-                                                    })}
-                                                    type="text"
-                                                    placeholder="Type here…"
-                                                    name="lastName"
-                                                    value={formData.lastName}
+                                                    name="name"
+                                                    value={formData.name}
                                                     onChange={handleInputChange}
                                                 />
                                             </Form.Group>
@@ -420,8 +399,8 @@ const EditUser = () => {
                                                         defaultCountry="IE"
                                                         country={selectedCountry || "IE"}
                                                         value={
-                                                            formData.phone && formData.countryCode
-                                                                ? `${formData.countryCode}${formData.phone}`
+                                                            formData.phone && formData.phoneCountry
+                                                                ? `${formData.phoneCountry}${formData.phone}`
                                                                 : undefined
                                                         }
                                                         onChange={handlePhoneChange}
@@ -466,20 +445,7 @@ const EditUser = () => {
                                             </Form.Group>
                                         </Col>
 
-                                        <Col md={6} className="mb-3">
-                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Label className="fs-16 fw-500 required">Payroll Code</Form.Label>
-                                                <Form.Control
-                                                    disabled={true}
-                                                    className={clsx("form-control-custom bg-white")}
-                                                    type="text"
-                                                    placeholder="Type here…"
-                                                    name="sagePayrollCode"
-                                                    value={formData.sagePayrollCode}
-                                                    // onChange={handleInputChange}
-                                                />
-                                            </Form.Group>
-                                        </Col>
+                                        {/* Hidden fields if not needed */}
                                     </Row>
                                 </Col>
                             </Row>

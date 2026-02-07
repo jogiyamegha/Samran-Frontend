@@ -5,17 +5,20 @@ import { languages } from 'prismjs';
 const AUTH_LOCAL_STORAGE_KEY = 'auth-admin-v';
 const AUTH_LOCAL_STORAGE_USER_KEY = 'auth-admin';
 
-const getAuth = () : AuthModel | undefined => {
+const getAuth = (): AuthModel | undefined => {
     if (!secureLocalStorage) {
         return
     }
 
     const lsValue: any = secureLocalStorage.getItem(AUTH_LOCAL_STORAGE_KEY);
-    if(!lsValue) {
+    if (!lsValue || lsValue === '' || lsValue === '""') {
         return;
     }
 
     try {
+        if (typeof lsValue === 'object') {
+            return lsValue as AuthModel;
+        }
         const auth: AuthModel = JSON.parse(lsValue) as AuthModel;
         if (auth) {
             return auth;
@@ -26,7 +29,7 @@ const getAuth = () : AuthModel | undefined => {
 }
 
 const setAuth = (auth: AuthModel) => {
-    if(!secureLocalStorage) {
+    if (!secureLocalStorage) {
         return;
     }
     try {
@@ -38,7 +41,7 @@ const setAuth = (auth: AuthModel) => {
 }
 
 const removeAuth = () => {
-    if(!secureLocalStorage) {
+    if (!secureLocalStorage) {
         return;
     }
     try {
@@ -48,15 +51,18 @@ const removeAuth = () => {
     }
 }
 
-const getUser = () : UserModel | undefined => {
-    if(!secureLocalStorage) {
+const getUser = (): UserModel | undefined => {
+    if (!secureLocalStorage) {
         return;
     }
-    const lsValue : any = secureLocalStorage.getItem(AUTH_LOCAL_STORAGE_USER_KEY);
-    if(!lsValue) {
+    const lsValue: any = secureLocalStorage.getItem(AUTH_LOCAL_STORAGE_USER_KEY);
+    if (!lsValue || lsValue === '' || lsValue === '""') {
         return;
     }
     try {
+        if (typeof lsValue === 'object') {
+            return lsValue as UserModel;
+        }
         const auth: UserModel = JSON.parse(lsValue) as UserModel;
         if (auth) {
             // You can easily check auth_token expiration also
@@ -67,8 +73,8 @@ const getUser = () : UserModel | undefined => {
     }
 }
 
-const setUser = (auth : UserModel) => {
-    if(!secureLocalStorage) {
+const setUser = (auth: UserModel) => {
+    if (!secureLocalStorage) {
         return;
     }
     try {
@@ -80,8 +86,8 @@ const setUser = (auth : UserModel) => {
     }
 }
 
-const setPageLimit = (limit : number) => {
-    if(!secureLocalStorage) {
+const setPageLimit = (limit: number) => {
+    if (!secureLocalStorage) {
         return;
     }
     try {
@@ -92,13 +98,16 @@ const setPageLimit = (limit : number) => {
 }
 
 const getPageLimit = () => {
-    const lsValue : any = secureLocalStorage.getItem('PAGE_LIMIT');
-    if(!lsValue) {
+    const lsValue: any = secureLocalStorage.getItem('PAGE_LIMIT');
+    if (!lsValue || lsValue === '' || lsValue === '""') {
         return;
     }
     try {
-        const limit : any = JSON.parse(lsValue);
-        if(limit) {
+        if (typeof lsValue === 'object' || typeof lsValue === 'number') {
+            return lsValue;
+        }
+        const limit: any = JSON.parse(lsValue);
+        if (limit) {
             return limit;
         }
     } catch (error) {
@@ -107,7 +116,7 @@ const getPageLimit = () => {
 }
 
 const removeUser = () => {
-    if(!secureLocalStorage) {
+    if (!secureLocalStorage) {
         return;
     }
     try {

@@ -1,0 +1,18 @@
+A clean, modern analytics interface mockup for SAMRAN solar investment platform showing:
+- Minimalist white background with navy and slate accents
+- Large data visualization with smooth line chart showing portfolio growth over time
+- Multiple KPI cards displaying: "18.5 MWp Capacity", "₹450 Cr AUM", "10.2% IRR", "2,400+ Investors"
+- Color-coded performance metrics with green for positive trends
+- Professional grid layout with perfect alignment
+- Soft shadows (0 20px 60px rgba(0,0,0,0.08))
+- Rounded corners (32px radius)
+- Inter font family for all text
+- Color palette: Navy (#0A1628), Cyan (#06B6D4), Blue (#0066FF), Slate (#64748B), White (#FFFFFF)
+- Glass morphism cards with subtle backdrop blur
+- Real-time data indicators with pulse animations
+- Institutional fintech design aesthetic
+- Similar to Stripe, Plaid, or Adyen product interfaces
+- No device frames, just the UI
+- Desktop view, professional and trustworthy
+
+Generate as: samran_analytics_ui.png

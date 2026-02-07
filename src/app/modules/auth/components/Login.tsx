@@ -3,33 +3,23 @@ import clsx from 'clsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useAuth } from '../core/Auth';
-import Logo from '../../../../_admin/assets/media/svg/authLogo.svg';
-import LockLogo from '../../../../_admin/assets/media/svg/Lock(field).svg';
-import EmailLogo from '../../../../_admin/assets/media/svg/Email(field).svg';
-import { FormLabel, InputGroup, FormControl, Button } from 'react-bootstrap';
-import eyeIcon from '../../../../_admin/assets/media/svg/eyeIcon.svg';
-import eyeActiveIcon from '../../../../_admin/assets/media/svg/eyeFill.svg';
-import APICallService from '../../../../api/apiCallService';
-import { LOGIN } from '../../../../api/apiEndPoints';
-import { APIJSON } from '../../../../api/apiJSON/auth';
 import { useState } from 'react';
+import APICallService from '../../../../api/apiCallService';
+import { USER_LOGIN } from '../../../../api/apiEndPoints';
+import { APIJSON } from '../../../../api/apiJSON/auth';
 
 const loginSchema = Yup.object().shape({
-    email : Yup.string()
+    email: Yup.string()
         .email('Please enter a valid email')
-        .min(3, '')
-        .max(50, '')
-        .required('Please enter email'),
+        .required('Email is required'),
     password: Yup.string()
-        .min(3, '')
-        .max(50, '')
-        .required('Please enter password')
+        .min(3, 'Password must be at least 3 characters')
+        .required('Password is required')
 });
 
-
 const initialValues = {
-    email : '',
-    password : '',
+    email: '',
+    password: '',
 }
 
 export function Login() {
@@ -37,165 +27,140 @@ export function Login() {
     const { saveAuth, saveCurrentUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
     const formik = useFormik({
         initialValues,
         validationSchema: loginSchema,
-        onSubmit: async (values, { setStatus, setSubmitting, setFieldValue}) => {
+        onSubmit: async (values, { setStatus, setSubmitting }) => {
             setLoading(true);
             const apiService = new APICallService(
-                LOGIN,
-                APIJSON.login({email: values.email, password: values.password})
+                USER_LOGIN,
+                APIJSON.login({ email: values.email, password: values.password })
             );
 
-            const response = await apiService.callAPI();
-            if(response) {
-                saveAuth(response?.token);
-                saveCurrentUser(response?.admin);
-                // navigate('/dashboard');
-            } else {
+            try {
+                const response = await apiService.callAPI();
+                if (response) {
+                    saveAuth(response?.token);
+                    const userData = response?.user || response?.admin;
+                    saveCurrentUser(userData);
+                    
+                    // Redirect based on user type
+                    if (userData?.userType === 1) { // Admin
+                        navigate('/dashboard');
+                    } else if (userData?.userType === 2) { // Investor
+                        navigate('/investor/dashboard');
+                    } else if (userData?.userType === 3) { // Consumer
+                        navigate('/consumer/dashboard');
+                    } else {
+                        navigate('/dashboard');
+                    }
+                } else {
+                    setStatus('The login details are incorrect');
+                    saveAuth(undefined);
+                    saveCurrentUser(undefined);
+                }
+            } catch (error) {
+                console.error("Login error:", error);
                 setStatus('The login details are incorrect');
                 saveAuth(undefined);
                 saveCurrentUser(undefined);
             }
-            setLoading(false)
+            
+            setLoading(false);
             setSubmitting(false);
         }
     });
 
-    const togglePasswordVisibility = () => {
-        setShowPassword((prevShowPassword) => !prevShowPassword);
-    }
-     
     return (
         <form
             className="form w-100"
             onSubmit={formik.handleSubmit}
             noValidate
-            id="kt_login_signin_form"
         >
-        <div className="d-flex flex-column gap-4">
-            <div className="d-flex justify-content-center align-items-center">
-                <img
-                    src={Logo}
-                    height={120}
-                    width={200}
-                    alt="logo"
-                />
+            <div className="text-center mb-12">
+                <h1 className="text-[#0b1f33] fw-black mb-3 display-6 tracing-tight">Sign In</h1>
+                <div className="text-slate-500 fw-bold fs-5">
+                    New here? <Link to="/auth/registration" className="text-[#0f766e] hover:text-[#43EBA6] fw-bolder text-decoration-none transition-colors">Create an Account</Link>
+                </div>
             </div>
-            <div className="d-flex justify-content-center align-items-center fs-3 fw-bold mb-4">
-                Welcome to Admin Portal
-            </div>
-        </div>
-        <div className="fv-row mb-8">
-            <FormLabel className="fs-6 fw-normal text-gray-900">Email</FormLabel>
-            <InputGroup
-                className={clsx(
-                    'border border border-r5px',
-                    formik.touched.email && formik.errors.email
-                    ? 'border-danger border-1'
-                    : ''
-                )}
-            >
-                <InputGroup.Text className="border-0 bg-white">
-                    <img
-                        src={EmailLogo}
-                        width={25}
-                        height={25}
-                        alt="email logo"
-                    />
-                </InputGroup.Text>
-                <FormControl
-                    placeholder="Type here..."
+
+            {formik.status && (
+                <div className="alert alert-danger d-flex align-items-center p-5 mb-10 border border-red-200 bg-red-50 rounded-xl">
+                    <i className="fas fa-exclamation-circle text-danger fs-3 me-3"></i>
+                    <div className="fw-semibold text-red-900">{formik.status}</div>
+                </div>
+            )}
+
+            <div className="fv-row mb-8">
+                <label className="form-label fs-6 fw-bold text-[#0b1f33] text-uppercase ls-1">Email</label>
+                <input
+                    placeholder="Enter your email"
                     {...formik.getFieldProps('email')}
-                    className="border-0 form-control-custom "
+                    className={clsx(
+                        'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50',
+                        { 'is-invalid border-red-500': formik.touched.email && formik.errors.email }
+                    )}
                     type="email"
                     name="email"
                     autoComplete="off"
                 />
-            </InputGroup>
-            {formik.touched.email && formik.errors.email && (
-                <div className="fv-plugins-message-container">
-                    <div className="fv-help-block">
-                        <span role="alert">{formik.errors.email}</span>
-                    </div>
-                </div>
-            )}
-        </div>
-        <div className="fv-row mb-3">
-            <FormLabel className="fs-6 fw-normal text-gray-900">Password</FormLabel>
-            <InputGroup
-                className={clsx(
-                    'border border border-r5px',
-                    formik.touched.password && formik.errors.password
-                    ? 'border-danger border-1'
-                    : ''
+                {formik.touched.email && formik.errors.email && (
+                    <div className="invalid-feedback fw-bold">{formik.errors.email}</div>
                 )}
-            >
-                <InputGroup.Text className="border-0 bg-white">
-                    <img
-                        src={LockLogo}
-                        width={25}
-                        height={25}
-                        alt="lock logo"
-                    />
-                </InputGroup.Text>
-                <FormControl
-                    placeholder="Type here..."
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="off"
-                    {...formik.getFieldProps('password')}
-                    className="border-0 form-control-custom"
-                />
-                <InputGroup.Text className="border-0 bg-white">
-                    <Button
-                        variant="link"
-                        className="btn-flush"
-                        onClick={togglePasswordVisibility}
-                    >
-                    <img
-                        width={25}
-                        height={16}
-                        src={showPassword ? eyeActiveIcon : eyeIcon}
-                        alt="Toggle Password Visibility"
-                    />
-                    </Button>
-                </InputGroup.Text>
-            </InputGroup>
-            {formik.touched.password && formik.errors.password && (
-                <div className="fv-plugins-message-container">
-                    <div className="fv-help-block">
-                    <span role="alert">{formik.errors.password}</span>
-                    </div>
+            </div>
+
+            <div className="fv-row mb-10">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <label className="form-label fs-6 fw-bold text-[#0b1f33] text-uppercase ls-1 mb-0">Password</label>
+                    <Link to="/auth/forgot-password" title="Recover account" className="text-[#0f766e] hover:text-[#43EBA6] fs-7 fw-bolder text-decoration-none">
+                        Forgot Password?
+                    </Link>
                 </div>
-            )}
-        </div>
-        <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-            <Link
-                to="/auth/forgot-password"
-                className="link-primary"
-            >
-                Forgot Password ?
-            </Link>
-        </div>
-        <div className="d-grid mb-10">
-            <Button
-                type="submit"
-                id="kt_sign_in_submit"
-                className="btn btn-primary"
-                disabled={formik.isSubmitting || !formik.isValid}
-            >
-            {!loading && <span className="indicator-label">Login</span>}
-                {loading && (
+                <div className="position-relative">
+                    <input
+                        placeholder="Enter your password"
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete="off"
+                        {...formik.getFieldProps('password')}
+                        className={clsx(
+                            'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50',
+                            { 'is-invalid border-red-500': formik.touched.password && formik.errors.password }
+                        )}
+                    />
                     <span
-                        className="indicator-progress"
-                        style={{ display: 'block' }}
+                        className="btn btn-sm btn-icon position-absolute translate-middle-y top-50 end-0 me-3"
+                        onClick={() => setShowPassword(!showPassword)}
                     >
-                        Please wait...
-                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        <i className={clsx('fas fs-4 text-[#94a3b8]', showPassword ? 'fa-eye-slash' : 'fa-eye')}></i>
                     </span>
-                )}
-            </Button>
-        </div>
+                    {formik.touched.password && formik.errors.password && (
+                        <div className="invalid-feedback fw-bold">{formik.errors.password}</div>
+                    )}
+                </div>
+            </div>
+
+            <div className="text-center">
+                <button
+                    type="submit"
+                    className="btn w-100 py-4 fs-4 fw-bold mb-5 shadow-lg bg-[#052F2B] text-white hover:bg-[#04362F] hover:shadow-xl hover:-translate-y-1 transition-all rounded-xl"
+                    disabled={formik.isSubmitting || !formik.isValid}
+                >
+                    {!loading ? 'Continue to Dashboard' : (
+                        <span className="d-flex align-items-center justify-content-center">
+                            Validating...
+                            <span className="spinner-border spinner-border-sm ms-3"></span>
+                        </span>
+                    )}
+                </button>
+
+                <div className="fs-6 text-slate-400 fw-bold">
+                    By signing in, you agree to our
+                    <Link to="/terms-conditions" className="text-[#0f766e] hover:text-[#43EBA6] text-decoration-none px-1">Terms</Link>
+                    &
+                    <Link to="/privacy-policy" className="text-[#0f766e] hover:text-[#43EBA6] text-decoration-none px-1">Privacy</Link>.
+                </div>
+            </div>
         </form>
     );
 }
