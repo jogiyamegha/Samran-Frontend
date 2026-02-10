@@ -1,4 +1,5 @@
 export interface ListUser {
+    profilePicture: string;
     name: string;
     email: string;
     userType: number;
@@ -7,6 +8,11 @@ export interface ListUser {
     isActive: boolean;
     _createdAt: string;
     _id: string;
+    addressDetail: {
+        address: string,
+        city: string,
+        pincode: number
+    }
 }
 
 export interface ListUserParams {

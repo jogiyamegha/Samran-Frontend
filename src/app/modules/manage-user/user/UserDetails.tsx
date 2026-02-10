@@ -1,3 +1,4 @@
+
 import React, {useState} from "react";
 import {Button, Card, Col, Row, Nav, Tab} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -15,9 +16,15 @@ const ViewUser = () => {
     console.log("🚀 ~ UserDetails ~ state:", state);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("overview");
+    const [showModal, setShowModal] = useState(false);
+    const [userId, setUserId] = useState<string | null>(null);
 
     const handleBack = () => {
         navigate("/user/all-users");
+    };
+
+    const handleEdit = () => {
+        navigate("/user/edit-user", {state: state});
     };
 
     if (!state) {
@@ -89,6 +96,24 @@ const ViewUser = () => {
                                     </Button>
                                     <h1 className="fs-22 fw-bolder mb-0" style={{ color: '#1e3369' }}>User Details</h1>
                                 </div>
+                                <div className="d-flex gap-2">
+                                    <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
+                                        <i className="bi bi-pencil me-2"></i>
+                                        Edit User
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        className="fs-16 fw-bold"
+                                        onClick={() => {
+                                            setShowModal(true);
+                                            setUserId(state._id);
+                                        }}
+                                    >
+                                        <i className="bi bi-trash me-2"></i>
+                                        Delete
+                                    </Button>
+                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -97,11 +122,56 @@ const ViewUser = () => {
                         <Tab.Content>
                             {/* Overview Tab */}
                             <Tab.Pane eventKey="overview">
-                                <Row className="g-1 mt-1">
+                                <Row className="g-6 mt-0.3">
+                                    <Col md={4}>
+                                        <Card className="border bg-white shadow-sm h-100">
+                                            <Card.Header className="bg-light border-bottom-0 pb-0">
+                                                <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
+                                                    <i className="bi bi-person-circle me-2 text-primary"></i>
+                                                    Profile Picture
+                                                </h5>
+                                            </Card.Header>
+                                            <Card.Body className="p-6">
+                                                <div className="d-flex justify-content-center align-items-center">
+                                                    <div
+                                                        className="border rounded p-4 bg-light"
+                                                        style={{
+                                                            width: "100%",
+                                                            maxWidth: "300px",
+                                                            minHeight: "300px",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                        }}
+                                                    >
+                                                        {state?.profilePicture ? (
+                                                            <img
+                                                                src={state?.profilePicture}
+                                                                className="img-fluid rounded"
+                                                                alt="Profile"
+                                                                style={{
+                                                                    maxWidth: "100%",
+                                                                    maxHeight: "300px",
+                                                                    objectFit: "contain",
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <img
+                                                                src={PlaceholderLogo}
+                                                                className="img-fluid"
+                                                                alt="Placeholder"
+                                                                style={{maxWidth: "200px", maxHeight: "200px"}}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
                                     <Col md={8}>
                                         <Card className="border bg-white shadow-sm h-100">
                                             <Card.Header className="bg-light border-bottom-0 pb-0">
-                                                <h5 className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#1e3369' }}>
+                                                <h5 className="fs-18 fw-bold text-dark mb-0 d-flex align-items-center">
                                                     <i className="bi bi-info-circle me-2 text-primary"></i>
                                                     User Information
                                                 </h5>
@@ -111,8 +181,7 @@ const ViewUser = () => {
                                                     icon="bi bi-person"
                                                     label="Full Name"
                                                     value={
-                                                        `${state?.name || ""}`.trim() ||
-                                                        "—"
+                                                        state?.name || "—"
                                                     }
                                                 />
                                                 <InfoRow
@@ -121,9 +190,9 @@ const ViewUser = () => {
                                                     value={
                                                         state?.phoneCountry && state?.phone
                                                             ? `${
-                                                                  state.phoneCountry.startsWith("+")
-                                                                      ? state.phoneCountry
-                                                                      : `+${state.phoneCountry}`
+                                                                  state?.phoneCountry.startsWith("+")
+                                                                      ? state?.phoneCountry
+                                                                      : `+${state?.phoneCountry}`
                                                               } ${state.phone}`
                                                             : "—"
                                                     }
@@ -137,9 +206,30 @@ const ViewUser = () => {
                                                     icon="bi bi-person-badge"
                                                     label="User Type"
                                                     value={
-                                                        state?.userType ? Method.getUserTypeLabel(state.userType) : "—"
+                                                        state?.userType ? Method.getUserTypeLabel(state?.userType) : "—"
                                                     }
                                                 />
+                                                { state?.addressDetail && 
+                                                    (
+                                                        <>
+                                                            <InfoRow
+                                                                icon="bi bi-envelope"
+                                                                label="Address"
+                                                                value={state?.addressDetail?.address || "—"}
+                                                            />
+                                                            <InfoRow
+                                                                icon="bi bi-envelope"
+                                                                label="City"
+                                                                value={state?.addressDetail?.city || "—"}
+                                                            />
+                                                            <InfoRow
+                                                                icon="bi bi-envelope"
+                                                                label="Pincode"
+                                                                value={state?.addressDetail?.pincode || "—"}
+                                                            />
+                                                        </>
+                                                    )
+                                                }
                                             </Card.Body>
                                         </Card>
                                     </Col>

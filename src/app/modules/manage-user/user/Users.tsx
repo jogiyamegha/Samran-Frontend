@@ -147,7 +147,7 @@ const Users = () => {
                                 className="btn btn-primary fs-14 fw-bold rounded-pill px-6"
                                 onClick={() => navigate("/user/add-user")}
                             >
-                                <i className="fas fa-plus me-2"></i> New Investor
+                                <i className="fas fa-plus me-2"></i> New User
                             </button>
                         </div>
                     </div>
@@ -298,7 +298,7 @@ const Users = () => {
                                                             className="fs-15 fw-500 "
                                                             style={{ cursor: 'pointer' }}
                                                             onClick={() =>
-                                                                navigate("/user/view-details", {
+                                                                navigate("/user/user-details", {
                                                                     state: user,
                                                                 })
                                                             }

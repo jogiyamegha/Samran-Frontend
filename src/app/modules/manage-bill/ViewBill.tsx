@@ -191,7 +191,7 @@ const ViewBill = () => {
                             </div>
                         </Card.Body>
                     </Card>
-                    <Card className="border bg-white shadow-sm h-30 mb-5">
+                    <Card className="border bg-white shadow-sm h-70 mb-5">
                         <Card.Header className="bg-light border-bottom-0 pb-0">
                             <h5 className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#2d4484' }}>
                                 <i className="bi bi-info-circle me-2 text-primary"></i>
@@ -204,7 +204,7 @@ const ViewBill = () => {
                         </Card.Body>
                     </Card>
                     
-                    <Card className="border bg-white shadow-sm h-30">
+                    <Card className="border bg-white shadow-sm h-45">
                         <Card.Header className="bg-light border-bottom-0 pb-0">
                             <h5 className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#2d4484' }}>
                                 <i className="bi bi-info-circle me-2 text-primary"></i>

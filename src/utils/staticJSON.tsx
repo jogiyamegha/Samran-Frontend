@@ -2,10 +2,9 @@ import AdminLogo from "../_admin/assets/media/svg/make-my-money-logo.svg";
 import DefaultImage from "../_admin/assets/media/default-user.png";
 
 export const userTypeOptions = [
-    {value: 1, label: 'Admin'},
-    {value: 2, label: 'Supervisor'},
-    {value: 3, label: 'Employee'},
-    {value: 4, label: 'Subcontractor'},
+    // {value: 1, label: 'Admin'},
+    {value: 2, label: 'Investor'},
+    {value: 3, label: 'Consumer'},
 ];
 
 export const IMAGES = {

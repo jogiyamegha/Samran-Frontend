@@ -267,7 +267,7 @@ const Plants = () => {
                         </div>
                         <Button
                             variant="primary"
-                            className="fs-16 fw-bold btn-lg"
+                            className="fs-14 fw-bold btn-lg d-flex" 
                             onClick={() => navigate('/plant/add-plant')}
                         >
                             <img

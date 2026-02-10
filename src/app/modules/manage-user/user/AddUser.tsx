@@ -67,24 +67,18 @@ const AddUser = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<any>({
+        name: "",
         email: "",
         phone: "",
-        phoneCountry: "+353",
-        name: "",
+        phoneCountry: "+91",
         userType: null,
-        profilePicture: null,
-        image: null,
-        sagePayrollCode: "",
     });
     const [selectedCountry, setSelectedCountry] = useState<any>("IE");
     const [validation, setValidation] = useState<any>({
+        name: false,
         email: false,
         phone: false,
         phoneCountry: false,
-        name: false,
-        profilePicture: false,
-        userType: false,
-        sagePayrollCode: false,
     });
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -104,7 +98,7 @@ const AddUser = () => {
             setFormData((prevData: any) => ({
                 ...prevData,
                 phone: "",
-                phoneCountry: prevData.phoneCountry || "+353",
+                phoneCountry: prevData.phoneCountry || "+91",
             }));
             return;
         }
@@ -206,10 +200,10 @@ const AddUser = () => {
         setLoading(true);
 
         const newValidation = {
+            name: formData.name.trim() === "",
             email: formData.email.trim() === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()),
             phone: formData.phone.trim() === "",
             phoneCountry: formData.phoneCountry.trim() === "",
-            name: formData.name.trim() === "",
             userType: formData.userType === null,
         };
         setValidation(newValidation);
@@ -358,7 +352,7 @@ const AddUser = () => {
                                                     <PhoneInput
                                                         international
                                                         countryCallingCodeEditable={false}
-                                                        defaultCountry="IE"
+                                                        defaultCountry="IN"
                                                         country={selectedCountry}
                                                         value={
                                                             formData.phone && formData.phoneCountry
@@ -430,4 +424,3 @@ const AddUser = () => {
     );
 };
 export default AddUser;
-

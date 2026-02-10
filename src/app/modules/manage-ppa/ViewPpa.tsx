@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {Button, Card, Col, Row} from "react-bootstrap";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -101,12 +102,22 @@ const ViewPpa = () => {
 
                         <h1 className="fs-22 fw-bolder mb-0" style={{ color: '#1e3369' }}>PPA Details</h1>
                     </div>
-                        {state?.isSigned === false && (
+                        {state?.isSigned === false ? (
                             <Button
                                 variant="primary"
                                 size="sm"
                                 className="fs-16 fw-bold ms-auto"
                                 onClick={() => handleSignPpa(state?._id)}
+                            >
+                                Sign PPA
+                            </Button>
+                        ) : (
+                             <Button
+                                variant="primary"
+                                size="sm"
+                                className="fs-16 fw-bold ms-auto" 
+                                disabled={true}
+                                // onClick={() => handleSignPpa(state?._id)}
                             >
                                 Sign PPA
                             </Button>
@@ -122,7 +133,7 @@ const ViewPpa = () => {
                         <Card.Header className="bg-light border-bottom-0 pb-0">
                             <p className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#2d4484' }}>
                                 <i className="bi bi-info-circle me-2 text-primary"></i>
-                                    Plant Information
+                                    PPA Information
                             </p>
                         </Card.Header>
                         <Card.Body className="p-6">
@@ -175,7 +186,7 @@ const ViewPpa = () => {
                         </Card.Body>
                     </Card>
 
-                    <Card className="border bg-white shadow-sm">
+                    <Card className="border bg-white shadow-sm mb-2">
                         <Card.Header className="bg-light border-bottom-0 pt-5">
                             <h5 className="fs-18 fw-bold mb-0" style={{ color: '#1e3369' }}>
                                 Documents
@@ -240,8 +251,25 @@ const ViewPpa = () => {
                         </Card.Body>
                     </Card>
 
-                    <Card className="border bg-white shadow-sm h-20">
+                    <Card className="border bg-white shadow-sm h-45">
                         <Card.Header className="bg-light border-bottom-0 pb-0">
+                            <p className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#2d4484' }}>
+                                <i className="bi bi-info-circle me-2 text-primary"></i>
+                                    Plant Information
+                            </p>
+                        </Card.Header>
+                        <Card.Body className="p-6">
+                            <InfoRow icon="bi bi-app-indicator"
+                                label="Plant Name"
+                                value={state?.plantDetail?.plantUniqueName} />
+                            <InfoRow  icon="bi bi-house"
+                                label="Property Name"
+                                value={state?.plantDetail?.propertyName} />
+                        </Card.Body>
+                    </Card>
+
+                    {/* <Card className="border bg-white shadow-sm h-20">
+                        <Card.Header className="bg-light border-bottom-0 pb-0 bg-primary">
                             <h5 className="fs-18 fw-bold mb-0 d-flex align-items-center" style={{ color: '#2d4484' }}>
                                 <i className="bi bi-info-circle me-2 text-primary"></i>
                                     Plant Information
@@ -259,7 +287,7 @@ const ViewPpa = () => {
                                 value={state?.plantDetail?.propertyName}
                             />
                         </Card.Body>
-                    </Card>
+                    </Card> */}
                 </Col>
 
                 
@@ -370,5 +398,3 @@ const ViewPpa = () => {
 };
 
 export default ViewPpa;
-
- 

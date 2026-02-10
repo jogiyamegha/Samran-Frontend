@@ -70,13 +70,10 @@ const EditUser = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<any>({
-        email: state.email,
-        phone: state.phone,
-        phoneCountry: state.phoneCountry?.startsWith("+") ? state.phoneCountry : `+${state.phoneCountry}`,
         name: state.name,
+        phoneCountry: state.phoneCountry?.startsWith("+") ? state.phoneCountry : `+${state.phoneCountry}`,
+        phone: state.phone,
         userType: state.userType,
-        profilePicture: state.image,
-        image: null,
     });
     const [selectedCountry, setSelectedCountry] = useState<any>(null);
 
@@ -86,30 +83,29 @@ const EditUser = () => {
             const codeWithoutPlus = formData.countryCode.replace("+", "");
             try {
                 // Try to get country from phone number if available
-                if (formData.phone && formData.countryCode) {
-                    const fullNumber = `${formData.countryCode}${formData.phone}`;
+                if (formData.phone && formData.phoneCountry) {
+                    const fullNumber = `${formData.phoneCountry}${formData.phone}`;
                     const phoneNumber = parsePhoneNumber(fullNumber);
                     if (phoneNumber) {
-                        setSelectedCountry(phoneNumber.country || "IE");
+                        setSelectedCountry(phoneNumber.country || "IND");
                     } else {
-                        setSelectedCountry("IE");
+                        setSelectedCountry("IND");
                     }
                 } else {
-                    setSelectedCountry("IE");
+                    setSelectedCountry("IND");
                 }
             } catch (error) {
-                setSelectedCountry("IE");
+                setSelectedCountry("IND");
             }
         } else {
-            setSelectedCountry("IE");
+            setSelectedCountry("IND");
         }
     }, []);
+
     const [validation, setValidation] = useState<any>({
-        email: false,
-        phone: false,
-        phoneCountry: false,
         name: false,
-        profilePicture: false,
+        phoneCountry: false,
+        phone: false,
         userType: false,
     });
     console.log("formData", formData);
@@ -132,7 +128,7 @@ const EditUser = () => {
             setFormData((prevData: any) => ({
                 ...prevData,
                 phone: "",
-                phoneCountry: prevData.phoneCountry || state.phoneCountry || "+353",
+                phoneCountry: prevData.phoneCountry || state.phoneCountry || "+91",
             }));
             return;
         }
@@ -153,7 +149,7 @@ const EditUser = () => {
     const handleCountryChange = (country: any) => {
         setSelectedCountry(country);
         if (country) {
-            const newCountryCode = `+${getCountryCallingCode(country)}`;
+            const newCountryCode = `${getCountryCallingCode(country)}`;
             setFormData((prevData: any) => ({
                 ...prevData,
                 phoneCountry: newCountryCode,
@@ -241,12 +237,10 @@ const EditUser = () => {
         setLoading(true);
 
         const newValidation = {
-            email: formData.email.trim() === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()),
-            phone: formData.phone.trim() === "",
-            phoneCountry: formData.phoneCountry.trim() === "",
             name: formData.name.trim() === "",
+            phoneCountry: formData.phoneCountry.trim() === "",
+            phone: formData.phone.trim() === "",
             userType: formData.userType === null,
-            profilePicture: formData.profilePicture === null,
         };
         setValidation(newValidation);
 
@@ -265,6 +259,10 @@ const EditUser = () => {
         setLoading(false);
     };
 
+    const handleBack = () => {
+        navigate('/user/all-users');
+    };
+
     return (
         <div className="p-9">
             <Row className="mb-6">
@@ -273,7 +271,7 @@ const EditUser = () => {
                 </Col>
             </Row>
             <Row>
-                <Col md={3} className="mb-lg-0 mb-8">
+                {/* <Col md={3} className="mb-lg-0 mb-8">
                     <Card className={clsx("border bg-white", {})}>
                         <Card.Body>
                             <Row>
@@ -332,7 +330,7 @@ const EditUser = () => {
                             </Row>
                         </Card.Body>
                     </Card>
-                </Col>
+                </Col> */}
                 <Col md={9}>
                     <Card className="bg-white pt-2 mb-6 mb-xl-9 border">
                         <Card.Header className="border-bottom-0">
@@ -346,7 +344,7 @@ const EditUser = () => {
                                     <Row>
                                         <Col md={12} className="mb-3">
                                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Label className="fs-16 fw-500 required">Full Name</Form.Label>
+                                                <Form.Label className="fs-16 fw-500">Full Name</Form.Label>
                                                 <Form.Control
                                                     className={clsx("form-control-custom bg-white", {
                                                         "border-danger": validation.name,
@@ -360,23 +358,8 @@ const EditUser = () => {
                                             </Form.Group>
                                         </Col>
                                         <Col md={6} className="mb-3">
-                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Label className="fs-16 fw-500 required">Email</Form.Label>
-                                                <Form.Control
-                                                    className={clsx("form-control-custom bg-white", {
-                                                        "border-danger": validation.email,
-                                                    })}
-                                                    type="text"
-                                                    placeholder="Type here…"
-                                                    name="email"
-                                                    value={formData.email}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={6} className="mb-3">
                                             <Form.Group className="mb-3" controlId="phoneNumber">
-                                                <Form.Label className="fs-16 fw-500 required">Phone Number</Form.Label>
+                                                <Form.Label className="fs-16 fw-500">Phone Number</Form.Label>
                                                 <div
                                                     className={clsx(
                                                         "form-control-custom bg-white",
@@ -396,8 +379,8 @@ const EditUser = () => {
                                                     <PhoneInput
                                                         international
                                                         countryCallingCodeEditable={false}
-                                                        defaultCountry="IE"
-                                                        country={selectedCountry || "IE"}
+                                                        defaultCountry="IN"
+                                                        country={selectedCountry || "IN"}
                                                         value={
                                                             formData.phone && formData.phoneCountry
                                                                 ? `${formData.phoneCountry}${formData.phone}`
@@ -430,16 +413,16 @@ const EditUser = () => {
                                                 <Form.Label className="fs-16 fw-500 required">User Type</Form.Label>
                                                 <CustomSelectWhite
                                                     height={"45px"}
-                                                    isDisabled={true}
+                                                    // isDisabled={true}
                                                     controlFontSize="14px"
                                                     fontWeight="500"
                                                     border={validation.userType ? "red" : ""}
                                                     placeholder="Select User Type"
                                                     options={userTypeOptions}
                                                     isMulti={false}
-                                                    // onChange={handleSelectChange}
+                                                    onChange={handleSelectChange}
                                                     value={userTypeOptions.find(
-                                                        (option) => option.value === formData.userType
+                                                        (option) => option.value ===  Number(formData.userType)
                                                     )}
                                                 />
                                             </Form.Group>
@@ -449,21 +432,29 @@ const EditUser = () => {
                                     </Row>
                                 </Col>
                             </Row>
+                            <div className="d-flex justify-content-center gap-4">
+                                <Button
+                                    variant="primary"
+                                    onClick={handleEditUser}
+                                    size="sm"
+                                    style={{background: "#d4edda", color:"#347042"}}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                    <>
+                                        Please wait...
+                                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </>
+                                    ) : (
+                                        
+                                        <span>Save</span>
+                                    )}
+                                </Button>
+                                <Button style={{background: "#e8aca1", color:"#86320f"}} onClick={handleBack}>Cancel</Button>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
-                <div className="d-flex justify-content-end">
-                    <Button size="lg" onClick={handleEditUser} disabled={loading}>
-                        {loading ? (
-                            <>
-                                Please wait...
-                                <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </>
-                        ) : (
-                            <span className="indicator-label fs-16 fw-bold">Edit User</span>
-                        )}
-                    </Button>
-                </div>
             </Row>
         </div>
     );

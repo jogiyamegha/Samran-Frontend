@@ -60,7 +60,7 @@ export const DASHBOARD = {
 
 export const USER = {
     ADDUSER: 'admin/user/add' + ' ' + constants.POST_FORM,
-    EDITUSER: 'admin/user/edit' + ' ' + constants.PATCH_FORM_ID,
+    EDITUSER: 'admin/user/edit' + ' ' + constants.PATCH_ID,
     LISTUSER: 'admin/user/list' + ' ' + constants.GET_URL_PARAMS,
     DELETEUSER: 'admin/user/delete' + ' ' + constants.DELETE_ID_PARAMS,
     GETUSERSITEJOBS: 'admin/user' + ' ' + constants.GET_ID_PARAMS,

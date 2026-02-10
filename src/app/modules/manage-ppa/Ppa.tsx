@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+    import React, {useEffect, useState} from "react";
 import {Button, Card, Col, Dropdown, FormLabel, Row} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import Loader from "../../../global/loader";
@@ -213,7 +213,7 @@ const Ppa = () => {
                     </div>
                     <Button
                         variant="primary"
-                        className="fs-16 fw-bold btn-lg"
+                        className="fs-16 fw-bold btn-lg d-flex" 
                         onClick={() => navigate('/ppa/add-ppa')}
                     >
                         <img
@@ -413,12 +413,9 @@ const Ppa = () => {
                                                         <td className="fs-14 fw-500 text-center">
                                                             {ppa?.tarrif}
                                                         </td>
-                                                        {/* <td className="fs-14 fw-500 text-center">
-                                                            {ppa?.isSigned ? true : false}
-                                                        </td>  */}
                                                         <td className="fs-14 fw-500 text-center">
-                                                             {String(ppa?.isSigned)}
-                                                        </td>
+                                                            {ppa?.isSigned ? "Signed" : "Not Signed"}
+                                                        </td> 
                                                         {/* <td className="fs-14 fw-500 text-center">
                                                             {formatDate(ppa?.startDate)}
                                                         </td> 
