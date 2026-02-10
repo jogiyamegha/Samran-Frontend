@@ -1,4 +1,5 @@
 import {IAddPpa, IListPpaParams} from '../../types';
+import { IEditPpa } from '../../types/request_data/ppa';
 import Method from '../../utils/methods';
 
 export const PPAAPIJSON = {
@@ -39,6 +40,58 @@ export const PPAAPIJSON = {
         }
         return formData;
     },
+
+    editPpa: ({
+        ppaName,
+        plantId,
+        plantCapacity,
+        tarrif,
+        expectedYears,
+        startDate,
+        ppaDocument,
+        leaseDocument,
+    }: IEditPpa) => {
+        const formData = new FormData();
+
+        formData.append('ppaName', ppaName!);
+        formData.append('plantId', plantId!);
+        formData.append('plantCapacity', plantCapacity!.toString());
+        formData.append('tarrif', tarrif!.toString());
+        formData.append('expectedYears', expectedYears!.toString());
+        formData.append(
+        'startDate',
+        Method.convertDateToFormat(startDate!.toISOString(), 'YYYY-MM-DD')
+        );
+
+        if (ppaDocument instanceof File){
+            formData.append('ppaDocument', ppaDocument);
+        }
+
+        if (leaseDocument instanceof File) {
+            formData.append('leaseDocument', leaseDocument);
+        }
+
+        return formData;
+    },
+
+    editPpaWithoutFile: ({
+        ppaName,
+        plantId,
+        plantCapacity,
+        tarrif,
+        expectedYears,
+        startDate,
+    }: Omit<IEditPpa, 'ppaDocument' | 'leaseDocument'>) => ({
+        ppaName,
+        plantId,
+        plantCapacity,
+        tarrif,
+        expectedYears,
+        startDate: Method.convertDateToFormat(
+            startDate!.toISOString(),
+            'YYYY-MM-DD'
+        ),
+    }),
 
     listPpa: ({
         page,

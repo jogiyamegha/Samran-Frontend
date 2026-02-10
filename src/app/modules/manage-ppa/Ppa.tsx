@@ -15,6 +15,8 @@ import AddIcon from "../../../_admin/assets/media/svg/add.svg";
 import { CustomSelectWhite } from "../../custom/select/CustomSelectWhite";
 import { PLANTAPIJSON } from "../../../api/apiJSON/plant";
 import Method from "../../../utils/methods";
+import DeleteModal from "../../modals/DeleteModal";
+import { success } from "../../../global/toast";
  
 const Ppa = () => {
     const navigate = useNavigate();
@@ -160,6 +162,21 @@ const Ppa = () => {
         );
     }
 
+    const handleDeletePpa = async (ppaId: string | null) => {
+        if (!ppaId) {
+            // nothing to delete 
+            setShowModel(false);
+            return;
+        }
+        setLoading(true);
+        const apiService = new APICallService(PPA.DELETEPPA, ppaId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success('Ppa has been deleted successfully');
+            await fetchPpa(page, pageLimit);
+        }
+        setLoading(false);
+    };
     const handleStatusChange = (eventKey: string | null) => {
         let filter: boolean | undefined = undefined;
 
@@ -181,7 +198,9 @@ const Ppa = () => {
             case 1:
                 navigate('/ppa/view-details', { state: ppa });
                 break;
-
+            case 2:
+                navigate('/ppa/edit-ppa', { state: ppa });
+                break;
             case 3:
                 setShowModel(true);
                 setPpaId(ppa._id);
@@ -451,7 +470,14 @@ const Ppa = () => {
                                                                         ),
                                                                         value: 1,
                                                                     },
-
+                                                                    {
+                                                                        label: (
+                                                                        <button className="btn btn-link fs-14 fw-500 text-black w-100 d-flex justify-content-center align-items-center py-3">
+                                                                            Edit details
+                                                                        </button>
+                                                                        ),
+                                                                        value: 2,
+                                                                    },
                                                                     {
                                                                         label: (
                                                                         <button className="btn btn-link fs-14 fw-500 text-danger w-100 d-flex justify-content-center align-items-center py-3">
@@ -489,6 +515,12 @@ const Ppa = () => {
                     <></>
                 )}
             </Row>
+            <DeleteModal
+                show={showModel}
+                onHide={() => setShowModel(false)}
+                handleDelete={() =>handleDeletePpa(ppaId)} // Pass the userId to delete
+                itemName={'PPA'}
+            />
         </div>
     );
 }

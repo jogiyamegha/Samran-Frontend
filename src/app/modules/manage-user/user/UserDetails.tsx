@@ -213,17 +213,17 @@ const ViewUser = () => {
                                                     (
                                                         <>
                                                             <InfoRow
-                                                                icon="bi bi-envelope"
+                                                                icon="bi bi-geo-alt"
                                                                 label="Address"
                                                                 value={state?.addressDetail?.address || "—"}
                                                             />
                                                             <InfoRow
-                                                                icon="bi bi-envelope"
+                                                                icon="fa-solid fa-city"
                                                                 label="City"
                                                                 value={state?.addressDetail?.city || "—"}
                                                             />
                                                             <InfoRow
-                                                                icon="bi bi-envelope"
+                                                                icon="bi bi-upc"
                                                                 label="Pincode"
                                                                 value={state?.addressDetail?.pincode || "—"}
                                                             />

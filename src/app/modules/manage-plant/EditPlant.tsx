@@ -262,16 +262,16 @@ const EditPlant = () => {
             <Row className="mb-6">
                 <Col xs={12}>
                     <div className="d-flex align-items-center gap-3">
-                            <Button
-                                variant="light"
-                                className="p-0"
-                                onClick={handleBack}
-                                style={{border: "none", background: "transparent"}}
-                            >
-                                <i className="bi bi-arrow-left fs-24 text-dark"></i>
-                            </Button>
-                            <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Edit Plant</h1>
-                        </div>
+                        <Button
+                            variant="light"
+                            className="p-0"
+                            onClick={handleBack}
+                            style={{border: "none", background: "transparent"}}
+                        >
+                            <i className="bi bi-arrow-left fs-24 text-dark"></i>
+                        </Button>
+                        <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Edit Plant</h1>
+                    </div>
                 </Col>
             </Row>
             <Row>

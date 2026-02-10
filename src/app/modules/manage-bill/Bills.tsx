@@ -18,6 +18,7 @@ import { PPAAPIJSON } from "../../../api/apiJSON/ppa";
 import Method from "../../../utils/methods";
 import CashPaymentModal from "../../modals/CashPaymentModal";
 import { success } from "../../../global/toast";
+import DeleteModal from "../../modals/DeleteModal";
  
 const Bills = () => {
     const navigate = useNavigate();
@@ -231,7 +232,6 @@ const Bills = () => {
             setShowModal(false);
             return;
         }
-        console.log(billId);
         setLoading(true);
         const apiService = new APICallService(PAYMENT.UPDATECASHPAYMENT, {}, { _id: billId });
         const response = await apiService.callAPI();
@@ -241,6 +241,22 @@ const Bills = () => {
         }
         setLoading(false);
     }
+
+    const handleDeleteBill = async (billId: string | null) => {
+        if (!billId) {
+            // nothing to delete 
+            setShowModel(false);
+            return;
+        }
+        setLoading(true);
+        const apiService = new APICallService(Bill.DELETEBILL, billId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success('Bill has been deleted successfully');
+            await fetchBills(page, pageLimit);
+        }
+        setLoading(false);
+    };  
 
     const handleBillOption = async (
         event: any,
@@ -283,7 +299,7 @@ const Bills = () => {
                     </div>
                     <Button
                         variant="primary"
-                        className="fs-16 fw-bold btn-lg"
+                        className="fs-16 fw-bold btn-lg d-flex"
                         onClick={() => navigate('/bill/add-bill')}
                     >
                         <img
@@ -862,6 +878,12 @@ const Bills = () => {
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 handleCashPayment={() => handleCashPayment(billId)} 
+            />
+            <DeleteModal
+                show={showModel}
+                onHide={() => setShowModel(false)}
+                handleDelete={() =>handleDeleteBill(billId)} // Pass the userId to delete
+                itemName={'Bill'}
             />
         </div>
     );

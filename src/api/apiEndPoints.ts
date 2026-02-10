@@ -31,10 +31,13 @@ export const PLANT = {
 }
 
 export const PPA = {
-    ADDPPA: 'admin/ppa/create' + ' ' + constants.POST_FORM,
-    LISTPPA: 'admin/ppa/list' + ' ' + constants.GET_URL_PARAMS,
-    PPAINFO: 'admin/ppa/info' + ' ' + constants.PATCH_FORM_ID,
-    SIGNPPA: 'admin/ppa/sign' + ' ' + constants.PATCH_ID,
+    ADDPPA : 'admin/ppa/create' + ' ' + constants.POST_FORM,
+    LISTPPA : 'admin/ppa/list' + ' ' + constants.GET_URL_PARAMS,
+    PPAINFO : 'admin/ppa/info' + ' ' + constants.PATCH_FORM_ID,
+    SIGNPPA : 'admin/ppa/sign' + ' ' + constants.PATCH_ID,
+    EDITPPA: 'admin/ppa/edit' + ' ' + constants.MULTI_PART_ID_PATCH,
+    EDITPPA_FORM: 'admin/ppa/edit' + ' ' + constants.PATCH_FORM_ID,
+    DELETEPPA: 'admin/ppa/delete' + ' ' + constants.DELETE_ID_PARAMS,
 }
 
 export const Bill = {
@@ -42,7 +45,8 @@ export const Bill = {
     LISTBILL: 'admin/bill/list' + ' ' + constants.GET_URL_PARAMS,
     BILLINFO: 'admin/bill/info' + ' ' + constants.PATCH_FORM_ID,
     DOWNLOADREPORT: 'admin/bill/report/download' + ' ' + constants.GET_URL_PARAMS,
-    EDITBILL: 'admin/bill/edit' + ' ' + constants.PATCH_ID
+    EDITBILL: 'admin/bill/edit' + ' ' + constants.PATCH_ID,
+    DELETEBILL: 'admin/bill/delete' + ' ' + constants.DELETE_ID_PARAMS,
 }
 
 export const PAYMENT = {

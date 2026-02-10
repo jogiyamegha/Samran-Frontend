@@ -9,11 +9,14 @@ import APICallService from "../../../api/apiCallService";
 import { PPA } from "../../../api/apiEndPoints";
 import { success } from "../../../global/toast";
 import { PPAAPIJSON } from "../../../api/apiJSON/ppa";
+import DeleteModal from "../../modals/DeleteModal";
 
 const ViewPpa = () => {
     const navigate = useNavigate();
     const {state}: any = useLocation();
     const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [ppaId, setPpaId] = useState<string | null>(null);
 
     const formatDate = (dateString: string): string => {
         return Method.convertDateToFormat(dateString, "DD-MM-YYYY");
@@ -21,6 +24,10 @@ const ViewPpa = () => {
     
     const handleBack = () => {
         navigate("/ppa/all-ppa");
+    };
+    
+    const handleEdit = () => {
+        navigate("/ppa/edit-ppa");
     };
 
     const handleSignPpa = async (ppaId: string | null) => {
@@ -36,6 +43,22 @@ const ViewPpa = () => {
         }
         setLoading(false);
     }
+
+    const handleDeletePpa = async (ppaId: string | null) => {
+        if (!ppaId) {
+            setShowModal(false);
+            return;
+        }
+        setLoading(true);
+        const apiService = new APICallService(PPA.DELETEPPA, ppaId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success("Ppa has been deleted successfully");
+            navigate("/ppa/all-ppa");
+        }
+        setLoading(false);
+    };
+
     if (!state) {
         return (
             <div className="p-9 bg-light d-flex justify-content-center align-items-center" style={{minHeight: "400px"}}>
@@ -87,7 +110,7 @@ const ViewPpa = () => {
         <div className="p-9 bg-light">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex align-items-center mb-4 w-100">
+                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
 
                     {/* LEFT */}
                     <div className="d-flex align-items-center gap-3">
@@ -102,13 +125,16 @@ const ViewPpa = () => {
 
                         <h1 className="fs-22 fw-bolder mb-0" style={{ color: '#1e3369' }}>PPA Details</h1>
                     </div>
+                    <div className="d-flex gap-2">
                         {state?.isSigned === false ? (
                             <Button
                                 variant="primary"
                                 size="sm"
                                 className="fs-16 fw-bold ms-auto"
+                                style={{background: "#547792"}}
                                 onClick={() => handleSignPpa(state?._id)}
                             >
+                                <i className="fa-solid fa-signature"></i>
                                 Sign PPA
                             </Button>
                         ) : (
@@ -119,9 +145,30 @@ const ViewPpa = () => {
                                 disabled={true}
                                 // onClick={() => handleSignPpa(state?._id)}
                             >
+                                <i className="fa-solid fa-signature"></i>
                                 Sign PPA
                             </Button>
                         )}
+                        <div className="d-flex gap-2">
+                            <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
+                                <i className="bi bi-pencil me-2"></i>
+                                Edit PPA
+                            </Button>
+                            <Button
+                                variant="danger"
+                                size="sm"
+                                className="fs-16 fw-bold"
+                                onClick={() => {
+                                    setShowModal(true);
+                                    setPpaId(state._id);
+                                }}
+                            >
+                                <i className="bi bi-trash me-2"></i>
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
+                       
                     </div>
                 </Col>
             </Row>
@@ -393,6 +440,12 @@ const ViewPpa = () => {
                     )}
                 </Col> */}
             </Row>
+            <DeleteModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                handleDelete={() => handleDeletePpa(ppaId)}
+                itemName={'ppa'}
+            />
         </div>
     );
 };

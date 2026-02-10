@@ -158,8 +158,16 @@ const AddBill = () => {
         <div className="p-9">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                        <h1 className="fs-22 fw-bolder">Add Bill</h1>
+                    <div className="d-flex align-items-center gap-3">
+                        <Button
+                            variant="light"
+                            className="p-0"
+                            onClick={handleBack}
+                            style={{border: "none", background: "transparent"}}
+                        >
+                            <i className="bi bi-arrow-left fs-24 text-dark"></i>
+                        </Button>
+                        <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Add Bill</h1>
                     </div>
                 </Col>
             </Row>
@@ -167,256 +175,202 @@ const AddBill = () => {
                 <Col md={12}>
                     <Card className="bg-white pt-2 mb-6 mb-xl-9 border">
                         <Card.Header className="border-bottom-0">
-                        <Card.Title>
-                            <h5 className="fs-22 fw-bolder">Bill details</h5>
-                        </Card.Title>
+                            <Card.Title>
+                                <h5 className="fs-22 fw-bolder">Bill details</h5>
+                            </Card.Title>
                         </Card.Header>
 
                         <Card.Body className="pt-0 pb-5">
                         <Row className="align-items-center">
-                            <Col md={6} className="mb-3">
+                            <Col md={12} className="mb-3">
                             <Row>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="plantId"
-                                >
-                                    <Form.Label className="fs-16 fw-500 required">
-                                        PPA
-                                    </Form.Label>
-                                    <CustomSelectWhite
-                                        border={validation.ppaId ? '#F1416C' : ''}
-                                        placeholder="Select ppa"
-                                        options={ppaOptions}
-                                        isMulti={false}
-                                        onChange={handleSelectChange}
-                                        value={ppaOptions.find(
-                                            (option) => option.value === formData.ppaId
-                                        ) || null}
-                                        minHeight="60px"
-                                        controlFontSize="14px"
-                                        fontWeight="500"
-                                    />
-                                </Form.Group>
-                                <Col sm={6} xl={4}>
+                                <Col md={4} className="mb-3">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="plantId"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            PPA
+                                        </Form.Label>
+                                        <CustomSelectWhite
+                                            border={validation.ppaId ? '#F1416C' : ''}
+                                            placeholder="Select ppa"
+                                            options={ppaOptions}
+                                            isMulti={false}
+                                            onChange={handleSelectChange}
+                                            value={ppaOptions.find(
+                                                (option) => option.value === formData.ppaId
+                                            ) || null}
+                                            minHeight="45px"
+                                            controlFontSize="14px"
+                                            fontWeight="500"
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4} className="mb-3">
                                     <FormLabel className="fs-16 fw-500 text-dark required">
                                         Billing Month
                                     </FormLabel>
-
                                     <Dropdown onSelect={handleMonthSelect}>
                                         <Dropdown.Toggle
-                                        variant="white"
-                                        className={clsx(
-                                            'form-control bg-white min-h-50px fs-14 fw-bold text-dark text-start border border-3px border-radius-15px',
-                                            { 'border-danger': validation.billingMonth }
-                                        )}
-                                        id="dropdown-billing-month"
+                                            variant="white"
+                                            className={clsx(
+                                                'form-control bg-white min-h-40px fs-14 fw-bold text-dark text-start border border-3px border-radius-15px',
+                                                { 'border-danger': validation.billingMonth }
+                                            )}
+                                            id="dropdown-billing-month"
                                         >
-                                        {formData.billingMonth
-                                            ? Method.getMonthLabel(formData.billingMonth)
-                                            : 'Select Billing Month'}
+                                            {formData.billingMonth
+                                                ? Method.getMonthLabel(formData.billingMonth)
+                                                : 'Select Billing Month'}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                        {Object.values(Months)
-                                            .filter(v => typeof v === "number")
-                                            .map((month) => (
-                                            <Dropdown.Item key={month} eventKey={month}>
-                                                {Method.getMonthLabel(month)}
-                                            </Dropdown.Item>
-                                        ))}
+                                            {Object.values(Months)
+                                                .filter(v => typeof v === "number")
+                                                .map((month) => (
+                                                <Dropdown.Item key={month} eventKey={month}>
+                                                    {Method.getMonthLabel(month)}
+                                                </Dropdown.Item>
+                                            ))}
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Col>
-                            </Row>
-                            </Col>
-
-                            <Col
-                                md={6}
-                                className="mb-3"
-                                >
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="billingYear"
-                                >
-                                    <Form.Label className="fs-16 fw-500 required">
-                                        Billing Year
-                                    </Form.Label>
-                                    <CustomDatePicker
-                                        className={clsx(
-                                            'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
-                                            { 'border-danger': validation.billingYear }
-                                        )}
-                                        selected={
-                                        formData.billingYear 
-                                            ? new Date(formData.billingYear, 0, 1)   // 1 Jan of that year
-                                            : null
-                                        }
-                                        onChange={handleDateChange}
-                                        placeholder="Select Year"
-                                        dateFormat="yyyy"
-                                        showYearPicker={true}
-                                        isClearable={true}
-                                        style={{
-                                            border: validation.billingYear
-                                            ? '1px solid #F1416C !important'
-                                            : '1px solid #e0e0df',
-                                        }}
-                                    />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                            <Row>
-                                {/* <Col
-                                    md={6}
-                                    className="mb-3"
-                                >
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="billingYear"
-                                >
-                                    <Form.Label className="fs-16 fw-500 required">
-                                        Billing Year
-                                    </Form.Label>
-                                    <Form.Control
-                                        className={clsx(
-                                            'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
-                                            { 'border-danger': validation.billingYear }
-                                        )}
-                                        type="year"
-                                        placeholder="Type here…"
-                                        name="billingYear"
-                                        value={formData.billingYear ?? ""}
-                                        onChange={handleInputChange}
-                                        style={{
-                                            border: validation.billingYear
-                                            ? '1px solid #F1416C'
-                                            : '1px solid #e0e0df',
-                                        }}
-                                    />
-                                </Form.Group>
-                                </Col> */}
-                                <Col
-                                    md={6}
-                                    className="mb-3"
-                                >
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="generatedUnits"
-                                >
-                                    <Form.Label className="fs-16 fw-500 required">
-                                        Generated Units
-                                    </Form.Label>
-                                    <Form.Control
-                                        className={clsx(
-                                            'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
-                                            { 'border-danger': validation.generatedUnits }
-                                        )}
-                                        type="number"
-                                        placeholder="Type here…"
-                                        name="generatedUnits"
-                                        value={formData.generatedUnits ?? ""}
-                                        onChange={handleInputChange}
-                                        style={{
-                                            border: validation.generatedUnits
-                                            ? '1px solid #F1416C'
-                                            : '1px solid #e0e0df',
-                                        }}
-                                    />
-                                </Form.Group>
+                                <Col md={4} className="mb-3">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="billingYear"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            Billing Year
+                                        </Form.Label>
+                                        <CustomDatePicker
+                                            className={clsx(
+                                                'form-control bg-white min-h-45px fs-15 fw-500 border-radius-15px',
+                                                { 'border-danger': validation.billingYear }
+                                            )}
+                                            selected={
+                                            formData.billingYear 
+                                                ? new Date(formData.billingYear, 0, 1)   // 1 Jan of that year
+                                                : null
+                                            }
+                                            onChange={handleDateChange}
+                                            placeholder="Select Year"
+                                            dateFormat="yyyy"
+                                            showYearPicker={true}
+                                            isClearable={true}
+                                            style={{
+                                                border: validation.billingYear
+                                                ? '1px solid #F1416C !important'
+                                                : '1px solid #e0e0df',
+                                            }}
+                                        />
+                                    </Form.Group>
                                 </Col>
-
-                                <Col
-                                    md={6}
-                                    className="mb-3"
-                                >
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="consumedUnits"
-                                >
-                                    <Form.Label className="fs-16 fw-500 ">
-                                        Consumed Units
-                                    </Form.Label>
-                                    <Form.Control
-                                        className={clsx(
-                                            'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
-                                            { 'border-danger': validation.consumedUnits }
-                                        )}
-                                        type="number"
-                                        placeholder="Type here…"
-                                        name="consumedUnits"
-                                        value={formData.consumedUnits ?? ""}
-                                        onChange={handleInputChange}
-                                        style={{
-                                            border: validation.consumedUnits
-                                            ? '1px solid #F1416C'
-                                            : '1px solid #e0e0df',
-                                        }}
-                                    />
-                                </Form.Group>
+                                <Col md={4} className="mb-3">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="generatedUnits"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            Generated Units
+                                        </Form.Label>
+                                        <Form.Control
+                                            className={clsx(
+                                                'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
+                                                { 'border-danger': validation.generatedUnits }
+                                            )}
+                                            type="number"
+                                            placeholder="Type here…"
+                                            name="generatedUnits"
+                                            value={formData.generatedUnits ?? ""}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: validation.generatedUnits
+                                                ? '1px solid #F1416C'
+                                                : '1px solid #e0e0df',
+                                            }}
+                                        />
+                                    </Form.Group>
                                 </Col>
-
-                                <Col
-                                    md={6}
-                                    className="mb-3"
-                                >
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="exportedUnits"
-                                >
-                                    <Form.Label className="fs-16 fw-500 required">
-                                        Exported Units
-                                    </Form.Label>
-                                    <Form.Control
-                                        className={clsx(
-                                            'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
-                                            { 'border-danger': validation.exportedUnits }
-                                        )}
-                                        type="number"
-                                        placeholder="Type here…"
-                                        name="exportedUnits"
-                                        value={formData.exportedUnits ?? ""}
-                                        onChange={handleInputChange}
-                                        style={{
-                                            border: validation.exportedUnits
-                                            ? '1px solid #F1416C'
-                                            : '1px solid #e0e0df',
-                                        }}
-                                    />
-                                </Form.Group>
+                                <Col md={4} className="mb-3">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="consumedUnits"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            Consumed Units
+                                        </Form.Label>
+                                        <Form.Control
+                                            className={clsx(
+                                                'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
+                                                { 'border-danger': validation.consumedUnits }
+                                            )}
+                                            type="number"
+                                            placeholder="Type here…"
+                                            name="consumedUnits"
+                                            value={formData.consumedUnits ?? ""}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: validation.consumedUnits
+                                                ? '1px solid #F1416C'
+                                                : '1px solid #e0e0df',
+                                            }}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4} className="mb-3">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="exportedUnits"
+                                    >
+                                        <Form.Label className="fs-16 fw-500 required">
+                                            Exported Units
+                                        </Form.Label>
+                                        <Form.Control
+                                            className={clsx(
+                                                'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
+                                                { 'border-danger': validation.exportedUnits }
+                                            )}
+                                            type="number"
+                                            placeholder="Type here…"
+                                            name="exportedUnits"
+                                            value={formData.exportedUnits ?? ""}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: validation.exportedUnits
+                                                ? '1px solid #F1416C'
+                                                : '1px solid #e0e0df',
+                                            }}
+                                        />
+                                    </Form.Group>
                                 </Col>
                             </Row>
                             </Col>
-                            
-
                         </Row>
+                        <div className="d-flex justify-content-center gap-4">
+                            <Button
+                                size="lg"
+                                onClick={handleAddBill}
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        Please wait...
+                                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </>
+                                    ) : (
+                                    <span className="indicator-label fs-16 fw-bold">
+                                        <i className="bi bi-plus-lg"></i>
+                                        Add Bill
+                                    </span>
+                                )}
+                            </Button>
+                        </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <div className="d-flex justify-content-center gap-4">
-                <Button
-                    size="lg"
-                    onClick={handleAddBill}
-                    disabled={loading}
-                >
-                    {loading ? (
-                    <>
-                        Please wait...
-                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </>
-                    ) : (
-                    <span className="indicator-label fs-16 fw-bold">
-                        Add Bill
-                    </span>
-                    )}
-                </Button>
-                {/* <Button
-                    className="indicator-label fs-16 fw-bold"
-                    onClick={handleBack}
-                >
-                    Cancel
-                </Button> */}
-                </div>
             </Row>
         </div>
     );

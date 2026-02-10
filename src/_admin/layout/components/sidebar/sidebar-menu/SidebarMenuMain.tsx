@@ -16,7 +16,7 @@ import FAQsIcon from "../../../../assets/media/svg/FAQ.svg";
 import CertificateIcon from "../../../../assets/media/svg/manage-certificate.svg";
 import PurchaseReqIcon from "../../../../assets/media/svg/purchae_req.svg";
 import TimeSheetIcon from "../../../../assets/media/svg/time_sheet.svg";
-import WalletIcon from "../../../../assets/media/svg/purchae_req.svg";
+import WalletIcon from "../../../../assets/media/svg/wallet.svg";
 import Dot from "../../../../assets/media/svg/dot.svg";
 const SidebarMenuMain = () => {
     const intl = useIntl();

@@ -3,6 +3,7 @@ import { PageTitle } from '../../../_admin/layout/core';
 import Ppa from './Ppa';
 import ViewPpa from './ViewPpa';
 import AddPpa from './AddPpa';
+import EditPpa from './EditPpa';
 
 const ManagePpaPage = () => {
     return (
@@ -27,6 +28,15 @@ const ManagePpaPage = () => {
                         <>
                             <PageTitle>Add PPA</PageTitle>
                             <AddPpa />
+                        </>
+                    }
+                />
+                <Route
+                    path='/edit-ppa'
+                    element={
+                        <>
+                            <PageTitle>Edit PPA</PageTitle>
+                            <EditPpa />
                         </>
                     }
                 />

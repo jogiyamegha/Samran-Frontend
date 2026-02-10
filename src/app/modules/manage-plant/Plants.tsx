@@ -18,6 +18,7 @@ import { CustomSelectWhite } from "../../custom/select/CustomSelectWhite";
 import Method from '../../../utils/methods';
 import PlantActionModal from "./PlantActionModal";
 import { success } from "../../../global/toast";
+import DeleteModal from "../../modals/DeleteModal";
  
 const Plants = () => {
     const navigate = useNavigate();
@@ -231,6 +232,21 @@ const Plants = () => {
         }
 
         setShowModal(false);
+        setLoading(false);
+    };
+
+    const handleDeletePlant = async (plantId: string | null) => {
+        if (!plantId) {
+            setShowModal(false);
+            return;
+        }
+        setLoading(true);
+        const apiService = new APICallService(PLANT.DELETEPLANT, plantId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success("Plant has been deleted successfully");
+            await fetchPlants(page, pageLimit);
+        }
         setLoading(false);
     };
 
@@ -691,6 +707,7 @@ const Plants = () => {
                 onSubmit={handleActionSubmit}
                 loading={loading}
             />
+            
         </div>
     );
 }

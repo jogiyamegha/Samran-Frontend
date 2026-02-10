@@ -5,6 +5,10 @@ import Method from "../../../utils/methods";
 import { PlantStatus, PropertyTypes } from "../../../utils/constants";
 import PlaceholderLogo from "../../../_admin/assets/media/svg/placeholder.svg";
 import CommonImageModal from "../../modals/CommonImageModal";
+import DeleteModal from "../../modals/DeleteModal";
+import APICallService from "../../../api/apiCallService";
+import { PLANT } from "../../../api/apiEndPoints";
+import { success } from "../../../global/toast";
 
 const ViewPlant = () => {
     const navigate = useNavigate();
@@ -13,6 +17,9 @@ const ViewPlant = () => {
     const [showImageModal, setShowImageModal] = React.useState(false);
     const [selectedImage, setSelectedImage] = React.useState<string>("");
     const [plant, setPlant] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [plantId, setPlantId] = useState<string | null>(null);
     const formatDate = (dateString: string): string => {
         return Method.convertDateToFormat(dateString, "DD-MM-YYYY");
     };
@@ -30,7 +37,23 @@ const ViewPlant = () => {
     const handleEdit = () => {
         navigate("/plant/edit-plant", {state: plant});
     }
-    
+
+    const handleDeletePlant = async (plantId: string | null) => {
+        if (!plantId) {
+            setShowModal(false);
+            return;
+        }
+        console.log('plantId',plantId);
+        setLoading(true);
+        const apiService = new APICallService(PLANT.DELETEPLANT, plantId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success("Plant has been deleted successfully");
+            navigate("/plant/all-plants");
+        }
+        setLoading(false);
+    };
+
     if (!state) {
         return (
             <div className="p-9 bg-light d-flex justify-content-center align-items-center" style={{minHeight: "400px"}}>
@@ -105,10 +128,25 @@ const ViewPlant = () => {
                             </Button>
                             <p className="fs-22 fw-bolder mb-0" style={{ color: '#1e3369' }}>Plant Details</p>
                         </div>
-                        <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
-                            <i className="bi bi-pencil me-2"></i>
-                            Edit Site
-                        </Button>
+                        <div className="d-flex gap-2">
+
+                            <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
+                                <i className="bi bi-pencil me-2"></i>
+                                Edit Plant
+                            </Button>
+                            <Button
+                                variant="danger"
+                                size="sm"
+                                className="fs-16 fw-bold"
+                                onClick={() => {
+                                    setShowModal(true);
+                                    setPlantId(state._id);
+                                }}
+                            >
+                                <i className="bi bi-trash me-2"></i>
+                                Delete
+                            </Button>
+                        </div>
                     </div>
                 </Col>
             </Row>
@@ -131,7 +169,7 @@ const ViewPlant = () => {
                             <InfoRow icon="bi bi-geo-alt" label="Property Address" value={state.propertyAddress?.address} />
                             <InfoRow icon="bi bi-upc" label="Property Pincode" value={state.propertyAddress?.pincode} />
                             <InfoRow icon="fa-solid fa-city" label="Property City" value={state.propertyAddress?.city} />
-                            <InfoRow icon="fa-light fa-flag-usa" label="Property State" value={state.propertyAddress?.state} />
+                            <InfoRow icon="fa-solid fa-flag-usa" label="Property State" value={state.propertyAddress?.state} />
                             <InfoRow icon="bi bi-textarea" label="RoofArea" value={state.propertyAddress?.roofArea} />
                             <InfoRow icon="fa-solid fa-bolt" label="Electricity Rate" value={state.propertyAddress?.electricityRate} />
                             <InfoRow
@@ -268,6 +306,12 @@ const ViewPlant = () => {
                 onHide={() => setShowImageModal(false)}
                 imageSrc={selectedImage}
                 imageAlt="Bill Image Preview"
+            />
+            <DeleteModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                handleDelete={() => handleDeletePlant(plantId)}
+                itemName={'plant'}
             />
         </div>
     );

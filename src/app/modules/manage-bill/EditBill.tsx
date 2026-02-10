@@ -85,81 +85,101 @@ const EditBill = () => {
         <div className="p-9 bg-light">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                        <h1 className="fs-22 fw-bolder">Edit Bill</h1>
+                    <div className="d-flex align-items-center gap-3">
+                        <Button
+                            variant="light"
+                            className="p-0"
+                            onClick={handleBack}
+                            style={{border: "none", background: "transparent"}}
+                        >
+                            <i className="bi bi-arrow-left fs-24 text-dark"></i>
+                        </Button>
+                        <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Edit Bill</h1>
                     </div>
                 </Col>
             </Row>
-            <Card className="border bg-white">
-                <Card.Body className="p-6">
-                <Form>
-                    <Row className="g-6">
-                    <Col md={6}>
-                        <Form.Group className="mb-4">
-                        <Form.Label className="fs-16 fw-600 text-dark required">
-                            Generated Units
-                        </Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="generatedUnits"
-                            value={formData.generatedUnits}
-                            onChange={handleInputChange}
-                            className="form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px"
-                        />
-                        </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                        <Form.Group className="mb-4">
-                        <Form.Label className="fs-16 fw-600 text-dark required">
-                            Consumed Units
-                        </Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="consumedUnits"
-                            value={formData.consumedUnits}
-                            onChange={handleInputChange}
-                            className="form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px"
-                        />
-                        </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                        <Form.Group className="mb-4">
-                            <Form.Label className="fs-16 fw-600 text-dark required">
-                                Exported Units
-                            </Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="exportedUnits"
-                                value={formData.exportedUnits}
-                                onChange={handleInputChange}
-                                className="form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px"
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
-                    <div className="d-flex justify-content-center gap-4">
-                        <Button
-                            variant="primary"
-                            onClick={handleEditSite}
-                            size="sm"
-                            style={{background: "#d4edda", color:"#347042"}}
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <>
-                                    Please wait...
-                                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </>
-                            ) : (
-                                        
-                                <span>Save</span>
-                            )}
-                            </Button>
-                        <Button style={{background: "#e8aca1", color:"#86320f"}} onClick={handleBack}>Cancel</Button>
-                    </div>
-                </Form>
-                </Card.Body>
-            </Card>
+            <Row>
+                <Col md={12} className="mb-lg-0 mb-8">
+                    <Card className="border bg-white">
+                        <Card.Body className="p-6">
+                        <Form>
+                            <Row className="g-6">
+                            <Col md={6}>
+                                <Form.Group className="mb-4">
+                                <Form.Label className="fs-16 fw-600 text-dark">
+                                    Generated Units
+                                </Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="generatedUnits"
+                                    value={formData.generatedUnits}
+                                    onChange={handleInputChange}
+                                    className="form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px"
+                                />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-4">
+                                <Form.Label className="fs-16 fw-600 text-dark">
+                                    Consumed Units
+                                </Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="consumedUnits"
+                                    value={formData.consumedUnits}
+                                    onChange={handleInputChange}
+                                    className="form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px"
+                                />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-4">
+                                    <Form.Label className="fs-16 fw-600 text-dark">
+                                        Exported Units
+                                    </Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="exportedUnits"
+                                        value={formData.exportedUnits}
+                                        onChange={handleInputChange}
+                                        className="form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px"
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                            <div className="d-flex justify-content-center gap-4">
+                                <Button
+                                    variant="primary"
+                                    onClick={handleEditSite}
+                                    size="sm"
+                                    style={{background: "#d4edda", color:"#347042"}}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            Please wait...
+                                            <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </>
+                                    ) : (
+                                        <span className="indicator-label fs-16 fw-bold">
+                                            Save Changes
+                                        </span>
+                                    )}
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        className="fs-16 fw-bold"
+                                        onClick={handleBack}
+                                    >
+                                        Cancel
+                                    </Button>
+                            </div>
+                        </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
         </div>
     );
 }

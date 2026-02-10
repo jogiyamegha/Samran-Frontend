@@ -34,3 +34,23 @@ export interface IAddPpa {
     ppaDocument: File | null,
     leaseDocument: File | null,
 }
+
+export interface IEditPpa {
+    ppaName: string | null,
+    plantId: string | null,
+    plantCapacity: number | null,
+    tarrif: number | null,
+    expectedYears: number | null, 
+    startDate: Date,
+    ppaDocument: File | null,
+    leaseDocument: File | null,
+}
+
+
+export type FileWithPreview = {
+    file: any,
+    preview: string,
+    name: string,
+    size: number,
+    type: string
+}

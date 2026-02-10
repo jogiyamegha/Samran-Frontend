@@ -5,9 +5,10 @@ import Method from "../../../utils/methods";
 import { Months, PlantStatus, PropertyTypes, UserPaymentMethod } from "../../../utils/constants";
 import PlaceholderLogo from "../../../_admin/assets/media/svg/placeholder.svg";
 import CashPaymentModal from "../../modals/CashPaymentModal";
-import { PAYMENT } from "../../../api/apiEndPoints";
+import { Bill, PAYMENT } from "../../../api/apiEndPoints";
 import APICallService from "../../../api/apiCallService";
 import { success } from "../../../global/toast";
+import DeleteModal from "../../modals/DeleteModal";
 
 const ViewBill = () => {
     const navigate = useNavigate();
@@ -23,6 +24,25 @@ const ViewBill = () => {
     const handleBack = () => {
         navigate("/bill/all-bills");
     };
+    const handleEdit = () => {
+        navigate("/bill/edit-bill");
+    };
+
+    const handleDeleteBill = async (billId: string | null) => {
+        if (!billId) {
+            setShowModal(false);
+            return;
+        }
+        setLoading(true);
+        const apiService = new APICallService(Bill.DELETEBILL, billId);
+        const response = await apiService.callAPI();
+        if (response) {
+            success("Bill has been deleted successfully");
+            navigate("/bill/all-bills");
+        }
+        setLoading(false);
+    };
+
     
     if (!state) {
         return (
@@ -50,7 +70,7 @@ const ViewBill = () => {
         const response = await apiService.callAPI();
         if (response) {
             success("Cash Payment updated successfully");
-            // await fetchBills(page, pageLimit, searchTerm, ppaId, plantId, userId, billingMonth, billingYear , userPaymentMethod, isPaid)
+            // await fetchBills(page, pageLimit, searchTerm, ppaId, billId, userId, billingMonth, billingYear , userPaymentMethod, isPaid)
         }
         setLoading(false);
     }
@@ -91,7 +111,7 @@ const ViewBill = () => {
         <div className="p-9 bg-light">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex align-items-center mb-4 w-100">
+                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
                         <div className="d-flex align-items-center gap-3">
                             <Button
                                 variant="light"
@@ -103,19 +123,40 @@ const ViewBill = () => {
                             </Button>
                             <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Bill Details</h1>
                         </div>
-                        {state?.isPaid === false && (
+                        <div className="d-flex gap-2">
+                            {state?.isPaid === false && (
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    className="fs-16 fw-bold ms-auto"
+                                    style={{background: "#547792"}}
+                                    onClick={() => {
+                                        setBillId(state?._id);
+                                        setShowModal(true);
+                                    }}
+                                >
+                                    <i className="bi bi-cash-stack"></i>
+                                    Update Cash Payment
+                                </Button>
+                            )}
+                            <Button variant="primary" size="sm" className="fs-16 fw-bold" onClick={handleEdit}>
+                                <i className="bi bi-pencil me-2"></i>
+                                Edit Bill
+                            </Button>
                             <Button
-                                variant="primary"
+                                variant="danger"
                                 size="sm"
-                                className="fs-16 fw-bold ms-auto"
+                                className="fs-16 fw-bold"
                                 onClick={() => {
-                                    setBillId(state?._id);
                                     setShowModal(true);
+                                    setBillId(state._id);
                                 }}
                             >
-                                Update Cash Payment
+                                <i className="bi bi-trash me-2"></i>
+                                Delete
                             </Button>
-                        )}
+                        </div>
+                        
                     </div>
                 </Col>
             </Row>
@@ -223,6 +264,12 @@ const ViewBill = () => {
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 handleCashPayment={() => handleCashPayment(billId)} 
+            />
+            <DeleteModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                handleDelete={() => handleDeleteBill(billId)}
+                itemName={'bill'}
             />
         </div>
     );

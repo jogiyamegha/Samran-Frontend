@@ -216,8 +216,16 @@ const AddPpa = () => {
         <div className="p-9">
             <Row className="mb-6">
                 <Col xs={12}>
-                    <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-                        <h1 className="fs-22 fw-bolder">Add PPA</h1>
+                    <div className="d-flex align-items-center gap-3">
+                        <Button
+                            variant="light"
+                            className="p-0"
+                            onClick={handleBack}
+                            style={{border: "none", background: "transparent"}}
+                        >
+                            <i className="bi bi-arrow-left fs-24 text-dark"></i>
+                        </Button>
+                        <h1 className="fs-22 fw-bolder mb-0"  style={{ color: '#1e3369' }}>Add PPA</h1>
                     </div>
                 </Col>
             </Row>
@@ -232,12 +240,9 @@ const AddPpa = () => {
 
                         <Card.Body className="pt-0 pb-5">
                             <Row className="align-items-center">
-                                <Col>
+                                <Col md={12} className="mb-3">
                                     <Row>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="ppaName"
@@ -247,7 +252,7 @@ const AddPpa = () => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     className={clsx(
-                                                        'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                        'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
                                                         { 'border-danger': validation.ppaName }
                                                     )}
                                                     type="string"
@@ -262,7 +267,8 @@ const AddPpa = () => {
                                                     }}
                                                 />
                                             </Form.Group>
-
+                                        </Col>
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="plantId"
@@ -270,47 +276,45 @@ const AddPpa = () => {
                                                 <Form.Label className="fs-16 fw-500 required">
                                                     Plant
                                                 </Form.Label>
-                                                {loadingPlants ? (
-                                                    <div className="d-flex align-items-center justify-content-center bg-white border rounded" style={{ minHeight: '60px' }}>
-                                                        <span className="spinner-border spinner-border-sm me-2"></span>
-                                                        <span className="text-muted">Loading plants...</span>
-                                                    </div>
-                                                ) : plantOptions.length === 0 ? (
-                                                    <div className="bg-light border rounded p-4">
-                                                        <p className="text-muted mb-2 fs-14">
-                                                            <i className="bi bi-info-circle me-2"></i>
-                                                            No approved plants available. Please approve a plant first before creating a PPA.
-                                                        </p>
-                                                        <Button
-                                                            variant="link"
-                                                            size="sm"
-                                                            className="p-0 fs-14"
-                                                            onClick={() => navigate('/plant/all-plants')}
-                                                        >
-                                                            Go to Plants →
-                                                        </Button>
-                                                    </div>
-                                                ) : (
-                                                    <CustomSelectWhite
-                                                        border={validation.plantId ? '#F1416C' : ''}
-                                                        placeholder="Select Plant"
-                                                        options={plantOptions}
-                                                        isMulti={false}
-                                                        onChange={handleSelectChange}
-                                                        value={plantOptions.find(
-                                                            (option) => option.value === formData.plantId
-                                                        ) || null}
-                                                        minHeight="60px"
-                                                        controlFontSize="14px"
-                                                        fontWeight="500"
-                                                    />
-                                                )}
+                                                    {loadingPlants ? (
+                                                        <div className="d-flex align-items-center justify-content-center bg-white border rounded" style={{ minHeight: '60px' }}>
+                                                            <span className="spinner-border spinner-border-sm me-2"></span>
+                                                            <span className="text-muted">Loading plants...</span>
+                                                        </div>
+                                                    ) : plantOptions.length === 0 ? (
+                                                        <div className="bg-light border rounded p-4">
+                                                            <p className="text-muted mb-2 fs-14">
+                                                                <i className="bi bi-info-circle me-2"></i>
+                                                                No approved plants available. Please approve a plant first before creating a PPA.
+                                                            </p>
+                                                            <Button
+                                                                variant="link"
+                                                                size="sm"
+                                                                className="p-0 fs-14"
+                                                                onClick={() => navigate('/plant/all-plants')}
+                                                            >
+                                                                Go to Plants →
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <CustomSelectWhite
+                                                            border={validation.plantId ? '#F1416C' : ''}
+                                                            placeholder="Select Plant"
+                                                            options={plantOptions}
+                                                            isMulti={false}
+                                                            onChange={handleSelectChange}
+                                                            value={plantOptions.find(
+                                                                (option) => option.value === formData.plantId
+                                                            ) || null}
+                                                            minHeight="43px"
+                                                            controlFontSize="14px"
+                                                            fontWeight="500"
+                                                        />
+                                                    )
+                                                }
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="plantCapacity"
@@ -320,7 +324,7 @@ const AddPpa = () => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     className={clsx(
-                                                        'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                        'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
                                                         { 'border-danger': validation.plantCapacity }
                                                     )}
                                                     type="number"
@@ -336,10 +340,7 @@ const AddPpa = () => {
                                                 />
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="tarrif"
@@ -349,7 +350,7 @@ const AddPpa = () => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     className={clsx(
-                                                        'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                        'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
                                                         { 'border-danger': validation.tarrif }
                                                     )}
                                                     type="number"
@@ -365,10 +366,7 @@ const AddPpa = () => {
                                                 />
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="expectedYears"
@@ -378,7 +376,7 @@ const AddPpa = () => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     className={clsx(
-                                                        'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                        'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
                                                         { 'border-danger': validation.expectedYears }
                                                     )}
                                                     type="number"
@@ -394,10 +392,7 @@ const AddPpa = () => {
                                                 />
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="startDate"
@@ -407,7 +402,7 @@ const AddPpa = () => {
                                                 </Form.Label>
                                                 <CustomDatePicker
                                                     className={clsx(
-                                                        'form-control bg-white min-h-60px fs-15 fw-500 border-radius-15px',
+                                                        'form-control bg-white min-h-43px fs-15 fw-500 border-radius-15px',
                                                         { 'border-danger': validation.startDate }
                                                     )}
                                                     selected={formData.startDate}
@@ -424,10 +419,7 @@ const AddPpa = () => {
                                                 />
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="ppaDocument"
@@ -447,7 +439,7 @@ const AddPpa = () => {
                                                         border: validation.ppaDocument
                                                             ? '1px solid #F1416C'
                                                             : '1px solid #e0e0df',
-                                                        height: '60px',
+                                                        height: '45px',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         paddingTop: '16px',
@@ -459,10 +451,7 @@ const AddPpa = () => {
                                                 </Form.Text>
                                             </Form.Group>
                                         </Col>
-                                        <Col
-                                            md={6}
-                                            className="mb-3"
-                                        >
+                                        <Col md={6} className="mb-3">
                                             <Form.Group
                                                 className="mb-3"
                                                 controlId="leaseDocument"
@@ -482,7 +471,7 @@ const AddPpa = () => {
                                                         border: validation.leaseDocument
                                                             ? '1px solid #F1416C'
                                                             : '1px solid #e0e0df',
-                                                        height: '60px',
+                                                        height: '45px',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         paddingTop: '16px',
@@ -497,34 +486,29 @@ const AddPpa = () => {
                                     </Row>
                                 </Col>
                             </Row>
+                            <div className="d-flex justify-content-center gap-4">
+                                <Button
+                                    size="lg"
+                                    onClick={handleAddPpa}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            Please wait...
+                                            <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </>
+                                    ) : (
+                                        <span className="indicator-label fs-16 fw-bold">
+                                            <i className="bi bi-plus-lg"></i>
+                                            Add PPA
+                                        </span>
+                                    )}
+                                </Button>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <div className="d-flex justify-content-center gap-4">
-                    <Button
-                        size="lg"
-                        onClick={handleAddPpa}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                Please wait...
-                                <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </>
-                        ) : (
-                            <span className="indicator-label fs-16 fw-bold">
-                                Add PPA
-                            </span>
-                        )}
-                    </Button>
-                    {/* <Button
-                    className="indicator-label fs-16 fw-bold"
-                    onClick={handleBack}
-                >
-                    Cancel
-                </Button> */}
-                </div>
             </Row>
         </div>
     );
