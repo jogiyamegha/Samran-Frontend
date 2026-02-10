@@ -49,6 +49,11 @@ export const PAYMENT = {
     UPDATECASHPAYMENT: 'admin/update/cash-payment' + ' ' + constants.PATCH_ID
 }
 
+export const WALLET = {
+    LISTTRANSACTIONS: 'admin/wallet/transactions' + ' ' + constants.GET_URL_PARAMS,
+    APPROVEDEPOSIT: 'admin/wallet/approve-deposit' + ' ' + constants.PATCH_ID,
+}
+
 export const DASHBOARD = {
     GET_DASHBOARD_DATA: "admin/dashboard" + " " + constants.GET,
 };

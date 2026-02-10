@@ -13,8 +13,24 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 // Tailwind CSS - Import last to ensure utilities override framework styles
 import './index.css';
 import { AppRoutes } from './app/routing/AppRoutes';
-import { AuthProvider } from './app/modules/auth';
+import { AuthProvider, getAuth } from './app/modules/auth';
 import { ToastContainer } from 'react-toastify';
+import { BASE_URL } from './utils/constants';
+
+// Configure axios defaults
+axios.defaults.baseURL = BASE_URL;
+axios.interceptors.request.use(
+    (config) => {
+        const auth = getAuth();
+        if (auth?.token) {
+            config.headers.Authorization = `Bearer ${auth.token}`;
+        }
+        config.headers['platform'] = 'web';
+        config.headers['ngrok-skip-browser-warning'] = '69420';
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 Chart.register(...registerables);
 

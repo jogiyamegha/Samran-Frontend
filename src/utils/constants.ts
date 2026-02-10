@@ -103,3 +103,23 @@ export const UserPaymentMethod = (function () {
 
     return UserPaymentMethod;
 })();
+
+export const TransactionType = (function () {
+    function TransactionType() { };
+    TransactionType.BillPayment = 1;
+    TransactionType.Return = 2;
+    TransactionType.InvestorReturn = 3;
+    TransactionType.WalletDeposit = 4;
+
+    return TransactionType;
+})();
+
+export const TransactionStatus = (function () {
+    function TransactionStatus() { };
+    TransactionStatus.Pending = 1;
+    TransactionStatus.Successful = 2;
+    TransactionStatus.Failed = 3;
+    TransactionStatus.InProgress = 4;
+
+    return TransactionStatus;
+})();

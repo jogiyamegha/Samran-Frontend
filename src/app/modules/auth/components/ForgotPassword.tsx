@@ -103,7 +103,7 @@ export function ForgotPassword() {
                 <button
                     type="submit"
                     className="btn btn-ps-primary btn-lg w-100 py-5 fs-4 fw-bolder shadow-sm"
-                    disabled={formik.isSubmitting || !formik.isValid}
+                    disabled={formik.isSubmitting}
                 >
                     {!loading ? 'Send Reset Link' : (
                         <span className="d-flex align-items-center justify-content-center">

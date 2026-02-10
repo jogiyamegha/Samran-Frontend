@@ -41,10 +41,10 @@ export function Login() {
             try {
                 const response = await apiService.callAPI();
                 if (response) {
-                    saveAuth(response?.token);
+                    saveAuth({ token: response?.token });
                     const userData = response?.user || response?.admin;
                     saveCurrentUser(userData);
-                    
+
                     // Redirect based on user type
                     if (userData?.userType === 1) { // Admin
                         navigate('/dashboard');
@@ -66,7 +66,7 @@ export function Login() {
                 saveAuth(undefined);
                 saveCurrentUser(undefined);
             }
-            
+
             setLoading(false);
             setSubmitting(false);
         }
@@ -79,26 +79,26 @@ export function Login() {
             noValidate
         >
             <div className="text-center mb-12">
-                <h1 className="text-[#0b1f33] fw-black mb-3 display-6 tracing-tight">Sign In</h1>
+                <h1 className="text-[#0b1f33] fw-black mb-3 display-6 tracking-tight">Sign In</h1>
                 <div className="text-slate-500 fw-bold fs-5">
-                    New here? <Link to="/auth/registration" className="text-[#0f766e] hover:text-[#43EBA6] fw-bolder text-decoration-none transition-colors">Create an Account</Link>
+                    New here? <Link to="/auth/registration" className="text-[#0f766e] hover:text-[#43EBA6] fw-bolder text-decoration-none transition-colors">Create an account</Link>
                 </div>
             </div>
 
             {formik.status && (
-                <div className="alert alert-danger d-flex align-items-center p-5 mb-10 border border-red-200 bg-red-50 rounded-xl">
+                <div className="alert alert-danger d-flex align-items-center p-5 mb-10">
                     <i className="fas fa-exclamation-circle text-danger fs-3 me-3"></i>
-                    <div className="fw-semibold text-red-900">{formik.status}</div>
+                    <div className="fw-semibold">{formik.status}</div>
                 </div>
             )}
 
             <div className="fv-row mb-8">
-                <label className="form-label fs-6 fw-bold text-[#0b1f33] text-uppercase ls-1">Email</label>
+                <label className="form-label fs-6 fw-bold text-[#0b1f33] text-uppercase ls-1">Email Address</label>
                 <input
-                    placeholder="Enter your email"
+                    placeholder="name@company.com"
                     {...formik.getFieldProps('email')}
                     className={clsx(
-                        'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50',
+                        'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50 transition-all',
                         { 'is-invalid border-red-500': formik.touched.email && formik.errors.email }
                     )}
                     type="email"
@@ -110,43 +110,38 @@ export function Login() {
                 )}
             </div>
 
-            <div className="fv-row mb-10">
+            <div className="fv-row mb-12">
                 <div className="d-flex justify-content-between align-items-center mb-2">
                     <label className="form-label fs-6 fw-bold text-[#0b1f33] text-uppercase ls-1 mb-0">Password</label>
-                    <Link to="/auth/forgot-password" title="Recover account" className="text-[#0f766e] hover:text-[#43EBA6] fs-7 fw-bolder text-decoration-none">
+                    <Link
+                        to="/auth/forgot-password"
+                        className="text-[#0f766e] fs-7 fw-bold hover:text-[#43EBA6] text-decoration-none"
+                    >
                         Forgot Password?
                     </Link>
                 </div>
-                <div className="position-relative">
-                    <input
-                        placeholder="Enter your password"
-                        type={showPassword ? 'text' : 'password'}
-                        autoComplete="off"
-                        {...formik.getFieldProps('password')}
-                        className={clsx(
-                            'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50',
-                            { 'is-invalid border-red-500': formik.touched.password && formik.errors.password }
-                        )}
-                    />
-                    <span
-                        className="btn btn-sm btn-icon position-absolute translate-middle-y top-50 end-0 me-3"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        <i className={clsx('fas fs-4 text-[#94a3b8]', showPassword ? 'fa-eye-slash' : 'fa-eye')}></i>
-                    </span>
-                    {formik.touched.password && formik.errors.password && (
-                        <div className="invalid-feedback fw-bold">{formik.errors.password}</div>
+                <input
+                    type="password"
+                    autoComplete="off"
+                    placeholder="••••••••"
+                    {...formik.getFieldProps('password')}
+                    className={clsx(
+                        'form-control form-control-solid p-4 border-2 border-slate-200 focus:border-[#43EBA6] rounded-xl fs-5 bg-slate-50 transition-all',
+                        { 'is-invalid border-red-500': formik.touched.password && formik.errors.password }
                     )}
-                </div>
+                />
+                {formik.touched.password && formik.errors.password && (
+                    <div className="invalid-feedback fw-bold">{formik.errors.password}</div>
+                )}
             </div>
 
             <div className="text-center">
                 <button
                     type="submit"
-                    className="btn w-100 py-4 fs-4 fw-bold mb-5 shadow-lg bg-[#052F2B] text-white hover:bg-[#04362F] hover:shadow-xl hover:-translate-y-1 transition-all rounded-xl"
-                    disabled={formik.isSubmitting || !formik.isValid}
+                    className="btn w-100 py-4 fs-4 fw-bold mb-5 shadow-lg bg-[#0b1f33] text-white hover:bg-[#0b1f33] hover:shadow-xl hover:-translate-y-1 transition-all rounded-xl"
+                    disabled={formik.isSubmitting}
                 >
-                    {!loading ? 'Continue to Dashboard' : (
+                    {!loading ? 'Sign In' : (
                         <span className="d-flex align-items-center justify-content-center">
                             Validating...
                             <span className="spinner-border spinner-border-sm ms-3"></span>

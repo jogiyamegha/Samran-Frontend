@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import FAQSection from '../components/FAQSection';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -12,28 +13,16 @@ const Home: React.FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
 
-  const metrics = useMemo(() => [
-    { val: '₹450Cr+', label: 'ASSETS MANAGED', icon: 'fa-vault', desc: 'Securely fractionalized on-chain', color: 'from-teal-500 to-cyan-600' },
-    { val: '14.8%', label: 'PROJECTED IRR', icon: 'fa-chart-line', desc: 'Project-specific yield average', color: 'from-emerald-500 to-teal-600' },
-    { val: '22K+', label: 'GLOBAL INVESTORS', icon: 'fa-users-viewfinder', desc: 'Active platform participants', color: 'from-cyan-500 to-blue-600' },
-    { val: '1.2GW', label: 'DEPLOYMENT PIPELINE', icon: 'fa-bolt-lightning', desc: 'Active project roadmap', color: 'from-blue-500 to-indigo-600' }
-  ], []);
+
 
   const transparencyItems = useMemo(() => [
-    { title: 'Asset Verification', content: 'On-chain proof of physical deployment at the hosting facility. Every panel serial number is cryptographically linked.', icon: 'fa-clipboard-check' },
+    { title: 'Asset Verification', content: 'Digital proof of physical deployment at the hosting facility. Every panel serial number is tracked and verified.', icon: 'fa-clipboard-check' },
     { title: 'Revenue Tracking', content: 'Direct PPA settlement visibility. Every rupee tracked from generation to wallet with real-time settlement.', icon: 'fa-chart-line' },
-    { title: 'Ownership Proof', content: 'Cryptographically secured fractional deed of ownership. Your digital twins represent immutable rights.', icon: 'fa-file-contract' },
-    { title: 'Public Audit', content: '24/7 public audit logs for telemetry and payout reconciliation. Zero trust architecture for institutional peace of mind.', icon: 'fa-magnifying-glass-dollar' }
+    { title: 'Ownership Proof', content: 'Secure digital deed of ownership. Your investment represents verifiable rights to physical assets.', icon: 'fa-file-contract' },
+    { title: 'Public Audit', content: '24/7 audit logs for telemetry and payout reconciliation. Zero trust architecture for institutional peace of mind.', icon: 'fa-magnifying-glass-dollar' }
   ], []);
 
-  const perks = useMemo(() => [
-    { title: 'Zero-Lock Tariff', desc: 'Pay only for energy consumed with no upfront capital', icon: 'fa-lock-open', gradient: 'from-teal-500 to-cyan-500' },
-    { title: 'Telemetric Monitor', desc: 'Real-time IoT monitoring of every panel', icon: 'fa-tower-broadcast', gradient: 'from-cyan-500 to-blue-500' },
-    { title: 'System Concierge', desc: 'Dedicated support for enterprise clients', icon: 'fa-headset', gradient: 'from-blue-500 to-indigo-500' },
-    { title: 'Industrial Cleaning', desc: 'Scheduled maintenance by certified teams', icon: 'fa-spray-can-sparkles', gradient: 'from-indigo-500 to-purple-500' },
-    { title: 'Performance Warranty', desc: 'Guaranteed output backed by insurance', icon: 'fa-shield-halved', gradient: 'from-purple-500 to-pink-500' },
-    { title: 'Asset Transfer', desc: 'Seamless ownership transfer capabilities', icon: 'fa-right-left', gradient: 'from-pink-500 to-teal-500' }
-  ], []);
+
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -128,23 +117,7 @@ const Home: React.FC = () => {
     }
 
     // Stagger animations
-    gsap.from('.metric-card', {
-      scrollTrigger: { trigger: '.metrics-section', start: 'top 80%' },
-      y: 60,
-      opacity: 0,
-      stagger: 0.15,
-      duration: 1,
-      ease: 'power3.out'
-    });
 
-    gsap.from('.perk-card', {
-      scrollTrigger: { trigger: '.perks-section', start: 'top 80%' },
-      y: 50,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: 'power3.out'
-    });
 
     gsap.from('.transparency-card', {
       scrollTrigger: { trigger: '.transparency-section', start: 'top 80%' },
@@ -454,7 +427,7 @@ const Home: React.FC = () => {
             </h2>
 
             <p className="text-xl lg:text-2xl text-[#334155] max-w-3xl mt-6 font-medium">
-              Every transaction, every watt, every rupee — fully auditable and on-chain
+              Every transaction, every watt, every rupee — fully auditable and transparent
             </p>
           </div>
 
@@ -495,56 +468,7 @@ const Home: React.FC = () => {
       </section>
 
 
-      {/* ============ PERKS/BENEFITS SECTION ============ */}
-      <section className="perks-section py-24 lg:py-32 bg-[#f8fafc] relative overflow-hidden">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
 
-          {/* Header */}
-          <div className="mb-20 reveal-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ECFDF5] border border-[#43EBA6]/40 text-[#0f766e] text-xs font-bold uppercase tracking-wider mb-6">
-              <i className="fas fa-star" />
-              Included Benefits
-            </div>
-
-            <h2 className="text-5xl lg:text-[80px] font-black tracking-tight text-[#0b1f33]">
-              Institutional Perks
-            </h2>
-
-            <p className="text-xl lg:text-2xl text-[#334155] max-w-3xl mt-6 font-medium">
-              White-glove service and enterprise-grade infrastructure management
-            </p>
-          </div>
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {perks.map((perk, i) => (
-              <div
-                key={i}
-                className="group bg-white rounded-[32px] p-8 border border-[#e2e8f0] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-              >
-                {/* Icon */}
-                <div className="w-16 h-16 rounded-2xl bg-[#ECFDF5] border border-[#43EBA6]/20 flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform">
-                  <i className={`fas ${perk.icon} text-2xl text-[#052F2B]`} />
-                </div>
-
-                {/* Title */}
-                <h4 className="text-2xl font-black text-[#0b1f33] mb-3 tracking-tight">
-                  {perk.title}
-                </h4>
-
-                {/* Description */}
-                <p className="text-[#475569] leading-relaxed font-medium">
-                  {perk.desc}
-                </p>
-
-                {/* Accent */}
-                <div className="mt-6 h-1 w-12 rounded-full bg-[#43EBA6] opacity-0 group-hover:opacity-100 transition" />
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
 
 
       {/* ============ HORIZONTAL SCROLL SECTION ============ */}
@@ -675,84 +599,8 @@ const Home: React.FC = () => {
       </section>
 
 
-      {/* ============ METRICS SECTION ============ */}
-      <section className="metrics-section py-24 lg:py-32 bg-[#052F2B] relative overflow-hidden">
-
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.09]"
-          style={{
-            backgroundImage: `linear-gradient(#43EBA6 1px, transparent 1px), linear-gradient(90deg, #43EBA6 1px, transparent 1px)`,
-            backgroundSize: '80px 80px'
-          }}
-        />
-
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
-
-          {/* Header */}
-          <div className="text-center mb-20 reveal-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#43EBA6]/10 border border-[#43EBA6]/30 text-[#43EBA6] text-xs font-bold uppercase tracking-wider mb-6">
-              <i className="fas fa-chart-bar" />
-              Platform Metrics
-            </div>
-
-            <h2 className="text-5xl lg:text-[80px] font-black tracking-tight text-[#ECFDF5]">
-              By the Numbers
-            </h2>
-          </div>
-
-          {/* Main Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {metrics.map((m, i) => (
-              <div
-                key={i}
-                className="group bg-white/5 border border-white/10 rounded-[32px] p-10 backdrop-blur-sm shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-[#052F2B] border border-[#43EBA6]/40 flex items-center justify-center text-[#43EBA6] mb-6 shadow-md">
-                  <i className={`fas ${m.icon} text-xl`} />
-                </div>
-
-                <div className="text-[#43EBA6] text-xs font-bold uppercase tracking-widest mb-4">
-                  {m.label}
-                </div>
-
-                <div className="text-5xl font-black text-[#ECFDF5] mb-3 tracking-tight">
-                  {m.val}
-                </div>
-
-                <p className="text-[#B2F5EA] text-sm font-medium">
-                  {m.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Highlight Bar */}
-          <div className="mt-20 reveal-up">
-            <div className="max-w-5xl mx-auto bg-[#04362F] border border-[#0f766e]/40 rounded-3xl p-10 grid grid-cols-2 md:grid-cols-4 gap-10 text-center shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
-
-              {[
-                ["99.8%", "Uptime Guarantee"],
-                ["< 1hr", "Settlement Time"],
-                ["25 yr", "Warranty Period"],
-                ["24/7", "Support Access"]
-              ].map(([v, t], i) => (
-                <div key={i}>
-                  <div className="text-5xl font-black text-[#43EBA6] mb-2">
-                    {v}
-                  </div>
-                  <div className="text-sm font-bold uppercase tracking-widest text-[#ECFDF5]">
-                    {t}
-                  </div>
-                </div>
-              ))}
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
+      {/* ============ FAQ SECTION ============ */}
+      <FAQSection pageType="home" />
 
       {/* ============ FINAL CTA SECTION ============ */}
       <section className="py-24 lg:py-32 px-6 lg:px-8 bg-[#f8fafc] relative overflow-hidden">

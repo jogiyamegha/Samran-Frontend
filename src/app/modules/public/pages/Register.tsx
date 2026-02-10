@@ -174,7 +174,6 @@ const Register: React.FC = () => {
               )}
             >
               <option value="">Select an option</option>
-              <option value="2">Solar Investor (Earn Returns)</option>
               <option value="3">Solar Consumer (Save Bills)</option>
             </select>
             {formik.touched.userType && formik.errors.userType && (

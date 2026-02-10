@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const PlantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -7,328 +9,174 @@ const PlantDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching plant detail from API
-    setTimeout(() => {
-      const mockPlant = {
-        id: parseInt(id || '1'),
-        propertyName: id === '2' ? 'Commercial Building B' : 'Residential Complex A',
-        propertyType: id === '2' ? 'Manufacturing Unit' : 'Housing Society',
-        address: '123 Main Street, Mumbai, Maharashtra 400001',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        pincode: '400001',
-        roofArea: '1200 sq ft',
-        billAmount: 15000,
-        electricityRate: 8.5,
-        plantStatus: id === '2' ? 'Approved' : 'Submitted',
-        plantCapacity: '10 kW',
-        expectedYears: 25,
-        startDate: '2023-01-15',
-        endDate: '2048-01-15',
-        ppaDetails: {
-          startDate: '2023-01-15',
-          endDate: '2048-01-15',
-          tariffRate: 5.5,
-          escalation: 3
-        },
-        performance: {
-          monthly: [
-            { month: 'Jan', generation: 1200, consumption: 1100, export: 100 },
-            { month: 'Feb', generation: 1100, consumption: 1050, export: 50 },
-            { month: 'Mar', generation: 1300, consumption: 1200, export: 100 },
-            { month: 'Apr', generation: 1400, consumption: 1300, export: 100 },
-            { month: 'May', generation: 1500, consumption: 1400, export: 100 },
-            { month: 'Jun', generation: 1600, consumption: 1500, export: 100 },
-          ]
-        }
-      };
-      setPlant(mockPlant);
-      setLoading(false);
-    }, 500);
+    fetchPlantDetail();
   }, [id]);
+
+  const fetchPlantDetail = async () => {
+    try {
+      // Since we don't have a single get endpoint, we fetch all and find
+      const response = await axios.get('/user/my-plants');
+      if (response.data && response.data.result) {
+        const foundPlant = response.data.result.find((p: any) => p._id === id);
+        if (foundPlant) {
+          // Flatten nested propertyAddress for easier access
+          const flattenedPlant = {
+            ...foundPlant,
+            propertyName: foundPlant.propertyAddress?.propertyName || foundPlant.propertyName || 'N/A',
+            propertyType: foundPlant.propertyAddress?.propertyType || foundPlant.propertyType,
+            address: foundPlant.propertyAddress?.address || foundPlant.address,
+            city: foundPlant.propertyAddress?.city || foundPlant.city,
+            state: foundPlant.propertyAddress?.state || foundPlant.state,
+            pincode: foundPlant.propertyAddress?.pincode || foundPlant.pincode,
+            roofArea: foundPlant.propertyAddress?.roofArea || foundPlant.roofArea,
+            billAmount: foundPlant.propertyAddress?.billAmount || foundPlant.billAmount,
+            billImage: foundPlant.propertyAddress?.billImage || foundPlant.billImage,
+            electricityRate: foundPlant.propertyAddress?.electricityRate || foundPlant.electricityRate,
+          };
+          setPlant(flattenedPlant);
+        } else {
+          // Plant not found - will show not found state
+        }
+      }
+    } catch (error) {
+      // Silently fail - page will show "not found" state
+      // Don't show error toast, page will show "not found" state
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12">
-            <div className="text-center">
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex justify-center p-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#052F2B]"></div>
       </div>
     );
   }
 
   if (!plant) {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12">
-            <div className="alert alert-danger" role="alert">
-              Plant not found
-            </div>
-          </div>
-        </div>
+      <div className="p-6 bg-red-50 text-red-600 rounded-xl border border-red-100">
+        Plant not found. <Link to="/consumer/plants" className="underline font-bold">Go back</Link>
       </div>
     );
   }
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-12">
-          <h1 className="h3 mb-2 text-gray-800">Plant Details</h1>
-          
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item"><Link to="/consumer/dashboard">Dashboard</Link></li>
-              <li className="breadcrumb-item"><Link to="/consumer/plants">My Plants</Link></li>
-              <li className="breadcrumb-item active" aria-current="page">Plant #{plant.id}</li>
-            </ol>
-          </nav>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+          <Link to="/consumer/dashboard" className="hover:text-[#052F2B]">Dashboard</Link>
+          <i className="fas fa-chevron-right text-xs"></i>
+          <Link to="/consumer/plants" className="hover:text-[#052F2B]">My Plants</Link>
+          <i className="fas fa-chevron-right text-xs"></i>
+          <span className="font-bold text-[#0b1f33]">Plant #{plant._id?.toString().slice(-6).toUpperCase()}</span>
         </div>
-      </div>
-
-      <div className="row">
-        <div className="col-12">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 className="m-0 font-weight-bold text-primary">Plant Information</h6>
-              <div>
-                <button className="btn btn-sm btn-outline-primary mr-2">
-                  <i className="fas fa-edit"></i> Edit
-                </button>
-                <button className="btn btn-sm btn-outline-info mr-2">
-                  <i className="fas fa-file-pdf"></i> Download Report
-                </button>
-                <button className="btn btn-sm btn-outline-success">
-                  <i className="fas fa-history"></i> History
-                </button>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Property Name:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.propertyName}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Property Type:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.propertyType}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Address:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.address}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">City:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.city}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">State:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.state}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Pincode:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.pincode}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Roof Area:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">{plant.roofArea}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Bill Amount:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">₹{plant.billAmount.toLocaleString()}</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Electricity Rate:</label>
-                    <div className="col-sm-8">
-                      <p className="form-control-plaintext">₹{plant.electricityRate}/kWh</p>
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-4 col-form-label font-weight-bold">Status:</label>
-                    <div className="col-sm-8">
-                      <span className={`badge ${
-                        plant.plantStatus.toLowerCase() === 'approved' 
-                          ? 'badge-success' 
-                          : plant.plantStatus.toLowerCase() === 'submitted' 
-                            ? 'badge-warning' 
-                            : plant.plantStatus.toLowerCase() === 'rejected' 
-                              ? 'badge-danger' 
-                              : 'badge-secondary'
-                      }`}>
-                        {plant.plantStatus}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="row mt-4">
-                <div className="col-12">
-                  <h5>Plant Specifications</h5>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label font-weight-bold">Plant Capacity:</label>
-                        <div className="col-sm-8">
-                          <p className="form-control-plaintext">{plant.plantCapacity}</p>
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label font-weight-bold">Expected Years:</label>
-                        <div className="col-sm-8">
-                          <p className="form-control-plaintext">{plant.expectedYears} years</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label font-weight-bold">Start Date:</label>
-                        <div className="col-sm-8">
-                          <p className="form-control-plaintext">{plant.startDate}</p>
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label className="col-sm-4 col-form-label font-weight-bold">End Date:</label>
-                        <div className="col-sm-8">
-                          <p className="form-control-plaintext">{plant.endDate}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="flex justify-between items-end">
+          <h1 className="text-3xl font-black text-[#0b1f33] tracking-tight">Plant Details</h1>
+          <div className="flex gap-2">
+            <button className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 transition shadow-sm">
+              <i className="fas fa-edit me-2"></i> Edit
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-md-6">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">PPA Details</h6>
+      {/* Admin Note / Status Warning */}
+      {(plant.adminNote || plant.plantStatus === 3 || plant.status === 'Rejected') && (
+        <div className={`p-6 rounded-2xl border ${plant.plantStatus === 3 || plant.status === 'Rejected' ? 'bg-red-50 border-red-100' : 'bg-yellow-50 border-yellow-100'
+          }`}>
+          <div className="flex gap-4">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${plant.plantStatus === 3 || plant.status === 'Rejected' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-600'
+              }`}>
+              <i className={`fas ${plant.plantStatus === 3 || plant.status === 'Rejected' ? 'fa-exclamation-circle' : 'fa-info-circle'} text-xl`}></i>
             </div>
-            <div className="card-body">
-              <div className="form-group row">
-                <label className="col-sm-5 col-form-label font-weight-bold">Agreement Start:</label>
-                <div className="col-sm-7">
-                  <p className="form-control-plaintext">{plant.ppaDetails.startDate}</p>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-5 col-form-label font-weight-bold">Agreement End:</label>
-                <div className="col-sm-7">
-                  <p className="form-control-plaintext">{plant.ppaDetails.endDate}</p>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-5 col-form-label font-weight-bold">Tariff Rate (₹/kWh):</label>
-                <div className="col-sm-7">
-                  <p className="form-control-plaintext">{plant.ppaDetails.tariffRate}</p>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-5 col-form-label font-weight-bold">Escalation (%):</label>
-                <div className="col-sm-7">
-                  <p className="form-control-plaintext">{plant.ppaDetails.escalation}%</p>
-                </div>
-              </div>
+            <div>
+              <h4 className={`font-bold text-lg mb-1 ${plant.plantStatus === 3 || plant.status === 'Rejected' ? 'text-red-800' : 'text-yellow-800'
+                }`}>
+                {plant.plantStatus === 3 || plant.status === 'Rejected' ? 'Action Required: Plant Rejected' : 'Admin Note'}
+              </h4>
+              <p className={`${plant.plantStatus === 3 || plant.status === 'Rejected' ? 'text-red-700' : 'text-yellow-700'
+                }`}>
+                {plant.adminNote || "Please review your application details or contact admin."}
+              </p>
             </div>
           </div>
         </div>
-        
-        <div className="col-md-6">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Performance Summary (Last 6 Months)</h6>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table table-bordered" width="100%" cellSpacing="0">
-                  <thead>
-                    <tr>
-                      <th>Month</th>
-                      <th>Generation (kWh)</th>
-                      <th>Consumption (kWh)</th>
-                      <th>Export (kWh)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {plant.performance.monthly.map((month: any, index: number) => (
-                      <tr key={index}>
-                        <td>{month.month}</td>
-                        <td>{month.generation}</td>
-                        <td>{month.consumption}</td>
-                        <td>{month.export}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
 
-      <div className="row">
-        <div className="col-12">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 className="m-0 font-weight-bold text-primary">Plant Documents</h6>
+      {/* Main Info Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Property Info */}
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <h3 className="font-bold text-[#0b1f33] text-xl mb-6 border-b border-gray-100 pb-4">Property Information</h3>
+          <div className="grid md:grid-cols-2 gap-y-6 gap-x-12">
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Property Name</label>
+              <div className="font-bold text-[#0b1f33] text-lg">{plant.propertyName}</div>
             </div>
-            <div className="card-body">
-              <div className="list-group">
-                <a href="#" className="list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-between">
-                    <h5 className="mb-1">Plant Installation Certificate.pdf</h5>
-                    <small className="text-muted">2 days ago</small>
-                  </div>
-                  <p className="mb-1">Official certificate for plant installation</p>
-                  <small className="text-muted">PDF • 1.2 MB</small>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-between">
-                    <h5 className="mb-1">PPA Document.pdf</h5>
-                    <small className="text-muted">1 week ago</small>
-                  </div>
-                  <p className="mb-1">Power Purchase Agreement</p>
-                  <small className="text-muted">PDF • 1.8 MB</small>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-between">
-                    <h5 className="mb-1">Performance Report Q1.pdf</h5>
-                    <small className="text-muted">1 month ago</small>
-                  </div>
-                  <p className="mb-1">Quarterly performance report</p>
-                  <small className="text-muted">PDF • 2.1 MB</small>
-                </a>
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Type</label>
+              <div className="font-bold text-[#0b1f33] text-lg">
+                {plant.propertyType === 1 ? 'Housing Society' : plant.propertyType === 2 ? 'Manufacturing Unit' : plant.propertyType}
               </div>
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Address</label>
+              <div className="font-bold text-[#0b1f33] text-lg">{plant.address}, {plant.city}, {plant.state} - {plant.pincode}</div>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Bill Amount</label>
+              <div className="font-bold text-[#0b1f33] text-lg">₹ {plant.billAmount?.toLocaleString()}</div>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Status</label>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${plant.plantStatus === 2 || plant.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' :
+                plant.plantStatus === 3 || plant.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                {plant.plantStatus === 1 ? 'Submitted' : plant.plantStatus === 2 ? 'Approved' : plant.plantStatus === 3 ? 'Rejected' : (plant.status || 'Submitted')}
+              </span>
+            </div>
+          </div>
+
+          <h3 className="font-bold text-[#0b1f33] text-xl mb-6 mt-10 border-b border-gray-100 pb-4">Application Details</h3>
+          <div className="grid md:grid-cols-2 gap-y-6 gap-x-12">
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Roof Area</label>
+              <div className="font-bold text-[#0b1f33] text-lg">{plant.roofArea} sq ft</div>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Submitted On</label>
+              <div className="font-bold text-[#0b1f33] text-lg">{new Date(plant.createdAt).toLocaleDateString()}</div>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Electricity Rate</label>
+              <div className="font-bold text-[#0b1f33] text-lg">₹ {plant.electricityRate}/kWh</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar Cards */}
+        <div className="space-y-6">
+          {/* Documents */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-[#0b1f33] mb-4">Documents</h4>
+            <div className="space-y-3">
+              {plant.billImage && (
+                <div className="flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition cursor-pointer" onClick={() => window.open(plant.billImage, '_blank')}>
+                  <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center me-3">
+                    <i className="fas fa-file-image"></i>
+                  </div>
+                  <div className="overflow-hidden">
+                    <div className="font-bold text-[#0b1f33] text-sm truncate">Electricity Bill</div>
+                    <div className="text-xs text-gray-500">View Document</div>
+                  </div>
+                </div>
+              )}
+              {!plant.billImage && (
+                <div className="text-sm text-gray-500 italic">No documents uploaded.</div>
+              )}
             </div>
           </div>
         </div>

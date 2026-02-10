@@ -11,7 +11,7 @@ import { APIJSON } from '../../../../api/apiJSON/auth';
 import { useState } from 'react';
 
 const loginSchema = Yup.object().shape({
-    email : Yup.string()
+    email: Yup.string()
         .email('Please enter a valid email')
         .min(3, '')
         .max(50, '')
@@ -23,8 +23,8 @@ const loginSchema = Yup.object().shape({
 });
 
 const initialValues = {
-    email : '',
-    password : '',
+    email: '',
+    password: '',
 }
 
 export function UserLogin() {
@@ -39,18 +39,18 @@ export function UserLogin() {
             setLoading(true);
             const apiService = new APICallService(
                 USER_LOGIN,
-                APIJSON.login({email: values.email, password: values.password})
+                APIJSON.login({ email: values.email, password: values.password })
             );
 
             try {
                 const response = await apiService.callAPI();
                 console.log("user login response", response);
-                if(response) {
-                    saveAuth(response?.token);
+                if (response) {
+                    saveAuth({ token: response?.token });
                     // Handle both 'user' and 'admin' properties for flexibility
                     const userData = response?.user || response?.admin;
                     saveCurrentUser(userData);
-                    
+
                     // Redirect based on user type
                     if (userData?.userType === 1) { // Admin
                         navigate('/dashboard');
@@ -73,7 +73,7 @@ export function UserLogin() {
                 saveAuth(undefined);
                 saveCurrentUser(undefined);
             }
-            
+
             setLoading(false);
             setSubmitting(false);
         }
@@ -82,7 +82,7 @@ export function UserLogin() {
     const togglePasswordVisibility = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     }
-     
+
     return (
         <form
             className="form w-100"
@@ -90,135 +90,136 @@ export function UserLogin() {
             noValidate
             id="kt_login_signin_form"
         >
-        <div className="d-flex flex-column gap-4">
-            <div className="d-flex justify-content-center align-items-center">
-                <img
-                    src={toAbsoluteUrl("media/svg/authLogo.svg")}
-                    height={120}
-                    width={200}
-                    alt="logo"
-                />
-            </div>
-            <div className="d-flex justify-content-center align-items-center fs-3 fw-bold mb-4">
-                Welcome to Solar Energy Portal
-            </div>
-        </div>
-        <div className="fv-row mb-8">
-            <FormLabel className="fs-6 fw-normal text-gray-900">Email</FormLabel>
-            <InputGroup
-                className={clsx(
-                    'border border border-r5px',
-                    formik.touched.email && formik.errors.email
-                    ? 'border-danger border-1'
-                    : ''
-                )}
-            >
-                <InputGroup.Text className="border-0 bg-white">
+            <div className="d-flex flex-column gap-4">
+                <h1 className="text-[#0b1f33] fw-black mb-3 display-6 tracking-tight">Sign In</h1>
+                <div className="d-flex justify-content-center align-items-center">
                     <img
-                        src={toAbsoluteUrl("media/svg/Email(field).svg")}
-                        width={25}
-                        height={25}
-                        alt="email logo"
+                        src={toAbsoluteUrl("media/svg/authLogo.svg")}
+                        height={120}
+                        width={200}
+                        alt="logo"
                     />
-                </InputGroup.Text>
-                <FormControl
-                    placeholder="Type here..."
-                    {...formik.getFieldProps('email')}
-                    className="border-0 form-control-custom "
-                    type="email"
-                    name="email"
-                    autoComplete="off"
-                />
-            </InputGroup>
-            {formik.touched.email && formik.errors.email && (
-                <div className="fv-plugins-message-container">
-                    <div className="fv-help-block">
-                        <span role="alert">{formik.errors.email}</span>
-                    </div>
                 </div>
-            )}
-        </div>
-        <div className="fv-row mb-3">
-            <FormLabel className="fs-6 fw-normal text-gray-900">Password</FormLabel>
-            <InputGroup
-                className={clsx(
-                    'border border border-r5px',
-                    formik.touched.password && formik.errors.password
-                    ? 'border-danger border-1'
-                    : ''
-                )}
-            >
-                <InputGroup.Text className="border-0 bg-white">
-                    <img
-                        src={toAbsoluteUrl("media/svg/Lock(field).svg")}
-                        width={25}
-                        height={25}
-                        alt="lock logo"
-                    />
-                </InputGroup.Text>
-                <FormControl
-                    placeholder="Type here..."
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="off"
-                    {...formik.getFieldProps('password')}
-                    className="border-0 form-control-custom"
-                />
-                <InputGroup.Text className="border-0 bg-white">
-                    <Button
-                        variant="link"
-                        className="btn-flush"
-                        onClick={togglePasswordVisibility}
-                    >
-                    <img
-                        width={25}
-                        height={16}
-                        src={showPassword ? toAbsoluteUrl("media/svg/eyeFill.svg") : toAbsoluteUrl("media/svg/eyeIcon.svg")}
-                        alt="Toggle Password Visibility"
-                    />
-                    </Button>
-                </InputGroup.Text>
-            </InputGroup>
-            {formik.touched.password && formik.errors.password && (
-                <div className="fv-plugins-message-container">
-                    <div className="fv-help-block">
-                    <span role="alert">{formik.errors.password}</span>
-                    </div>
+                <div className="d-flex justify-content-center align-items-center fs-3 fw-bold mb-4">
+                    Welcome to Solar Energy Portal
                 </div>
-            )}
-        </div>
-        <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-            <Link
-                to="/auth/forgot-password"
-                className="link-primary"
-            >
-                Forgot Password ?
-            </Link>
-        </div>
-        <div className="d-grid mb-10">
-            <Button
-                type="submit"
-                id="kt_sign_in_submit"
-                className="btn btn-primary"
-                disabled={formik.isSubmitting || !formik.isValid}
-            >
-            {!loading && <span className="indicator-label">Login</span>}
-                {loading && (
-                    <span
-                        className="indicator-progress"
-                        style={{ display: 'block' }}
-                    >
-                        Please wait...
-                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
+            </div>
+            <div className="fv-row mb-8">
+                <FormLabel className="fs-6 fw-normal text-gray-900">Email</FormLabel>
+                <InputGroup
+                    className={clsx(
+                        'border border border-r5px',
+                        formik.touched.email && formik.errors.email
+                            ? 'border-danger border-1'
+                            : ''
+                    )}
+                >
+                    <InputGroup.Text className="border-0 bg-white">
+                        <img
+                            src={toAbsoluteUrl("media/svg/Email(field).svg")}
+                            width={25}
+                            height={25}
+                            alt="email logo"
+                        />
+                    </InputGroup.Text>
+                    <FormControl
+                        placeholder="Type here..."
+                        {...formik.getFieldProps('email')}
+                        className="border-0 form-control-custom "
+                        type="email"
+                        name="email"
+                        autoComplete="off"
+                    />
+                </InputGroup>
+                {formik.touched.email && formik.errors.email && (
+                    <div className="fv-plugins-message-container">
+                        <div className="fv-help-block">
+                            <span role="alert">{formik.errors.email}</span>
+                        </div>
+                    </div>
                 )}
-            </Button>
-        </div>
-        <div className="text-center text-muted fw-bold fs-6">
-            Don't have an account?{' '}
-            <Link to="/auth/register" className="link-primary fw-bold">
-                Sign up
-            </Link>
-        </div>
+            </div>
+            <div className="fv-row mb-3">
+                <FormLabel className="fs-6 fw-normal text-gray-900">Password</FormLabel>
+                <InputGroup
+                    className={clsx(
+                        'border border border-r5px',
+                        formik.touched.password && formik.errors.password
+                            ? 'border-danger border-1'
+                            : ''
+                    )}
+                >
+                    <InputGroup.Text className="border-0 bg-white">
+                        <img
+                            src={toAbsoluteUrl("media/svg/Lock(field).svg")}
+                            width={25}
+                            height={25}
+                            alt="lock logo"
+                        />
+                    </InputGroup.Text>
+                    <FormControl
+                        placeholder="Type here..."
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete="off"
+                        {...formik.getFieldProps('password')}
+                        className="border-0 form-control-custom"
+                    />
+                    <InputGroup.Text className="border-0 bg-white">
+                        <Button
+                            variant="link"
+                            className="btn-flush"
+                            onClick={togglePasswordVisibility}
+                        >
+                            <img
+                                width={25}
+                                height={16}
+                                src={showPassword ? toAbsoluteUrl("media/svg/eyeFill.svg") : toAbsoluteUrl("media/svg/eyeIcon.svg")}
+                                alt="Toggle Password Visibility"
+                            />
+                        </Button>
+                    </InputGroup.Text>
+                </InputGroup>
+                {formik.touched.password && formik.errors.password && (
+                    <div className="fv-plugins-message-container">
+                        <div className="fv-help-block">
+                            <span role="alert">{formik.errors.password}</span>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                <Link
+                    to="/auth/forgot-password"
+                    className="link-primary"
+                >
+                    Forgot Password ?
+                </Link>
+            </div>
+            <div className="d-grid mb-10">
+                <button
+                    type="submit"
+                    id="kt_sign_in_submit"
+                    className="btn w-100 py-4 fs-4 fw-bold mb-5 shadow-lg bg-[#052F2B] text-white hover:bg-[#0b1f33] transition-all rounded-xl"
+                    disabled={formik.isSubmitting}
+                >
+                    {!loading && <span className="indicator-label">Sign In</span>}
+                    {loading && (
+                        <span
+                            className="indicator-progress"
+                            style={{ display: 'block' }}
+                        >
+                            Please wait...
+                            <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    )}
+                </button>
+            </div>
+            <div className="text-center text-muted fw-bold fs-6">
+                Don't have an account?{' '}
+                <Link to="/auth/register" className="link-primary fw-bold">
+                    Sign up
+                </Link>
+            </div>
         </form>
     );
 }

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import FAQSection from '../components/FAQSection';
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -187,6 +188,9 @@ const Investors: React.FC = () => {
       </section>
 
 
+      {/* ============ FAQ SECTION ============ */}
+      <FAQSection pageType="investor" />
+
       {/* LIGHT CTA */}
       <section className="py-32 bg-white">
         <div className="max-w-4xl mx-auto px-6 text-center reveal-up">
@@ -200,9 +204,9 @@ const Investors: React.FC = () => {
             <Link to="/auth/registration" className="px-12 py-5 bg-emerald-600 text-white font-bold text-lg rounded-full hover:bg-emerald-700 hover:scale-105 transition-all shadow-xl shadow-emerald-200">
               Create Account
             </Link>
-            <button className="px-12 py-5 bg-white text-[#0b1f33] border border-slate-200 font-bold text-lg rounded-full hover:bg-slate-50 transition-colors">
+            <Link to="/home/contact" className="px-12 py-5 bg-white text-[#0b1f33] border border-slate-200 font-bold text-lg rounded-full hover:bg-slate-50 transition-colors">
               Talk to Sales
-            </button>
+            </Link>
           </div>
         </div>
       </section>

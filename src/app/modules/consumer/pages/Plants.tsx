@@ -1,57 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Modal, Button } from 'react-bootstrap';
 
 const ConsumerPlants: React.FC = () => {
   const [plants, setPlants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
-  // Mock data - in a real app, this would come from an API
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setPlants([
-        {
-          _id: '1',
-          propertyName: 'Home Solar System',
-          propertyType: 'Housing Society',
-          address: '123 Main St',
-          city: 'New York',
-          state: 'NY',
-          pincode: '10001',
-          roofArea: '200 sq ft',
-          billAmount: 5000,
-          billImage: '',
-          electricityRate: 8.5,
-          createdAt: '2023-01-15',
-          status: 'Submitted'
-        },
-        {
-          _id: '2',
-          propertyName: 'Office Building Solar',
-          propertyType: 'Manufacturing Unit',
-          address: '456 Business Ave',
-          city: 'San Francisco',
-          state: 'CA',
-          pincode: '94105',
-          roofArea: '500 sq ft',
-          billAmount: 12000,
-          billImage: '',
-          electricityRate: 9.2,
-          createdAt: '2023-03-22',
-          status: 'Approved'
-        }
-      ]);
-      setLoading(false);
-    }, 500);
+    fetchPlants();
   }, []);
 
-  const handleDeletePlant = (id: string) => {
+  const fetchPlants = async () => {
+    try {
+      const response = await axios.get('/user/my-plants');
+      if (response.data && response.data.result) {
+        // Flatten nested propertyAddress for easier access
+        const flattenedPlants = response.data.result.map((plant: any) => ({
+          ...plant,
+          propertyName: plant.propertyAddress?.propertyName || plant.propertyName || 'N/A',
+          propertyType: plant.propertyAddress?.propertyType || plant.propertyType,
+          address: plant.propertyAddress?.address || plant.address,
+          city: plant.propertyAddress?.city || plant.city,
+          state: plant.propertyAddress?.state || plant.state,
+          pincode: plant.propertyAddress?.pincode || plant.pincode,
+          roofArea: plant.propertyAddress?.roofArea || plant.roofArea,
+          billAmount: plant.propertyAddress?.billAmount || plant.billAmount,
+          billImage: plant.propertyAddress?.billImage || plant.billImage,
+          electricityRate: plant.propertyAddress?.electricityRate || plant.electricityRate,
+        }));
+        setPlants(flattenedPlants);
+      } else {
+        setPlants([]);
+      }
+    } catch (error) {
+      // Silently fail - will show empty state
+      setPlants([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeletePlant = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this plant?')) {
-      setPlants(plants.filter(plant => plant._id !== id));
-      toast.success('Plant deleted successfully');
+      try {
+        // Placeholder for delete functionality
+        toast.info("Delete functionality not yet available from backend.");
+      } catch (error) {
+        toast.error("Failed to delete plant");
+      }
     }
   };
 
@@ -80,279 +79,283 @@ const ConsumerPlants: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // In a real app, this would call the API
-    const newPlant = {
-      _id: (plants.length + 1).toString(),
-      ...formData,
-      createdAt: new Date().toISOString().split('T')[0],
-      status: 'Submitted'
-    };
-    
-    setPlants([...plants, newPlant]);
-    setFormData({
-      propertyName: '',
-      propertyType: 'Housing Society',
-      address: '',
-      city: '',
-      state: '',
-      pincode: '',
-      roofArea: '',
-      billAmount: '',
-      electricityRate: '',
-      billImage: null
-    });
-    setShowAddForm(false);
-    toast.success('Plant added successfully');
+
+    try {
+      const data = new FormData();
+      data.append('propertyName', formData.propertyName);
+      data.append('propertyType', formData.propertyType === 'Housing Society' ? '1' : '2');
+      data.append('address', formData.address);
+      data.append('city', formData.city);
+      data.append('state', formData.state);
+      data.append('pincode', formData.pincode);
+      data.append('roofArea', formData.roofArea);
+      data.append('billAmount', formData.billAmount);
+      data.append('electricityRate', formData.electricityRate);
+      if (formData.billImage) {
+        data.append('billImage', formData.billImage);
+      }
+
+      await axios.post('/user/plant/add', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      toast.success('Plant added successfully');
+      setShowAddModal(false);
+      setFormData({
+        propertyName: '',
+        propertyType: 'Housing Society',
+        address: '',
+        city: '',
+        state: '',
+        pincode: '',
+        roofArea: '',
+        billAmount: '',
+        electricityRate: '',
+        billImage: null
+      });
+      fetchPlants();
+
+    } catch (error) {
+      toast.error("Failed to add plant. Check required fields.");
+    }
   };
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh' }}>
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+      <div className="flex justify-center p-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#052F2B]"></div>
       </div>
     );
   }
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="h3 mb-0 text-gray-800">My Solar Plants</h1>
-            <button 
-              className="btn btn-primary"
-              onClick={() => setShowAddForm(!showAddForm)}
-            >
-              {showAddForm ? 'Cancel' : 'Add New Plant'}
-            </button>
-          </div>
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-black text-[#0b1f33] tracking-tight">My Solar Plants</h1>
+          <p className="text-[#64748b] mt-1">Manage your solar installations and monitor performance</p>
+        </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="px-5 py-2.5 bg-[#052F2B] text-white font-bold rounded-xl shadow-lg hover:bg-[#0b1f33] transition-all flex items-center gap-2"
+        >
+          <i className="fas fa-plus-circle"></i> Add New Plant
+        </button>
+      </div>
 
-          {showAddForm && (
-            <div className="card shadow mb-4">
-              <div className="card-header py-3">
-                <h6 className="m-0 font-weight-bold text-primary">Add New Plant</h6>
-              </div>
-              <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="propertyName" className="form-label">Property Name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="propertyName"
-                          name="propertyName"
-                          value={formData.propertyName}
-                          onChange={handleInputChange}
-                          placeholder="Enter property name"
-                        />
-                      </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="bg-[#f8fafc] text-xs uppercase text-gray-500 font-bold border-b border-gray-100">
+              <tr>
+                <th className="px-6 py-4">Property Name</th>
+                <th className="px-6 py-4">Location</th>
+                <th className="px-6 py-4">Type</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Date Submitted</th>
+                <th className="px-6 py-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {plants.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    No plants found. Add your first solar plant to get started.
+                  </td>
+                </tr>
+              ) : plants.map(plant => (
+                <tr key={plant._id} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-6 py-4 font-bold text-[#0b1f33]">
+                    {plant.propertyName || 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 text-gray-600 font-medium">
+                    {plant.city}, {plant.state}
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {plant.propertyType === 1 ? 'Housing Society' : plant.propertyType === 2 ? 'Manufacturing Unit' : plant.propertyType}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${plant.status === 'Approved' || plant.plantStatus === 2 ? 'bg-emerald-100 text-emerald-800' :
+                      plant.status === 'Rejected' || plant.plantStatus === 3 ? 'bg-red-100 text-red-800' :
+                        'bg-amber-100 text-amber-800'
+                      }`}>
+                      {plant.plantStatus === 1 ? 'Submitted' : plant.plantStatus === 2 ? 'Approved' : plant.plantStatus === 3 ? 'Rejected' : (plant.status || 'Submitted')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-500 text-sm">
+                    {new Date(plant.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      <Link
+                        to={`/consumer/plants/${plant._id}`}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
+                        title="View Details"
+                      >
+                        <i className="fas fa-eye"></i>
+                      </Link>
+                      <button
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
+                        onClick={() => handleDeletePlant(plant._id)}
+                        title="Delete Plant"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
                     </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="propertyType" className="form-label">Property Type</label>
-                        <select
-                          className="form-select"
-                          id="propertyType"
-                          name="propertyType"
-                          value={formData.propertyType}
-                          onChange={handleInputChange}
-                        >
-                          <option value="Housing Society">Housing Society</option>
-                          <option value="Manufacturing Unit">Manufacturing Unit</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="address" className="form-label">Address</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="address"
-                          name="address"
-                          value={formData.address}
-                          onChange={handleInputChange}
-                          placeholder="Enter address"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="city" className="form-label">City</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="city"
-                          name="city"
-                          value={formData.city}
-                          onChange={handleInputChange}
-                          placeholder="Enter city"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="row">
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="state" className="form-label">State</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="state"
-                          name="state"
-                          value={formData.state}
-                          onChange={handleInputChange}
-                          placeholder="Enter state"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="pincode" className="form-label">Pincode</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="pincode"
-                          name="pincode"
-                          value={formData.pincode}
-                          onChange={handleInputChange}
-                          placeholder="Enter pincode"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="roofArea" className="form-label">Roof Area (sq ft)</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="roofArea"
-                          name="roofArea"
-                          value={formData.roofArea}
-                          onChange={handleInputChange}
-                          placeholder="Enter roof area"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="row">
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="billAmount" className="form-label">Bill Amount</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="billAmount"
-                          name="billAmount"
-                          value={formData.billAmount}
-                          onChange={handleInputChange}
-                          placeholder="Enter bill amount"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="electricityRate" className="form-label">Electricity Rate</label>
-                        <input
-                          type="number"
-                          step="0.01"
-                          className="form-control"
-                          id="electricityRate"
-                          name="electricityRate"
-                          value={formData.electricityRate}
-                          onChange={handleInputChange}
-                          placeholder="Enter electricity rate"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="mb-3">
-                        <label htmlFor="billImage" className="form-label">Bill Document</label>
-                        <input
-                          type="file"
-                          className="form-control"
-                          id="billImage"
-                          name="billImage"
-                          onChange={handleFileChange}
-                          accept=".pdf,.jpg,.jpeg,.png"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <button type="submit" className="btn btn-primary">Submit Plant</button>
-                </form>
-              </div>
-            </div>
-          )}
-
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Plants List</h6>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Property Name</th>
-                      <th>Location</th>
-                      <th>Type</th>
-                      <th>Status</th>
-                      <th>Date Submitted</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {plants.map(plant => (
-                      <tr key={plant._id}>
-                        <td>{plant.propertyName || 'N/A'}</td>
-                        <td>{plant.city}, {plant.state}</td>
-                        <td>{plant.propertyType}</td>
-                        <td>
-                          <span className={`badge ${
-                            plant.status === 'Approved' ? 'bg-success' : 
-                            plant.status === 'Rejected' ? 'bg-danger' : 'bg-warning'
-                          }`}>
-                            {plant.status}
-                          </span>
-                        </td>
-                        <td>{plant.createdAt}</td>
-                        <td>
-                          <Link 
-                            to={`/consumer/plants/${plant._id}`} 
-                            className="btn btn-sm btn-primary me-1"
-                          >
-                            View
-                          </Link>
-                          <button 
-                            className="btn btn-sm btn-danger"
-                            onClick={() => handleDeletePlant(plant._id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
+      {/* Add Plant Modal */}
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered size="lg" contentClassName="rounded-3xl border-0 overflow-hidden">
+        <div className="bg-[#052F2B] p-6 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-2 -mr-2 w-20 h-20 bg-[#43EBA6] rounded-full opacity-20 blur-2xl"></div>
+          <h4 className="font-black text-xl relative z-10">Add New Plant</h4>
+          <p className="text-[#ECFDF5]/70 text-sm relative z-10">Register your solar installation</p>
+        </div>
+        <div className="p-8">
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Property Name</label>
+                <input
+                  required
+                  type="text"
+                  name="propertyName"
+                  value={formData.propertyName}
+                  onChange={handleInputChange}
+                  placeholder="e.g. My Home Solar"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all font-bold text-[#0b1f33]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Property Type</label>
+                <select
+                  name="propertyType"
+                  value={formData.propertyType}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all font-bold text-[#0b1f33]"
+                >
+                  <option value="Housing Society">Housing Society</option>
+                  <option value="Manufacturing Unit">Manufacturing Unit</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Address</label>
+                <input
+                  required
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  placeholder="Full street address"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">City</label>
+                <input
+                  required
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">State</label>
+                <input
+                  required
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Pincode</label>
+                <input
+                  required
+                  type="text"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Roof Area (sq ft)</label>
+                <input
+                  required
+                  type="number"
+                  name="roofArea"
+                  value={formData.roofArea}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Previous Bill Amount (₹)</label>
+                <input
+                  required
+                  type="number"
+                  name="billAmount"
+                  value={formData.billAmount}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Electricity Rate (₹/kWh)</label>
+                <input
+                  required
+                  type="number"
+                  step="0.01"
+                  name="electricityRate"
+                  value={formData.electricityRate}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Recent Bill Document</label>
+                <input
+                  required
+                  type="file"
+                  name="billImage"
+                  onChange={handleFileChange}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#052F2B] focus:ring-0 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#052F2B] file:text-white hover:file:bg-[#0b1f33]"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Button variant="light" onClick={() => setShowAddModal(false)} className="py-3 rounded-xl font-bold border border-gray-200 text-gray-600 hover:bg-gray-50 bg-white">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="py-3 rounded-xl font-bold bg-[#052F2B] border-0 hover:bg-[#0b1f33] shadow-lg shadow-[#052F2B]/20 text-white"
+              >
+                Submit Application
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };
