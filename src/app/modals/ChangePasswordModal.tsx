@@ -245,7 +245,7 @@ const ChangePasswordModal = (props: any) => {
                     )}
                 </Button>
                 <Button
-                    variant="outline-secondary"
+                    variant="danger"
                     className="px-4 py-2 fw-semibold"
                     onClick={props.onHide}
                     disabled={loading}

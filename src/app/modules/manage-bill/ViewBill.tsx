@@ -14,6 +14,7 @@ const ViewBill = () => {
     const navigate = useNavigate();
     const {state}: any = useLocation();
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showCashModal, setShowCashModal] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const [billId, setBillId] = useState<string | null>(null);
     
@@ -61,7 +62,7 @@ const ViewBill = () => {
 
     const handleCashPayment = async (billId: string | null) => {
         if (!billId) {
-            setShowModal(false);
+            setShowCashModal(false);
             return;
         }
         console.log(billId);
@@ -132,7 +133,7 @@ const ViewBill = () => {
                                     style={{background: "#547792"}}
                                     onClick={() => {
                                         setBillId(state?._id);
-                                        setShowModal(true);
+                                        setShowCashModal(true);
                                     }}
                                 >
                                     <i className="bi bi-cash-stack"></i>
@@ -261,8 +262,8 @@ const ViewBill = () => {
                 </Col>
             </Row>
             <CashPaymentModal
-                show={showModal}
-                onHide={() => setShowModal(false)}
+                show={showCashModal}
+                onHide={() => setShowCashModal(false)}
                 handleCashPayment={() => handleCashPayment(billId)} 
             />
             <DeleteModal

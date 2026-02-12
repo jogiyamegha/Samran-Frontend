@@ -383,7 +383,7 @@ const EditPlant = () => {
                                         className="mb-3"
                                         controlId="userId"
                                     >
-                                        <Form.Label className="fs-16 fw-500 required">
+                                        <Form.Label className="fs-16 fw-500 ">
                                             User
                                         </Form.Label>
                                         <CustomSelectWhite
@@ -558,26 +558,33 @@ const EditPlant = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                            <div className="d-flex justify-content-center gap-4">
-                            <Button
-                                variant="primary"
-                                onClick={handleEditSite}
-                                size="sm"
-                                style={{background: "#d4edda", color:"#347042"}}
-                                disabled={loading}
-                                value={state._id}
-                            >
-                                {loading ? (
-                                <>
-                                    Please wait...
-                                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </>
-                                ) : (
-                                    <span>Save</span>
-                                )}
-                            </Button>
-                            <Button style={{background: "#e8aca1", color:"#86320f"}} onClick={handleBack}>Cancel</Button>
-                            </div>
+                        <div className="d-flex justify-content-center gap-4 mt-4">
+                                    <Button
+                                        variant="primary"
+                                        onClick={handleEditSite}
+                                        size="sm"
+                                        disabled={loading}
+                                    >
+                                    {loading ? (
+                                        <>
+                                            Please wait...
+                                            <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </>
+                                    ) : (
+                                        <span className="indicator-label fs-16 fw-bold">
+                                            Save Changes
+                                        </span>
+                                    )}
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        className="fs-16 fw-bold"
+                                        onClick={handleBack}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
                         </Form>
                         </Card.Body>
                     </Card>
